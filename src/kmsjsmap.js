@@ -3,6 +3,48 @@ var $conTextMenu = '';
 // an noop function define
 var _noop = function() {};
 
+// 河蟹IE8 时 没有Object.keys方法
+if (!Object.keys) {
+  Object.keys = (function () {
+    'use strict';
+    var hasOwnProperty = Object.prototype.hasOwnProperty,
+        hasDontEnumBug = !({toString: null}).propertyIsEnumerable('toString'),
+        dontEnums = [
+          'toString',
+          'toLocaleString',
+          'valueOf',
+          'hasOwnProperty',
+          'isPrototypeOf',
+          'propertyIsEnumerable',
+          'constructor'
+        ],
+        dontEnumsLength = dontEnums.length;
+
+    return function (obj) {
+      if (typeof obj !== 'object' && (typeof obj !== 'function' || obj === null)) {
+        throw new TypeError('Object.keys called on non-object');
+      }
+
+      var result = [], prop, i;
+
+      for (prop in obj) {
+        if (hasOwnProperty.call(obj, prop)) {
+          result.push(prop);
+        }
+      }
+
+      if (hasDontEnumBug) {
+        for (i = 0; i < dontEnumsLength; i++) {
+          if (hasOwnProperty.call(obj, dontEnums[i])) {
+            result.push(dontEnums[i]);
+          }
+        }
+      }
+      return result;
+    };
+  }());
+}
+
 $(function() {
   var html = '<div id="kmsjsmap_contextmenu"><ul class="sui-dropdown-menu"><li><a href="javascript: kmsjsmap.add_node();">添加节点</a></li><li><a href="javascript: kmsjsmap.modify_node()">编辑节点</a></li><li><a href="javascript: kmsjsmap.del_node()">删除节点</a></li><li><a href="javascript: kmsjsmap.relation_node()">关联节点</a></li></ul></div>';
 
