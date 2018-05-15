@@ -3174,34 +3174,41 @@ $(function() {
       var container = this.jm.view.container;
       // 鼠标右键 (leo 加的)
       jdom.add_event(container, 'contextmenu', function(e) {
-        // console.log('contextmenu')
+        // console.log('鼠标右键')
         var evt = e || event;
         jd.dragend.call(jd, evt);
       });
       // 鼠标按下
       jdom.add_event(container, 'mousedown', function(e) {
+        // console.log('鼠标按下')
+        $conTextMenu.hide();
         var evt = e || event;
         jd.dragstart.call(jd, evt);
       });
       // 鼠标移动
       jdom.add_event(container, 'mousemove', function(e) {
+        // console.log('鼠标移动')
         var evt = e || event;
         jd.drag.call(jd, evt);
       });
       // 鼠标弹起
       jdom.add_event(container, 'mouseup', function(e) {
+        // console.log('鼠标弹起')
         var evt = e || event;
         jd.dragend.call(jd, evt);
       });
       jdom.add_event(container, 'touchstart', function(e) {
+        // console.log('touchstart')
         var evt = e || event;
         jd.dragstart.call(jd, evt);
       });
       jdom.add_event(container, 'touchmove', function(e) {
+        // console.log('touchmove')
         var evt = e || event;
         jd.drag.call(jd, evt);
       });
       jdom.add_event(container, 'touchend', function(e) {
+        // console.log('touchend')
         var evt = e || event;
         jd.dragend.call(jd, evt);
       });

@@ -1,20 +1,19 @@
-# kmsjsmap
+## kmsjsmap
+思维导图JS库，对hizzgdev大神的库进行二次封装，扩展右键菜单，包含拖拽节点等功能。
 
-> KMS用知识地图 思维导图 JS库
 
-
-# 1.引入样式
+## 1.引入样式
 ```
 <link rel="stylesheet" type="text/css" href="./dist/kmsjsmap.min.css">
 ```
 
-# 2.引入JS库
+## 2.引入JS库
 ```
 <script type="text/javascript" src="./dist/kmsjsmap.min.js"></script>
 ```
 
 
-# 调用示例
+## 调用示例
 ```
 kmsjsmap.init({
     container: "jsmind_container",
@@ -48,7 +47,7 @@ kmsjsmap.init({
   });
 ```
 
-# API 说明
+## API 说明
 
 参数 | 类型 | 是否必填 | 说明
 -----  | ---- | -------- | -----
@@ -58,7 +57,7 @@ onSave | Function | 否 | 用户点击"保存思维导图"按钮的回调函数�
 editable | Boolean | 否 | 是否允许编辑
 onRelation | Function | 否 | 点击右键菜单"关联"时的回调，返回当前操作节点的信息
 
-# API - data 说明
+## API - data 说明
 参数 | 类型 | 是否必填 | 说明
 -----  | ---- | -------- | -----
 id | String | 是  | 当前节点的ID
