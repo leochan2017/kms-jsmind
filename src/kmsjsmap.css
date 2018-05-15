@@ -188,18 +188,18 @@ jmnode{transition:top .2s;-moz-transition:top .2s;-webkit-transition:top .2s;-o-
 
 .leo-badge {
   background-color: #f56c6c;
-    border-radius: 10px;
-    color: #fff;
-    display: inline-block;
-    font-size: 12px;
-    height: 18px;
-    line-height: 18px;
-    padding: 0 6px;
-    text-align: center;
-    white-space: nowrap;
-    border: 1px solid #fff;
+  border-radius: 10px;
+  color: #fff;
+  display: inline-block;
+  font-size: 12px;
+  height: 18px;
+  line-height: 18px;
+  padding: 0 6px;
+  text-align: center;
+  white-space: nowrap;
+  border: 1px solid #fff;
   border-color: #adadad;
   position: absolute;
   overflow: hidden;
-
+  z-index: 9;
 }

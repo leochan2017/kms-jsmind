@@ -17,7 +17,7 @@ $(function() {
   // __name__ should be a const value, Never try to change it easily.
   var __name__ = 'jsMind';
   // library version
-  var __version__ = '0.2e';
+  var __version__ = '0.4.6';
   // author
   var __author__ = 'leochan2017@gmail.com';
 
@@ -32,9 +32,11 @@ $(function() {
   } : console;
 
   // check global variables
-  if (typeof $w[__name__] != 'undefined') {
-    logger.log(__name__ + ' has been already exist.');
-    return;
+  if (typeof module === 'undefined' || !module.exports) {
+    if (typeof $w[__name__] != 'undefined') {
+      logger.log(__name__ + ' has been already exist.');
+      return;
+    }
   }
 
   // shortcut of methods in dom
@@ -43,6 +45,9 @@ $(function() {
   var $c = function(tag) { return $d.createElement(tag); };
   var $t = function(n, t) { if (n.hasChildNodes()) { n.firstChild.nodeValue = t; } else { n.appendChild($d.createTextNode(t)); } };
   var $h = function(n, t) { n.innerHTML = t; };
+  // detect isElement
+  var $i = function(el) { return !!el && (typeof el === 'object') && (el.nodeType === 1) && (typeof el.style === 'object') && (typeof el.ownerDocument === 'object'); };
+  if (typeof String.prototype.startsWith != 'function') { String.prototype.startsWith = function(p) { return this.slice(0, p.length) === p; }; }
 
   var DEFAULT_OPTIONS = {
     container: '', // id of the container
@@ -53,12 +58,19 @@ $(function() {
 
     view: {
       hmargin: 100,
-      vmargin: 50
+      vmargin: 50,
+      line_width: 2,
+      line_color: '#555'
     },
     layout: {
       hspace: 30,
       vspace: 20,
       pspace: 13
+    },
+    default_event_handle: {
+      enable_mousedown_handle: true,
+      enable_click_handle: true,
+      enable_dblclick_handle: true
     },
     shortcut: {
       enable: true,
@@ -86,8 +98,8 @@ $(function() {
     jm.util.json.merge(opts, DEFAULT_OPTIONS);
     jm.util.json.merge(opts, options);
 
-    if (opts.container == null || opts.container.length == 0) {
-      logger.error('the options.container should not be empty.');
+    if (!opts.container) {
+      logger.error('the options.container should not be null or empty.');
       return;
     }
     this.options = opts;
@@ -101,16 +113,18 @@ $(function() {
   jm.direction = { left: -1, center: 0, right: 1 };
   jm.event_type = { show: 1, resize: 2, edit: 3, select: 4 };
 
-  jm.node = function(sId, iIndex, sTopic, oData, bIsRoot, oParent, eDirection) {
+  jm.node = function(sId, iIndex, sTopic, oData, bIsRoot, oParent, eDirection, bExpanded) {
     if (!sId) { logger.error('invalid nodeid'); return; }
     if (typeof iIndex != 'number') { logger.error('invalid node index'); return; }
+    if (typeof bExpanded === 'undefined') { bExpanded = true; }
     this.id = sId;
     this.index = iIndex;
     this.topic = sTopic;
-    this.data = oData;
+    this.data = oData || {};
     this.isroot = bIsRoot;
     this.parent = oParent;
     this.direction = eDirection;
+    this.expanded = !!bExpanded;
     this.children = [];
     this._data = {};
   };
@@ -131,7 +145,7 @@ $(function() {
     } else {
       r = 0;
     }
-    ////logger.debug(i1+' <> '+i2+'  =  '+r);
+    //logger.debug(i1+' <> '+i2+'  =  '+r);
     return r;
   };
 
@@ -201,61 +215,66 @@ $(function() {
       }
     },
 
-    add_node: function(parent_node, nodeid, topic, data, idx, direction) {
-      //console.debug('6');
-      if (typeof parent_node === 'string') {
-        return this.add_node(this.get_node(parent_node), nodeid, topic, data, idx, direction);
+    add_node: function(parent_node, nodeid, topic, data, idx, direction, expanded) {
+      if (!jm.util.is_node(parent_node)) {
+        var the_parent_node = this.get_node(parent_node);
+        if (!the_parent_node) {
+          logger.error('the parent_node[id=' + parent_node + '] can not be found.');
+          return null;
+        } else {
+          return this.add_node(the_parent_node, nodeid, topic, data, idx, direction, expanded);
+        }
       }
       var nodeindex = idx || -1;
-      if (!!parent_node) {
-        ////logger.debug(parent_node);
-        var node = null;
-        if (parent_node.isroot) {
-          var d = jm.direction.right;
-          if (isNaN(direction)) {
-            var children = parent_node.children;
-            var children_len = children.length;
-            var r = 0;
-            for (var i = 0; i < children_len; i++) { if (children[i].direction === jm.direction.left) { r--; } else { r++; } }
-            if (direction) { d = jm.direction.right } else { d = (children_len > 1 && r > 0) ? jm.direction.left : jm.direction.right }
-          } else {
-            d = (direction != jm.direction.left) ? jm.direction.right : jm.direction.left;
-          }
-          node = new jm.node(nodeid, nodeindex, topic, data, false, parent_node, d);
+      var node = null;
+      if (parent_node.isroot) {
+        var d = jm.direction.right;
+        if (isNaN(direction)) {
+          var children = parent_node.children;
+          var children_len = children.length;
+          var r = 0;
+          for (var i = 0; i < children_len; i++) { if (children[i].direction === jm.direction.left) { r--; } else { r++; } }
+          d = (children_len > 1 && r > 0) ? jm.direction.left : jm.direction.right
         } else {
-          node = new jm.node(nodeid, nodeindex, topic, data, false, parent_node, parent_node.direction);
+          d = (direction != jm.direction.left) ? jm.direction.right : jm.direction.left;
         }
-        if (this._put_node(node)) {
-          parent_node.children.push(node);
-          this._reindex(parent_node);
-        } else {
-          //logger.error('fail, the nodeid \''+node.id+'\' has been already exist.');
-          node = null;
-        }
-        return node;
+        node = new jm.node(nodeid, nodeindex, topic, data, false, parent_node, d, expanded);
       } else {
-        logger.error('fail, the [node_parent] can not be found.');
-        return null;
+        node = new jm.node(nodeid, nodeindex, topic, data, false, parent_node, parent_node.direction, expanded);
       }
+      if (this._put_node(node)) {
+        parent_node.children.push(node);
+        this._reindex(parent_node);
+      } else {
+        logger.error('fail, the nodeid \'' + node.id + '\' has been already exist.');
+        node = null;
+      }
+      return node;
     },
 
     insert_node_before: function(node_before, nodeid, topic, data) {
-      if (typeof node_before === 'string') {
-        return this.insert_node_before(this.get_node(node_before), nodeid, topic, data);
+      if (!jm.util.is_node(node_before)) {
+        var the_node_before = this.get_node(node_before);
+        if (!the_node_before) {
+          logger.error('the node_before[id=' + node_before + '] can not be found.');
+          return null;
+        } else {
+          return this.insert_node_before(the_node_before, nodeid, topic, data);
+        }
       }
-      if (!!node_before) {
-        var node_index = node_before.index - 0.5;
-        return this.add_node(node_before.parent, nodeid, topic, data, node_index);
-      } else {
-        logger.error('fail, the [node_before] can not be found.');
-        return null;
-      }
+      var node_index = node_before.index - 0.5;
+      return this.add_node(node_before.parent, nodeid, topic, data, node_index);
     },
 
     get_node_before: function(node) {
-      if (!node) { return null; }
-      if (typeof node === 'string') {
-        return this.get_node_before(this.get_node(node));
+      if (!jm.util.is_node(node)) {
+        var the_node = this.get_node(node);
+        if (!the_node) {
+          logger.error('the node[id=' + node + '] can not be found.');
+          return null;
+        } else {
+          return this.get_node_before(the_node);
+        }
       }
       if (node.isroot) { return null; }
       var idx = node.index - 2;
@@ -267,22 +286,28 @@ $(function() {
     },
 
     insert_node_after: function(node_after, nodeid, topic, data) {
-      if (typeof node_after === 'string') {
-        return this.insert_node_after(this.get_node(node_after), nodeid, topic, data);
+      if (!jm.util.is_node(node_after)) {
+        var the_node_after = this.get_node(node_before);
+        if (!the_node_after) {
+          logger.error('the node_after[id=' + node_after + '] can not be found.');
+          return null;
+        } else {
+          return this.insert_node_after(the_node_after, nodeid, topic, data);
+        }
       }
-      if (!!node_after) {
-        var node_index = node_after.index + 0.5;
-        return this.add_node(node_after.parent, nodeid, topic, data, node_index);
-      } else {
-        logger.error('fail, the [node_after] can not be found.');
-        return null;
-      }
+      var node_index = node_after.index + 0.5;
+      return this.add_node(node_after.parent, nodeid, topic, data, node_index);
     },
 
     get_node_after: function(node) {
-      if (!node) { return null; }
-      if (typeof node === 'string') {
-        return this.get_node_after(this.get_node(node));
+      if (!jm.util.is_node(node)) {
+        var the_node = this.get_node(node);
+        if (!the_node) {
+          logger.error('the node[id=' + node + '] can not be found.');
+          return null;
+        } else {
+          return this.get_node_after(the_node);
+        }
       }
       if (node.isroot) { return null; }
       var idx = node.index;
@@ -295,8 +320,14 @@ $(function() {
     },
 
     move_node: function(node, beforeid, parentid, direction) {
-      if (typeof node === 'string') {
-        return this.move_node(this.get_node(node), beforeid, parentid, direction);
+      if (!jm.util.is_node(node)) {
+        var the_node = this.get_node(node);
+        if (!the_node) {
+          logger.error('the node[id=' + node + '] can not be found.');
+          return null;
+        } else {
+          return this.move_node(the_node, beforeid, parentid, direction);
+        }
       }
       if (!parentid) {
         parentid = node.parent.id;
@@ -367,9 +398,14 @@ $(function() {
     },
 
     remove_node: function(node) {
-      // console.log(node)
-      if (typeof node === 'string') {
-        return this.remove_node(this.get_node(node));
+      if (!jm.util.is_node(node)) {
+        var the_node = this.get_node(node);
+        if (!the_node) {
+          logger.error('the node[id=' + node + '] can not be found.');
+          return false;
+        } else {
+          return this.remove_node(the_node);
+        }
       }
       if (!node) {
         logger.error('fail, the node can not be found');
@@ -483,7 +519,7 @@ $(function() {
       _extract_data: function(node_json) {
         var data = {};
         for (var k in node_json) {
-          if (k == 'id' || k == 'topic' || k == 'children' || k == 'direction') {
+          if (k == 'id' || k == 'topic' || k == 'children' || k == 'direction' || k == 'expanded') {
             continue;
           }
           data[k] = node_json[k];
@@ -498,7 +534,7 @@ $(function() {
         if (node_parent.isroot) {
           d = node_json.direction == 'left' ? jm.direction.left : jm.direction.right;
         }
-        var node = mind.add_node(node_parent, node_json.id, node_json.topic, data, null, d);
+        var node = mind.add_node(node_parent, node_json.id, node_json.topic, data, null, d, node_json.expanded);
         if ('children' in node_json) {
           var children = node_json.children;
           for (var i = 0; i < children.length; i++) {
@@ -512,7 +548,8 @@ $(function() {
         if (!(node instanceof jm.node)) { return; }
         var o = {
           id: node.id,
-          topic: node.topic
+          topic: node.topic,
+          expanded: node.expanded
         };
         if (!!node.parent && node.parent.isroot) {
           o.direction = node.direction == jm.direction.left ? 'left' : 'right';
@@ -614,7 +651,7 @@ $(function() {
             if (!!node_direction) {
               d = node_direction == 'left' ? jm.direction.left : jm.direction.right;
             }
-            mind.add_node(parentid, node_json.id, node_json.topic, data, null, d);
+            mind.add_node(parentid, node_json.id, node_json.topic, data, null, d, node_json.expanded);
             node_array.splice(i, 1);
             extract_count++;
             var sub_extract_count = df._extract_subnode(mind, node_json.id, node_array);
@@ -631,7 +668,7 @@ $(function() {
       _extract_data: function(node_json) {
         var data = {};
         for (var k in node_json) {
-          if (k == 'id' || k == 'topic' || k == 'parentid' || k == 'isroot' || k == 'direction') {
+          if (k == 'id' || k == 'topic' || k == 'parentid' || k == 'isroot' || k == 'direction' || k == 'expanded') {
             continue;
           }
           data[k] = node_json[k];
@@ -649,7 +686,8 @@ $(function() {
         if (!(node instanceof jm.node)) { return; }
         var o = {
           id: node.id,
-          topic: node.topic
+          topic: node.topic,
+          expanded: node.expanded
         };
         if (!!node.parent) {
           o.parentid = node.parent.id;
@@ -763,7 +801,7 @@ $(function() {
           var topic_child = null;
           for (var i = 0; i < topic_children.length; i++) {
             topic_child = topic_children[i];
-            ////logger.debug(topic_child.tagName);
+            //logger.debug(topic_child.tagName);
             if (topic_child.nodeType == 1 && topic_child.tagName === 'richcontent') {
               node_topic = topic_child.textContent;
               break;
@@ -771,14 +809,17 @@ $(function() {
           }
         }
         var node_data = df._load_attributes(xml_node);
+        var node_expanded = ('expanded' in node_data) ? (node_data.expanded == 'true') : true;
+        delete node_data.expanded;
+
         var node_position = xml_node.getAttribute('POSITION');
         var node_direction = null;
         if (!!node_position) {
           node_direction = node_position == 'left' ? jm.direction.left : jm.direction.right;
         }
-        ////logger.debug(node_position +':'+ node_direction);
+        //logger.debug(node_position +':'+ node_direction);
         if (!!parent_id) {
-          mind.add_node(parent_id, node_id, node_topic, node_data, null, node_direction);
+          mind.add_node(parent_id, node_id, node_topic, node_data, null, node_direction, node_expanded);
         } else {
           mind.set_root(node_id, node_topic, node_data);
         }
@@ -795,13 +836,10 @@ $(function() {
       _load_attributes: function(xml_node) {
         var children = xml_node.childNodes;
         var attr = null;
-        var attr_data = null;
+        var attr_data = {};
         for (var i = 0; i < children.length; i++) {
           attr = children[i];
           if (attr.nodeType == 1 && attr.tagName === 'attribute') {
-            if (attr_data == null) {
-              attr_data = {};
-            }
             attr_data[attr.getAttribute('NAME')] = attr.getAttribute('VALUE');
           }
         }
@@ -819,25 +857,26 @@ $(function() {
         if (!!pos) {
           xmllines.push('POSITION=\"' + pos + '\"');
         }
-        xmllines.push('TEXT=\"' + node.topic + '\"');
-        var children = node.children;
+        xmllines.push('TEXT=\"' + node.topic + '\">');
+
+        // store expanded status as an attribute
+        xmllines.push('<attribute NAME=\"expanded\" VALUE=\"' + node.expanded + '\"/>');
+
+        // for attributes
         var node_data = node.data;
-        if (children.length > 0 || node_data != null) {
-          xmllines.push('>');
-          // for attributes
-          if (node_data != null) {
-            for (var k in node_data) {
-              xmllines.push('<attribute NAME=\"' + k + '\" VALUE=\"' + node_data[k] + '\"/>');
-            }
+        if (node_data != null) {
+          for (var k in node_data) {
+            xmllines.push('<attribute NAME=\"' + k + '\" VALUE=\"' + node_data[k] + '\"/>');
           }
-          // for children
-          for (var i = 0; i < children.length; i++) {
-            df._buildmap(children[i], xmllines);
-          }
-          xmllines.push('</node>');
-        } else {
-          xmllines.push('/>');
         }
+
+        // for children
+        var children = node.children;
+        for (var i = 0; i < children.length; i++) {
+          df._buildmap(children[i], xmllines);
+        }
+
+        xmllines.push('</node>');
       },
     },
   };
@@ -845,6 +884,9 @@ $(function() {
   // ============= utility object =============================================
 
   jm.util = {
+    is_node: function(node) {
+      return !!node && node instanceof jm.node;
+    },
     ajax: {
       _xhr: function() {
         var xhr = null;
@@ -864,7 +906,7 @@ $(function() {
         var a = jm.util.ajax;
         var p = null;
         var tmp_param = [];
-        for (k in param) {
+        for (var k in param) {
           tmp_param.push(a._eurl(k) + '=' + a._eurl(param[k]));
         }
         if (tmp_param.length > 0) {
@@ -876,8 +918,12 @@ $(function() {
           if (xhr.readyState == 4) {
             if (xhr.status == 200 || xhr.status == 0) {
               if (typeof callback === 'function') {
-                var data = eval('(' + xhr.responseText + ')');
-                callback(data);
+                var data = jm.util.json.string2json(xhr.responseText);
+                if (data != null) {
+                  callback(data);
+                } else {
+                  callback(xhr.responseText);
+                }
               }
             } else {
               if (typeof fail_callback === 'function') {
@@ -918,19 +964,10 @@ $(function() {
     },
 
     canvas: {
-      easing_gauss: function(t, b, c, d) { var x = t * 4 / d; return (1 - Math.pow(Math.E, -(x * x) / 2)) * c + b; },
-      gaussto: function(ctx, x1, y1, x2, y2) {
-        var ztf = jm.util.canvas.easing_gauss;
-        ctx.moveTo(x1, y1);
+      bezierto: function(ctx, x1, y1, x2, y2) {
         ctx.beginPath();
-        var l = x2 - x1;
-        var c = y1 - y2;
-        var absl = Math.abs(l);
-        var t = 0;
-        for (var t = 0; t < absl + 1; t++) {
-          y2 = y1 - ztf(t, 0, c, l);
-          ctx.lineTo(t * (Math.abs(l) / l) + x1, y2);
-        }
+        ctx.moveTo(x1, y1);
+        ctx.bezierCurveTo(x1 + (x2 - x1) * 2 / 3, y1, x1, y2, x2, y2);
         ctx.stroke();
       },
       lineto: function(ctx, x1, y1, x2, y2) {
@@ -965,22 +1002,24 @@ $(function() {
           bb.append(file_data);
           blob = bb.getBlob(type);
         }
-        var URL = $w.URL || $w.webkitURL;
-        var bloburl = URL.createObjectURL(blob);
-        var anchor = $c('a');
-        if ('download' in anchor) {
-          anchor.style.visibility = 'hidden';
-          anchor.href = bloburl;
-          anchor.download = name;
-          $d.body.appendChild(anchor);
-          var evt = $d.createEvent('MouseEvents');
-          evt.initEvent('click', true, true);
-          anchor.dispatchEvent(evt);
-          $d.body.removeChild(anchor);
-        } else if (navigator.msSaveBlob) {
+        if (navigator.msSaveBlob) {
           navigator.msSaveBlob(blob, name);
         } else {
-          location.href = bloburl;
+          var URL = $w.URL || $w.webkitURL;
+          var bloburl = URL.createObjectURL(blob);
+          var anchor = $c('a');
+          if ('download' in anchor) {
+            anchor.style.visibility = 'hidden';
+            anchor.href = bloburl;
+            anchor.download = name;
+            $d.body.appendChild(anchor);
+            var evt = $d.createEvent('MouseEvents');
+            evt.initEvent('click', true, true);
+            anchor.dispatchEvent(evt);
+            $d.body.removeChild(anchor);
+          } else {
+            location.href = bloburl;
+          }
         }
       }
     },
@@ -1059,7 +1098,9 @@ $(function() {
         container: opts.container,
         support_html: opts.support_html,
         hmargin: opts.view.hmargin,
-        vmargin: opts.view.vmargin
+        vmargin: opts.view.vmargin,
+        line_width: opts.view.line_width,
+        line_color: opts.view.line_color
       };
       // create instance of function provider
       this.data = new jm.data_provider(this);
@@ -1085,6 +1126,18 @@ $(function() {
       this.options.editable = false;
     },
 
+    // call enable_event_handle('dblclick')
+    // options are 'mousedown', 'click', 'dblclick'
+    enable_event_handle: function(event_handle) {
+      this.options.default_event_handle['enable_' + event_handle + '_handle'] = true;
+    },
+
+    // call disable_event_handle('dblclick')
+    // options are 'mousedown', 'click', 'dblclick'
+    disable_event_handle: function(event_handle) {
+      this.options.default_event_handle['enable_' + event_handle + '_handle'] = false;
+    },
+
     get_editable: function() {
       return this.options.editable;
     },
@@ -1094,6 +1147,7 @@ $(function() {
       this.options.theme = (!!theme) ? theme : null;
       if (theme_old != this.options.theme) {
         this.view.reset_theme();
+        this.view.reset_custom_style();
       }
     },
     _event_bind: function() {
@@ -1103,10 +1157,12 @@ $(function() {
     },
 
     mousedown_handle: function(e) {
+      if (!this.options.default_event_handle['enable_mousedown_handle']) {
+        return;
+      }
       var element = e.target || event.srcElement;
-      var isnode = this.view.is_node(element);
-      if (isnode) {
-        var nodeid = this.view.get_nodeid(element);
+      var nodeid = this.view.get_binded_nodeid(element);
+      if (!!nodeid) {
         this.select_node(nodeid);
       } else {
         this.select_clear();
@@ -1114,35 +1170,44 @@ $(function() {
     },
 
     click_handle: function(e) {
+      if (!this.options.default_event_handle['enable_click_handle']) {
+        return;
+      }
       var element = e.target || event.srcElement;
       var isexpander = this.view.is_expander(element);
       if (isexpander) {
-        var nodeid = this.view.get_nodeid(element);
-        this.toggle_node(nodeid);
+        var nodeid = this.view.get_binded_nodeid(element);
+        if (!!nodeid) {
+          this.toggle_node(nodeid);
+        }
       }
     },
 
     dblclick_handle: function(e) {
+      if (!this.options.default_event_handle['enable_dblclick_handle']) {
+        return;
+      }
       if (this.get_editable()) {
         var element = e.target || event.srcElement;
-        var isnode = this.view.is_node(element);
-        if (isnode) {
-          var nodeid = this.view.get_nodeid(element);
+        var nodeid = this.view.get_binded_nodeid(element);
+        if (!!nodeid) {
           this.begin_edit(nodeid);
         }
       }
     },
 
     begin_edit: function(node) {
-      if (typeof node === 'string') {
-        return this.begin_edit(this.get_node(node));
+      if (!jm.util.is_node(node)) {
+        var the_node = this.get_node(node);
+        if (!the_node) {
+          logger.error('the node[id=' + node + '] can not be found.');
+          return false;
+        } else {
+          return this.begin_edit(the_node);
+        }
       }
       if (this.get_editable()) {
-        if (!!node) {
-          this.view.edit_node_begin(node);
-        } else {
-          logger.error('the node can not be found');
-        }
+        this.view.edit_node_begin(node);
       } else {
         logger.error('fail, this mind map is not editable.');
         return;
@@ -1154,44 +1219,69 @@ $(function() {
     },
 
     toggle_node: function(node) {
-      // console.log('toggle_node', node)
-      if (typeof node === 'string') {
-        return this.toggle_node(this.get_node(node));
+      if (!jm.util.is_node(node)) {
+        var the_node = this.get_node(node);
+        if (!the_node) {
+          logger.error('the node[id=' + node + '] can not be found.');
+          return;
+        } else {
+          return this.toggle_node(the_node);
+        }
       }
-      if (!!node) {
-        if (node.isroot) { return; }
-        this.layout.toggle_node(node);
-        this.view.relayout();
-      } else {
-        logger.error('the node can not be found.');
-      }
+      if (node.isroot) { return; }
+      this.view.save_location(node);
+      this.layout.toggle_node(node);
+      this.view.relayout();
+      this.view.restore_location(node);
     },
 
     expand_node: function(node) {
-      // console.log('expand_node')
-      if (typeof node === 'string') {
-        return this.expand_node(this.get_node(node));
+      if (!jm.util.is_node(node)) {
+        var the_node = this.get_node(node);
+        if (!the_node) {
+          logger.error('the node[id=' + node + '] can not be found.');
+          return;
+        } else {
+          return this.expand_node(the_node);
+        }
       }
-      if (!!node) {
-        if (node.isroot) { return; }
-        this.layout.expand_node(node);
-        this.view.relayout();
-      } else {
-        logger.error('the node can not be found.');
-      }
+      if (node.isroot) { return; }
+      this.view.save_location(node);
+      this.layout.expand_node(node);
+      this.view.relayout();
+      this.view.restore_location(node);
     },
 
     collapse_node: function(node) {
-      if (typeof node === 'string') {
-        return this.collapse_node(this.get_node(node));
+      if (!jm.util.is_node(node)) {
+        var the_node = this.get_node(node);
+        if (!the_node) {
+          logger.error('the node[id=' + node + '] can not be found.');
+          return;
+        } else {
+          return this.collapse_node(the_node);
+        }
       }
-      if (!!node) {
-        if (node.isroot) { return; }
-        this.layout.collapse_node(node);
-        this.view.relayout();
-      } else {
-        logger.error('the node can not be found.');
-      }
+      if (node.isroot) { return; }
+      this.view.save_location(node);
+      this.layout.collapse_node(node);
+      this.view.relayout();
+      this.view.restore_location(node);
+    },
+
+    expand_all: function() {
+      this.layout.expand_all();
+      this.view.relayout();
+    },
+
+    collapse_all: function() {
+      this.layout.collapse_all();
+      this.view.relayout();
+    },
+
+    expand_to_depth: function(depth) {
+      this.layout.expand_to_depth(depth);
+      this.view.relayout();
     },
 
     _reset: function() {
@@ -1208,17 +1298,17 @@ $(function() {
         logger.error('data.load error');
         return;
       } else {
-        //logger.debug('data.load ok');
+        logger.debug('data.load ok');
       }
 
       this.view.load();
-      //logger.debug('view.load ok');
+      logger.debug('view.load ok');
 
       this.layout.layout();
-      //logger.debug('layout.layout ok');
+      logger.debug('layout.layout ok');
 
       this.view.show(true);
-      //logger.debug('view.show ok');
+      logger.debug('view.show ok');
 
       this.invoke_event_handle(jm.event_type.show, { data: [mind] });
     },
@@ -1248,15 +1338,15 @@ $(function() {
     get_node: function(nodeid) {
       return this.mind.get_node(nodeid);
     },
-    //拓展，新增节点
-    add_node: function(parent_node, nodeid, topic, data, direction) {
-      //console.debug('5');
+
+    add_node: function(parent_node, nodeid, topic, data) {
       if (this.get_editable()) {
-        var node = this.mind.add_node(parent_node, nodeid, topic, data, null, direction);
+        var node = this.mind.add_node(parent_node, nodeid, topic, data);
         if (!!node) {
           this.view.add_node(node);
           this.layout.layout();
           this.view.show(false);
+          this.view.reset_node_custom_style(node);
           this.expand_node(parent_node);
           this.invoke_event_handle(jm.event_type.edit, { evt: 'add_node', data: [parent_node.id, nodeid, topic, data], node: nodeid });
         }
@@ -1269,7 +1359,7 @@ $(function() {
 
     insert_node_before: function(node_before, nodeid, topic, data) {
       if (this.get_editable()) {
-        var beforeid = (typeof node_before === 'string') ? node_before : node_before.id;
+        var beforeid = jm.util.is_node(node_before) ? node_before.id : node_before;
         var node = this.mind.insert_node_before(node_before, nodeid, topic, data);
         if (!!node) {
           this.view.add_node(node);
@@ -1286,12 +1376,13 @@ $(function() {
 
     insert_node_after: function(node_after, nodeid, topic, data) {
       if (this.get_editable()) {
+        var afterid = jm.util.is_node(node_after) ? node_after.id : node_after;
         var node = this.mind.insert_node_after(node_after, nodeid, topic, data);
         if (!!node) {
           this.view.add_node(node);
           this.layout.layout();
           this.view.show(false);
-          this.invoke_event_handle(jm.event_type.edit, { evt: 'insert_node_after', data: [node_after.id, nodeid, topic, data], node: nodeid });
+          this.invoke_event_handle(jm.event_type.edit, { evt: 'insert_node_after', data: [afterid, nodeid, topic, data], node: nodeid });
         }
         return node;
       } else {
@@ -1301,29 +1392,34 @@ $(function() {
     },
 
     remove_node: function(node) {
-      if (typeof node === 'string') {
-        return this.remove_node(this.get_node(node));
+      if (!jm.util.is_node(node)) {
+        var the_node = this.get_node(node);
+        if (!the_node) {
+          logger.error('the node[id=' + node + '] can not be found.');
+          return false;
+        } else {
+          return this.remove_node(the_node);
+        }
       }
       if (this.get_editable()) {
-        if (!!node) {
-          if (node.isroot) {
-            logger.error('fail, can not remove root node');
-            return false;
-          }
-          var nodeid = node.id;
-          var parentid = node.parent.id;
-          this.view.remove_node(node);
-          this.mind.remove_node(node);
-          this.layout.layout();
-          this.view.show(false);
-          this.invoke_event_handle(jm.event_type.edit, { evt: 'remove_node', data: [nodeid], node: parentid });
-        } else {
-          logger.error('fail, node can not be found');
+        if (node.isroot) {
+          logger.error('fail, can not remove root node');
           return false;
         }
+        var nodeid = node.id;
+        var parentid = node.parent.id;
+        var parent_node = this.get_node(parentid);
+        this.view.save_location(parent_node);
+        this.view.remove_node(node);
+        this.mind.remove_node(node);
+        this.layout.layout();
+        this.view.show(false);
+        this.view.restore_location(parent_node);
+        this.invoke_event_handle(jm.event_type.edit, { evt: 'remove_node', data: [nodeid], node: parentid });
+        return true;
       } else {
         logger.error('fail, this mind map is not editable');
-        return;
+        return false;
       }
     },
 
@@ -1368,16 +1464,20 @@ $(function() {
     },
 
     select_node: function(node) {
-      if (typeof node === 'string') {
-        return this.select_node(this.get_node(node));
+      if (!jm.util.is_node(node)) {
+        var the_node = this.get_node(node);
+        if (!the_node) {
+          logger.error('the node[id=' + node + '] can not be found.');
+          return;
+        } else {
+          return this.select_node(the_node);
+        }
       }
       if (!this.layout.is_visible(node)) {
         return;
       }
       this.mind.selected = node;
-      if (!!node) {
-        this.view.select_node(node);
-      }
+      this.view.select_node(node);
     },
 
     get_selected_node: function() {
@@ -1400,10 +1500,16 @@ $(function() {
     },
 
     find_node_before: function(node) {
-      if (typeof node === 'string') {
-        return this.find_node_before(this.get_node(node));
+      if (!jm.util.is_node(node)) {
+        var the_node = this.get_node(node);
+        if (!the_node) {
+          logger.error('the node[id=' + node + '] can not be found.');
+          return;
+        } else {
+          return this.find_node_before(the_node);
+        }
       }
-      if (!node || node.isroot) { return null; }
+      if (node.isroot) { return null; }
       var n = null;
       if (node.parent.isroot) {
         var c = node.parent.children;
@@ -1425,10 +1531,16 @@ $(function() {
     },
 
     find_node_after: function(node) {
-      if (typeof node === 'string') {
-        return this.find_node_after(this.get_node(node));
+      if (!jm.util.is_node(node)) {
+        var the_node = this.get_node(node);
+        if (!the_node) {
+          logger.error('the node[id=' + node + '] can not be found.');
+          return;
+        } else {
+          return this.find_node_after(the_node);
+        }
       }
-      if (!node || node.isroot) { return null; }
+      if (node.isroot) { return null; }
       var n = null;
       if (node.parent.isroot) {
         var c = node.parent.children;
@@ -1450,6 +1562,95 @@ $(function() {
         n = this.mind.get_node_after(node);
       }
       return n;
+    },
+
+    set_node_color: function(nodeid, bgcolor, fgcolor) {
+      if (this.get_editable()) {
+        var node = this.mind.get_node(nodeid);
+        if (!!node) {
+          if (!!bgcolor) {
+            node.data['background-color'] = bgcolor;
+          }
+          if (!!fgcolor) {
+            node.data['foreground-color'] = fgcolor;
+          }
+          this.view.reset_node_custom_style(node);
+        }
+      } else {
+        logger.error('fail, this mind map is not editable');
+        return null;
+      }
+    },
+
+    set_node_font_style: function(nodeid, size, weight, style) {
+      if (this.get_editable()) {
+        var node = this.mind.get_node(nodeid);
+        if (!!node) {
+          if (!!size) {
+            node.data['font-size'] = size;
+          }
+          if (!!weight) {
+            node.data['font-weight'] = weight;
+          }
+          if (!!style) {
+            node.data['font-style'] = style;
+          }
+          this.view.reset_node_custom_style(node);
+          this.view.update_node(node);
+          this.layout.layout();
+          this.view.show(false);
+        }
+      } else {
+        logger.error('fail, this mind map is not editable');
+        return null;
+      }
+    },
+
+    set_node_background_image: function(nodeid, image, width, height, rotation) {
+      if (this.get_editable()) {
+        var node = this.mind.get_node(nodeid);
+        if (!!node) {
+          if (!!image) {
+            node.data['background-image'] = image;
+          }
+          if (!!width) {
+            node.data['width'] = width;
+          }
+          if (!!height) {
+            node.data['height'] = height;
+          }
+          if (!!rotation) {
+            node.data['background-rotation'] = rotation;
+          }
+          this.view.reset_node_custom_style(node);
+          this.view.update_node(node);
+          this.layout.layout();
+          this.view.show(false);
+        }
+      } else {
+        logger.error('fail, this mind map is not editable');
+        return null;
+      }
+    },
+
+    set_node_background_rotation: function(nodeid, rotation) {
+      if (this.get_editable()) {
+        var node = this.mind.get_node(nodeid);
+        if (!!node) {
+          if (!node.data['background-image']) {
+            logger.error('fail, only can change rotation angle of node with background image');
+            return null;
+          }
+          node.data['background-rotation'] = rotation;
+          this.view.reset_node_custom_style(node);
+          this.view.update_node(node);
+          this.layout.layout();
+          this.view.show(false);
+        }
+      } else {
+        logger.error('fail, this mind map is not editable');
+        return null;
+      }
     },
 
     resize: function() {
@@ -1487,11 +1688,11 @@ $(function() {
 
   jm.data_provider.prototype = {
     init: function() {
-      //logger.debug('data.init');
+      logger.debug('data.init');
     },
 
     reset: function() {
-      //logger.debug('data.reset');
+      logger.debug('data.reset');
     },
 
     load: function(mind_data) {
@@ -1547,14 +1748,14 @@ $(function() {
 
   jm.layout_provider.prototype = {
     init: function() {
-      //logger.debug('layout.init');
+      logger.debug('layout.init');
     },
     reset: function() {
-      //logger.debug('layout.reset');
+      logger.debug('layout.reset');
       this.bounds = { n: 0, s: 0, w: 0, e: 0 };
     },
     layout: function() {
-      //logger.debug('layout.layout');
+      logger.debug('layout.layout');
       this.layout_direction();
       this.layout_offset();
     },
@@ -1565,7 +1766,7 @@ $(function() {
 
     _layout_direction_root: function() {
       var node = this.jm.mind.root;
-      // //logger.debug(node);
+      // logger.debug(node);
       var layout_data = null;
       if ('layout' in node._data) {
         layout_data = node._data.layout;
@@ -1651,7 +1852,7 @@ $(function() {
       layout_data.outer_height_right = this._layout_offset_subnodes(right_nodes);
       this.bounds.e = node._data.view.width / 2;
       this.bounds.w = 0 - this.bounds.e;
-      ////logger.debug(this.bounds.w);
+      //logger.debug(this.bounds.w);
       this.bounds.n = 0;
       this.bounds.s = Math.max(layout_data.outer_height_left, layout_data.outer_height_right);
     },
@@ -1674,8 +1875,9 @@ $(function() {
         }
 
         node_outer_height = this._layout_offset_subnodes(node.children);
-        if (('isexpand' in layout_data) && !layout_data.isexpand) {
+        if (!node.expanded) {
           node_outer_height = 0;
+          this.set_visible(node.children, false);
         }
         node_outer_height = Math.max(node._data.view.height, node_outer_height);
 
@@ -1697,14 +1899,12 @@ $(function() {
       while (i--) {
         node = nodes[i];
         node._data.layout.offset_y += middle_height;
-        ////logger.debug(node._data.layout.offset_y);
       }
       return total_height;
     },
 
     // layout the y axis only, for collapse/expand a node
     _layout_offset_subnodes_height: function(nodes) {
-      return this._layout_offset_subnodes(nodes);
       var total_height = 0;
       var nodes_count = nodes.length;
       var i = nodes_count;
@@ -1721,7 +1921,7 @@ $(function() {
         }
 
         node_outer_height = this._layout_offset_subnodes_height(node.children);
-        if (('isexpand' in layout_data) && !layout_data.isexpand) {
+        if (!node.expanded) {
           node_outer_height = 0;
         }
         node_outer_height = Math.max(node._data.view.height, node_outer_height);
@@ -1739,8 +1939,8 @@ $(function() {
       while (i--) {
         node = nodes[i];
         node._data.layout.offset_y += middle_height;
-        ////logger.debug(node.topic);
-        ////logger.debug(node._data.layout.offset_y);
+        //logger.debug(node.topic);
+        //logger.debug(node._data.layout.offset_y);
       }
       return total_height;
     },
@@ -1771,11 +1971,11 @@ $(function() {
     get_node_point: function(node) {
       var view_data = node._data.view;
       var offset_p = this.get_node_offset(node);
-      ////logger.debug(offset_p);
+      //logger.debug(offset_p);
       var p = {};
       p.x = offset_p.x + view_data.width * (node._data.layout.direction - 1) / 2;
       p.y = offset_p.y - view_data.height / 2;
-      ////logger.debug(p);
+      //logger.debug(p);
       return p;
     },
 
@@ -1802,8 +2002,8 @@ $(function() {
           var offset_p = this.get_node_offset(node);
           pout_cache.x = offset_p.x + (view_data.width + this.opts.pspace) * node._data.layout.direction;
           pout_cache.y = offset_p.y;
-          ////logger.debug('pout');
-          ////logger.debug(pout_cache);
+          //logger.debug('pout');
+          //logger.debug(pout_cache);
         }
       }
       return pout_cache;
@@ -1828,7 +2028,7 @@ $(function() {
       for (var nodeid in nodes) {
         node = nodes[nodeid];
         pout = this.get_node_point_out(node);
-        ////logger.debug(pout.x);
+        //logger.debug(pout.x);
         if (pout.x > this.bounds.e) { this.bounds.e = pout.x; }
         if (pout.x < this.bounds.w) { this.bounds.w = pout.x; }
       }
@@ -1842,12 +2042,7 @@ $(function() {
       if (node.isroot) {
         return;
       }
-      var layout_data = node._data.layout;
-      var isexpand = true;
-      if ('isexpand' in layout_data) {
-        isexpand = layout_data.isexpand;
-      }
-      if (isexpand) {
+      if (node.expanded) {
         this.collapse_node(node);
       } else {
         this.expand_node(node);
@@ -1855,23 +2050,18 @@ $(function() {
     },
     // 展开节点
     expand_node: function(node) {
-      // console.log('expand_node', node)
-      ////logger.debug('expand');
-      node._data.layout.isexpand = true;
+      node.expanded = true;
       this.part_layout(node);
       this.set_visible(node.children, true);
       this.toggleBadge(node.children, true);
     },
     // 收叠节点
     collapse_node: function(node) {
-      // console.log('collapse_node', node)
-      ////logger.debug('collapse');
-      node._data.layout.isexpand = false;
+      node.expanded = false;
       this.part_layout(node);
       this.set_visible(node.children, false);
       this.toggleBadge(node.children, false);
     },
-
     // 隐藏/显示 badger
     // true: 显示
     // false: 隐藏
@@ -1889,20 +2079,80 @@ $(function() {
         } else {
           $ele.hide();
         }
-        var children = e.children;
-        if (children.length > 0) that.toggleBadge(children, isShow)
       });
     },
 
+    expand_all: function() {
+      var nodes = this.jm.mind.nodes;
+      var c = 0;
+      var node;
+      for (var nodeid in nodes) {
+        node = nodes[nodeid];
+        if (!node.expanded) {
+          node.expanded = true;
+          c++;
+        }
+      }
+      if (c > 0) {
+        var root = this.jm.mind.root;
+        this.part_layout(root);
+        this.set_visible(root.children, true);
+      }
+    },
+
+    collapse_all: function() {
+      var nodes = this.jm.mind.nodes;
+      var c = 0;
+      var node;
+      for (var nodeid in nodes) {
+        node = nodes[nodeid];
+        if (node.expanded && !node.isroot) {
+          node.expanded = false
+          c++;
+        }
+      }
+      if (c > 0) {
+        var root = this.jm.mind.root;
+        this.part_layout(root);
+        this.set_visible(root.children, true);
+      }
+    },
+
+    expand_to_depth: function(target_depth, curr_nodes, curr_depth) {
+      if (target_depth < 1) { return; }
+      var nodes = curr_nodes || this.jm.mind.root.children;
+      var depth = curr_depth || 1;
+      var i = nodes.length;
+      var node = null;
+      while (i--) {
+        node = nodes[i];
+        if (depth < target_depth) {
+          if (!node.expanded) {
+            this.expand_node(node);
+          }
+          this.expand_to_depth(target_depth, node.children, depth + 1);
+        }
+        if (depth == target_depth) {
+          if (node.expanded) {
+            this.collapse_node(node);
+          }
+        }
+      }
+    },
+
     part_layout: function(node) {
-      ////logger.debug('part_layout');
       var root = this.jm.mind.root;
       if (!!root) {
         var root_layout_data = root._data.layout;
-        if (node._data.layout.direction == jm.direction.right) {
+        if (node.isroot) {
           root_layout_data.outer_height_right = this._layout_offset_subnodes_height(root_layout_data.right_nodes);
-        } else {
           root_layout_data.outer_height_left = this._layout_offset_subnodes_height(root_layout_data.left_nodes);
+        } else {
+          if (node._data.layout.direction == jm.direction.right) {
+            root_layout_data.outer_height_right = this._layout_offset_subnodes_height(root_layout_data.right_nodes);
+          } else {
+            root_layout_data.outer_height_left = this._layout_offset_subnodes_height(root_layout_data.left_nodes);
+          }
         }
         this.bounds.s = Math.max(root_layout_data.outer_height_left, root_layout_data.outer_height_right);
         this.cache_valid = false;
@@ -1918,22 +2168,19 @@ $(function() {
       while (i--) {
         node = nodes[i];
         layout_data = node._data.layout;
-        if (('isexpand' in layout_data) && !layout_data.isexpand) {
-          this.set_visible(node.children, false);
-        } else {
+        if (node.expanded) {
           this.set_visible(node.children, visible);
+        } else {
+          this.set_visible(node.children, false);
         }
-        node._data.layout.visible = visible;
+        if (!node.isroot) {
+          node._data.layout.visible = visible;
+        }
       }
     },
 
     is_expand: function(node) {
-      var layout_data = node._data.layout;
-      if (('isexpand' in layout_data) && !layout_data.isexpand) {
-        return false;
-      } else {
-        return true;
-      }
+      return node.expanded;
     },
 
     is_visible: function(node) {
@@ -1966,9 +2213,9 @@ $(function() {
 
   jm.view_provider.prototype = {
     init: function() {
-      //logger.debug('view.init');
+      logger.debug('view.init');
 
-      this.container = $g(this.opts.container);
+      this.container = $i(this.opts.container) ? this.opts.container : $g(this.opts.container);
       if (!this.container) {
         logger.error('the options.view.container was not be found in dom');
         return;
@@ -1985,13 +2232,16 @@ $(function() {
       this.e_editor.className = 'jsmind-editor';
       this.e_editor.type = 'text';
 
+      this.actualZoom = 1;
+      this.zoomStep = 0.1;
+      this.minZoom = 0.5;
+      this.maxZoom = 2;
+
       var v = this;
       jm.util.dom.add_event(this.e_editor, 'keydown', function(e) {
         var evt = e || event;
-        if (evt.keyCode == 13) {
-          v.edit_node_end();
-          evt.stopPropagation();
-        }
+        if (evt.keyCode == 13) { v.edit_node_end();
+          evt.stopPropagation(); }
       });
       jm.util.dom.add_event(this.e_editor, 'blur', function(e) {
         v.edit_node_end();
@@ -2009,12 +2259,19 @@ $(function() {
       });
     },
 
-    get_nodeid: function(element) {
-      return element.getAttribute('nodeid');
-    },
-
-    is_node: function(element) {
-      return (element.tagName.toLowerCase() == 'jmnode');
+    get_binded_nodeid: function(element) {
+      if (element == null) {
+        return null;
+      }
+      var tagName = element.tagName.toLowerCase();
+      if (tagName == 'jmnodes' || tagName == 'body' || tagName == 'html') {
+        return null;
+      }
+      if (tagName == 'jmnode' || tagName == 'jmexpander') {
+        return element.getAttribute('nodeid');
+      } else {
+        return this.get_binded_nodeid(element.parentElement);
+      }
     },
 
     is_expander: function(element) {
@@ -2022,7 +2279,7 @@ $(function() {
     },
 
     reset: function() {
-      // console.log('view.reset');
+      logger.debug('view.reset');
       this.selected_node = null;
       this.clear_lines();
       this.clear_nodes();
@@ -2032,14 +2289,21 @@ $(function() {
     reset_theme: function() {
       var theme_name = this.jm.options.theme;
       if (!!theme_name) {
-        this.e_nodes.className = theme_name;
+        this.e_nodes.className = 'theme-' + theme_name;
       } else {
         this.e_nodes.className = '';
       }
     },
 
+    reset_custom_style: function() {
+      var nodes = this.jm.mind.nodes;
+      for (var nodeid in nodes) {
+        this.reset_node_custom_style(nodes[nodeid]);
+      }
+    },
+
     load: function() {
-      //logger.debug('view.load');
+      logger.debug('view.load');
       this.init_nodes();
     },
 
@@ -2054,28 +2318,36 @@ $(function() {
       this.size.w = client_w;
       this.size.h = client_h;
     },
-    //补充，绘制连接线
+
     init_canvas: function() {
       var ctx = this.e_canvas.getContext('2d');
-      ctx.strokeStyle = '#555';
-      ctx.lineWidth = 2;
-      ctx.lineCap = 'round';
       this.canvas_ctx = ctx;
+    },
+
+    init_nodes_size: function(node) {
+      var view_data = node._data.view;
+      view_data.width = view_data.element.clientWidth;
+      view_data.height = view_data.element.clientHeight;
     },
 
     init_nodes: function() {
       var nodes = this.jm.mind.nodes;
+      var doc_frag = $d.createDocumentFragment();
       for (var nodeid in nodes) {
-        this.create_node_element(nodes[nodeid]);
+        this.create_node_element(nodes[nodeid], doc_frag);
+      }
+      this.e_nodes.appendChild(doc_frag);
+      for (var nodeid in nodes) {
+        this.init_nodes_size(nodes[nodeid]);
       }
     },
 
     add_node: function(node) {
-      //console.debug('1');
-      this.create_node_element(node);
+      this.create_node_element(node, this.e_nodes);
+      this.init_nodes_size(node);
     },
 
-    create_node_element: function(node) {
+    create_node_element: function(node, parent_node) {
       var view_data = null;
       if ('view' in node._data) {
         view_data = node._data.view;
@@ -2092,30 +2364,35 @@ $(function() {
         $t(d_e, '-');
         d_e.setAttribute('nodeid', node.id);
         d_e.style.visibility = 'hidden';
-        this.e_nodes.appendChild(d_e);
+        parent_node.appendChild(d_e);
         view_data.expander = d_e;
       }
-      if (this.opts.support_html) {
-        $h(d, node.topic);
-      } else {
-        $t(d, node.topic);
+      if (!!node.topic) {
+        if (this.opts.support_html) {
+          $h(d, node.topic);
+        } else {
+          $t(d, node.topic);
+        }
       }
-      d.setAttribute('nodeid', node.id);
-      d.style.visibility = 'hidden';
-      this.e_nodes.appendChild(d);
-      view_data.element = d;
-      view_data.width = d.clientWidth;
-      view_data.height = d.clientHeight;
 
       // 创建右上角的小图标 雕漆里
       var badge = $c('div');
       badge.className = 'leo-badge'
-      this.e_nodes.appendChild(badge);
+      parent_node.appendChild(badge);
       $t(badge, node._data.badge)
       badge.setAttribute('nodeid', node.id);
       badge.style.visibility = 'hidden';
       view_data.badge = badge;
+
+
+      d.setAttribute('nodeid', node.id);
+      d.style.visibility = 'hidden';
+      this._reset_node_custom_style(d, node.data);
+
+      parent_node.appendChild(d);
+      view_data.element = d;
     },
+
     remove_node: function(node) {
       if (this.selected_node != null && this.selected_node.id == node.id) {
         this.selected_node = null;
@@ -2142,10 +2419,12 @@ $(function() {
     update_node: function(node) {
       var view_data = node._data.view;
       var element = view_data.element;
-      if (this.opts.support_html) {
-        $h(element, node.topic);
-      } else {
-        $t(element, node.topic);
+      if (!!node.topic) {
+        if (this.opts.support_html) {
+          $h(element, node.topic);
+        } else {
+          $t(element, node.topic);
+        }
       }
       view_data.width = element.clientWidth;
       view_data.height = element.clientHeight;
@@ -2154,11 +2433,13 @@ $(function() {
     select_node: function(node) {
       if (!!this.selected_node) {
         this.selected_node._data.view.element.className =
-          this.selected_node._data.view.element.className.replace(/\s*selected\s*/i, '');
+          this.selected_node._data.view.element.className.replace(/\s*selected\b/i, '');
+        this.reset_node_custom_style(this.selected_node);
       }
       if (!!node) {
         this.selected_node = node;
         node._data.view.element.className += ' selected';
+        this.clear_node_custom_style(node);
       }
     },
 
@@ -2175,6 +2456,10 @@ $(function() {
     },
 
     edit_node_begin: function(node) {
+      if (!node.topic) {
+        logger.warn("don't edit image nodes");
+        return;
+      }
       if (this.editing_node != null) {
         this.edit_node_end();
       }
@@ -2182,7 +2467,9 @@ $(function() {
       var view_data = node._data.view;
       var element = view_data.element;
       var topic = node.topic;
+      var ncs = getComputedStyle(element);
       this.e_editor.value = topic;
+      this.e_editor.style.width = (element.clientWidth - parseInt(ncs.getPropertyValue('padding-left')) - parseInt(ncs.getPropertyValue('padding-right'))) + 'px';
       element.innerHTML = '';
       element.appendChild(this.e_editor);
       element.style.zIndex = 5;
@@ -2229,7 +2516,6 @@ $(function() {
     },
 
     _show: function() {
-      // console.log('_show')
       this.e_canvas.width = this.size.w;
       this.e_canvas.height = this.size.h;
       this.e_nodes.style.width = this.size.w + 'px';
@@ -2238,6 +2524,27 @@ $(function() {
       this.show_lines();
       //this.layout.cache_valid = true;
       this.jm.invoke_event_handle(jm.event_type.resize, { data: [] });
+    },
+
+    zoomIn: function() {
+      return this.setZoom(this.actualZoom + this.zoomStep);
+    },
+
+    zoomOut: function() {
+      return this.setZoom(this.actualZoom - this.zoomStep);
+    },
+
+    setZoom: function(zoom) {
+      if ((zoom < this.minZoom) || (zoom > this.maxZoom)) {
+        return false;
+      }
+      this.actualZoom = zoom;
+      for (var i = 0; i < this.e_panel.children.length; i++) {
+        this.e_panel.children[i].style.transform = 'scale(' + zoom + ')';
+      };
+      this.show(true);
+      return true;
+
     },
 
     _center_root: function() {
@@ -2254,7 +2561,7 @@ $(function() {
     },
 
     show: function(keep_center) {
-      //logger.debug('view.show');
+      logger.debug('view.show');
       this.expand_size();
       this._show();
       if (!!keep_center) {
@@ -2263,9 +2570,22 @@ $(function() {
     },
 
     relayout: function() {
-      // console.log('relayout')
       this.expand_size();
       this._show();
+    },
+
+    save_location: function(node) {
+      var vd = node._data.view;
+      vd._saved_location = {
+        x: parseInt(vd.element.style.left) - this.e_panel.scrollLeft,
+        y: parseInt(vd.element.style.top) - this.e_panel.scrollTop,
+      };
+    },
+
+    restore_location: function(node) {
+      var vd = node._data.view;
+      this.e_panel.scrollLeft = parseInt(vd.element.style.left) - vd._saved_location.x;
+      this.e_panel.scrollTop = parseInt(vd.element.style.top) - vd._saved_location.y;
     },
 
     clear_nodes: function() {
@@ -2293,35 +2613,30 @@ $(function() {
       var expander_text = '-';
       var view_data = null;
       var _offset = this.get_view_offset();
-      // 喝喝
       for (var nodeid in nodes) {
         node = nodes[nodeid];
-        // console.log('node', node);
         view_data = node._data.view;
         node_element = view_data.element;
         expander = view_data.expander;
         if (!this.layout.is_visible(node)) {
-          ////console.debug("扩展，动画");
-          //扩展，动画
-          $(node_element).fadeOut("fast");
-          $(expander).fadeOut("fast");
-          // Leo: 下面这两个是作者注释的，不关我事
-          //node_element.style.display = 'none';
-          //expander.style.display = 'none';
+          node_element.style.display = 'none';
+          expander.style.display = 'none';
           continue;
         }
+        this.reset_node_custom_style(node);
         p = this.layout.get_node_point(node);
         view_data.abs_x = _offset.x + p.x;
         view_data.abs_y = _offset.y + p.y;
         node_element.style.left = (_offset.x + p.x) + 'px';
         node_element.style.top = (_offset.y + p.y) + 'px';
-        $(node_element).fadeIn("fast");
-        //node_element.style.display = '';
+        node_element.style.display = '';
         node_element.style.visibility = 'visible';
+        
         p_expander = this.layout.get_expander_point(node);
+        
         // 创建右侧expander收缩按钮
         if (!node.isroot && node.children.length > 0) {
-          expander_text = this.layout.is_expand(node) ? '-' : '+';
+          expander_text = node.expanded ? '-' : '+';
           expander.style.left = (_offset.x + p_expander.x) + 'px';
           expander.style.top = (_offset.y + p_expander.y) + 'px';
           expander.style.display = '';
@@ -2344,13 +2659,76 @@ $(function() {
       }
     },
 
-    clear_lines: function() {
-      // console.log('clear_lines')
-      jm.util.canvas.clear(this.canvas_ctx, 0, 0, this.size.w, this.size.h);
+    reset_node_custom_style: function(node) {
+      this._reset_node_custom_style(node._data.view.element, node.data);
     },
 
-    show_lines: function() {
-      this.clear_lines();
+    _reset_node_custom_style: function(node_element, node_data) {
+      if ('background-color' in node_data) {
+        node_element.style.backgroundColor = node_data['background-color'];
+      }
+      if ('foreground-color' in node_data) {
+        node_element.style.color = node_data['foreground-color'];
+      }
+      if ('width' in node_data) {
+        node_element.style.width = node_data['width'] + 'px';
+      }
+      if ('height' in node_data) {
+        node_element.style.height = node_data['height'] + 'px';
+      }
+      if ('font-size' in node_data) {
+        node_element.style.fontSize = node_data['font-size'] + 'px';
+      }
+      if ('font-weight' in node_data) {
+        node_element.style.fontWeight = node_data['font-weight'];
+      }
+      if ('font-style' in node_data) {
+        node_element.style.fontStyle = node_data['font-style'];
+      }
+      if ('background-image' in node_data) {
+        var backgroundImage = node_data['background-image'];
+        if (backgroundImage.startsWith('data') && node_data['width'] && node_data['height']) {
+          var img = new Image();
+
+          img.onload = function() {
+            var c = $c('canvas');
+            c.width = node_element.clientWidth;
+            c.height = node_element.clientHeight;
+            var img = this;
+            if (c.getContext) {
+              var ctx = c.getContext('2d');
+              ctx.drawImage(img, 2, 2, node_element.clientWidth, node_element.clientHeight);
+              var scaledImageData = c.toDataURL();
+              node_element.style.backgroundImage = 'url(' + scaledImageData + ')';
+            }
+          };
+          img.src = backgroundImage;
+
+        } else {
+          node_element.style.backgroundImage = 'url(' + backgroundImage + ')';
+        }
+        node_element.style.backgroundSize = '99%';
+
+        if ('background-rotation' in node_data) {
+          node_element.style.transform = 'rotate(' + node_data['background-rotation'] + 'deg)';
+        }
+
+      }
+    },
+
+    clear_node_custom_style: function(node) {
+      var node_element = node._data.view.element;
+      node_element.style.backgroundColor = "";
+      node_element.style.color = "";
+    },
+
+    clear_lines: function(canvas_ctx) {
+      var ctx = canvas_ctx || this.canvas_ctx;
+      jm.util.canvas.clear(ctx, 0, 0, this.size.w, this.size.h);
+    },
+
+    show_lines: function(canvas_ctx) {
+      this.clear_lines(canvas_ctx);
       var nodes = this.jm.mind.nodes;
       var node = null;
       var pin = null;
@@ -2359,26 +2737,26 @@ $(function() {
       for (var nodeid in nodes) {
         node = nodes[nodeid];
         if (!!node.isroot) { continue; }
-        // 找到当前操作的节点，进行排除
-        if (('visible' in node._data.layout) && !node._data.layout.visible) {
-          // console.log('if' , node)
-          continue;
-        }
-        // console.log('else' , node)
+        if (('visible' in node._data.layout) && !node._data.layout.visible) { continue; }
         pin = this.layout.get_node_point_in(node);
         pout = this.layout.get_node_point_out(node.parent);
-        this.draw_line(pout, pin, _offset);
+        this.draw_line(pout, pin, _offset, canvas_ctx);
       }
     },
 
-    draw_line: function(pin, pout, offset) {
-      jm.util.canvas.gaussto(
-        this.canvas_ctx,
+    draw_line: function(pin, pout, offset, canvas_ctx) {
+      var ctx = canvas_ctx || this.canvas_ctx;
+      ctx.strokeStyle = this.opts.line_color;
+      ctx.lineWidth = this.opts.line_width;
+      ctx.lineCap = 'round';
+
+      jm.util.canvas.bezierto(
+        ctx,
         pin.x + offset.x,
         pin.y + offset.y,
         pout.x + offset.x,
         pout.y + offset.y);
-    }
+    },
   };
 
   // shortcut provider
@@ -2476,35 +2854,39 @@ $(function() {
     handle_up: function(_jm, e) {
       var evt = e || event;
       var selected_node = _jm.get_selected_node();
-      var up_node = _jm.find_node_before(selected_node);
-      if (!up_node) {
-        var np = _jm.find_node_before(selected_node.parent);
-        if (!!np && np.children.length > 0) {
-          up_node = np.children[np.children.length - 1];
+      if (!!selected_node) {
+        var up_node = _jm.find_node_before(selected_node);
+        if (!up_node) {
+          var np = _jm.find_node_before(selected_node.parent);
+          if (!!np && np.children.length > 0) {
+            up_node = np.children[np.children.length - 1];
+          }
         }
+        if (!!up_node) {
+          _jm.select_node(up_node);
+        }
+        evt.stopPropagation();
+        evt.preventDefault();
       }
-      if (!!up_node) {
-        _jm.select_node(up_node);
-      }
-      evt.stopPropagation();
-      evt.preventDefault();
     },
 
     handle_down: function(_jm, e) {
       var evt = e || event;
       var selected_node = _jm.get_selected_node();
-      var down_node = _jm.find_node_after(selected_node);
-      if (!down_node) {
-        var np = _jm.find_node_after(selected_node.parent);
-        if (!!np && np.children.length > 0) {
-          down_node = np.children[0];
+      if (!!selected_node) {
+        var down_node = _jm.find_node_after(selected_node);
+        if (!down_node) {
+          var np = _jm.find_node_after(selected_node.parent);
+          if (!!np && np.children.length > 0) {
+            down_node = np.children[0];
+          }
         }
+        if (!!down_node) {
+          _jm.select_node(down_node);
+        }
+        evt.stopPropagation();
+        evt.preventDefault();
       }
-      if (!!down_node) {
-        _jm.select_node(down_node);
-      }
-      evt.stopPropagation();
-      evt.preventDefault();
     },
 
     handle_left: function(_jm, e) {
@@ -2584,8 +2966,14 @@ $(function() {
     return _jm;
   };
 
-  // register global variables
-  $w[__name__] = jm;
+  // export jsmind
+  if (typeof module !== 'undefined' && typeof exports === 'object') {
+    module.exports = jm;
+  } else if (typeof define === 'function' && (define.amd || define.cmd)) {
+    define(function() { return jm; });
+  } else {
+    $w[__name__] = jm;
+  }
 })(window);
 
 
@@ -2669,8 +3057,14 @@ $(function() {
       this.shadow.innerHTML = el.innerHTML;
       s.left = el.style.left;
       s.top = el.style.top;
+      s.width = el.style.width;
+      s.height = el.style.height;
+      s.backgroundImage = el.style.backgroundImage;
+      s.backgroundSize = el.style.backgroundSize;
+      s.transform = el.style.transform;
       this.shadow_w = this.shadow.clientWidth;
       this.shadow_h = this.shadow.clientHeight;
+
     },
 
     show_shadow: function() {
@@ -2775,7 +3169,7 @@ $(function() {
     _event_bind: function() {
       var jd = this;
       var container = this.jm.view.container;
-      // 鼠标右键
+      // 鼠标右键 (leo 加的)
       jdom.add_event(container, 'contextmenu', function(e) {
         // console.log('contextmenu')
         var evt = e || event;
@@ -2783,42 +3177,49 @@ $(function() {
       });
       // 鼠标按下
       jdom.add_event(container, 'mousedown', function(e) {
-        // console.log('mousedown')
         var evt = e || event;
         jd.dragstart.call(jd, evt);
       });
       // 鼠标移动
       jdom.add_event(container, 'mousemove', function(e) {
-        // console.log('mousemove')
         var evt = e || event;
         jd.drag.call(jd, evt);
       });
       // 鼠标弹起
       jdom.add_event(container, 'mouseup', function(e) {
-        // console.log('mouseup')
-        $conTextMenu.hide();
+        var evt = e || event;
+        jd.dragend.call(jd, evt);
+      });
+      jdom.add_event(container, 'touchstart', function(e) {
+        var evt = e || event;
+        jd.dragstart.call(jd, evt);
+      });
+      jdom.add_event(container, 'touchmove', function(e) {
+        var evt = e || event;
+        jd.drag.call(jd, evt);
+      });
+      jdom.add_event(container, 'touchend', function(e) {
         var evt = e || event;
         jd.dragend.call(jd, evt);
       });
     },
 
     dragstart: function(e) {
-      // Leo: 为了配合右键菜单，注释下面这个，就很好了
       if (!this.jm.get_editable()) { return; }
       if (this.capture) { return; }
       this.active_node = null;
 
       var jview = this.jm.view;
       var el = e.target || event.srcElement;
-      var isnode = jview.is_node(el);
-      if (isnode) {
-        var nodeid = jview.get_nodeid(el);
+      if (el.tagName.toLowerCase() != 'jmnode') { return; }
+      var nodeid = jview.get_binded_nodeid(el);
+      if (!!nodeid) {
         var node = this.jm.get_node(nodeid);
         if (!node.isroot) {
           this.reset_shadow(el);
           this.active_node = node;
-          this.offset_x = e.clientX - el.offsetLeft;
-          this.offset_y = e.clientY - el.offsetTop;
+          this.offset_x = (e.clientX || e.touches[0].clientX) - el.offsetLeft;
+          this.offset_y = (e.clientY || e.touches[0].clientY) - el.offsetTop;
           this.client_hw = Math.floor(el.clientWidth / 2);
           this.client_hh = Math.floor(el.clientHeight / 2);
           if (this.hlookup_delay != 0) {
@@ -2840,14 +3241,14 @@ $(function() {
     },
 
     drag: function(e) {
-      // Leo: 为了配合右键菜单，注释下面这个，就很好了
       if (!this.jm.get_editable()) { return; }
       if (this.capture) {
+        e.preventDefault();
         this.show_shadow();
         this.moved = true;
         clear_selection();
-        var px = e.clientX - this.offset_x;
-        var py = e.clientY - this.offset_y;
+        var px = (e.clientX || e.touches[0].clientX) - this.offset_x;
+        var py = (e.clientY || e.touches[0].clientY) - this.offset_y;
         var cx = px + this.client_hw;
         var cy = py + this.client_hh;
         this.shadow.style.left = px + 'px';
@@ -2857,7 +3258,6 @@ $(function() {
     },
 
     dragend: function(e) {
-      // Leo: 为了配合右键菜单，注释下面这个，就很好了
       if (!this.jm.get_editable()) { return; }
       if (this.capture) {
         if (this.hlookup_delay != 0) {
