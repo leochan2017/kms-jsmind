@@ -1,7 +1,10 @@
 var $conTextMenu = '';
 
+// an noop function define
+var _noop = function() {};
+
 $(function() {
-  var html = '<div id="kmsjsmap_contextmenu"><ul class="sui-dropdown-menu"><li><a href="javascript: kmsjsmap.add_node();">添加节点</a></li><li><a href="javascript: kmsjsmap.modify_node()">编辑节点</a></li><li><a href="javascript: kmsjsmap.del_node()">删除节点</a></li></ul></div>';
+  var html = '<div id="kmsjsmap_contextmenu"><ul class="sui-dropdown-menu"><li><a href="javascript: kmsjsmap.add_node();">添加节点</a></li><li><a href="javascript: kmsjsmap.modify_node()">编辑节点</a></li><li><a href="javascript: kmsjsmap.del_node()">删除节点</a></li><li><a href="javascript: kmsjsmap.relation_node()">关联节点</a></li></ul></div>';
 
   $('body').append(html);
 
@@ -21,8 +24,6 @@ $(function() {
   // author
   var __author__ = 'leochan2017@gmail.com';
 
-  // an noop function define
-  var _noop = function() {};
   var logger = (typeof console === 'undefined') ? {
     log: _noop,
     debug: _noop,
@@ -2240,8 +2241,10 @@ $(function() {
       var v = this;
       jm.util.dom.add_event(this.e_editor, 'keydown', function(e) {
         var evt = e || event;
-        if (evt.keyCode == 13) { v.edit_node_end();
-          evt.stopPropagation(); }
+        if (evt.keyCode == 13) {
+          v.edit_node_end();
+          evt.stopPropagation();
+        }
       });
       jm.util.dom.add_event(this.e_editor, 'blur', function(e) {
         v.edit_node_end();
@@ -2631,9 +2634,9 @@ $(function() {
         node_element.style.top = (_offset.y + p.y) + 'px';
         node_element.style.display = '';
         node_element.style.visibility = 'visible';
-        
+
         p_expander = this.layout.get_expander_point(node);
-        
+
         // 创建右侧expander收缩按钮
         if (!node.isroot && node.children.length > 0) {
           expander_text = node.expanded ? '-' : '+';
@@ -10566,7 +10569,6 @@ $(function() {
   if (!$w.jsMind) return
 
   var __NAME__ = 'kmsjsmap'
-  var _noop = function() {}
   var logger = (typeof console === 'undefined') ? {
     log: _noop,
     debug: _noop,
@@ -10582,7 +10584,12 @@ $(function() {
     }
   }
 
-  var kmsjsmap = { options: '', isInit: false, editable: true }
+  var kmsjsmap = {
+    options: '',
+    isInit: false,
+    editable: true,
+    onRelation: _noop
+  }
 
 
   kmsjsmap.init = function(options) {
@@ -10595,6 +10602,7 @@ $(function() {
     this.isInit = true
     this.options = options
     this.editable = options.editable === true ? true : false
+    if (options.onRelation) this.onRelation = options.onRelation
     this._load_jsmind()
     this._init_button()
   }
@@ -10690,7 +10698,6 @@ $(function() {
     })
   }
 
-
   // 编辑节点
   kmsjsmap.modify_node = function() {
     $conTextMenu.hide();
@@ -10711,6 +10718,12 @@ $(function() {
     $('jmnode').on('contextmenu', kmsjsmap._conTextMenuEvenHandle)
   }
 
+  // 关联节点
+  kmsjsmap.relation_node = function() {
+    $conTextMenu.hide();
+    var node = _jm.get_selected_node();
+    kmsjsmap.onRelation(node)
+  }
 
   if (typeof module !== 'undefined' && typeof exports === 'object') {
     module.exports = kmsjsmap
