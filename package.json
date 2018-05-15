@@ -1,0 +1,17 @@
+{
+  "name": "kms-knowledge-map-web",
+  "version": "1.0.0",
+  "main": "demo.html",
+  "repository": "git@codehub.devcloud.huaweicloud.com:f38aa5de8f254666b18d2ccc5dd6179e/kms-knowledge-map-web.git",
+  "author": "Leo <leochan2017@gmail.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "gulp": "^3.9.1",
+    "gulp-clean": "^0.4.0",
+    "gulp-minify-css": "^1.2.4",
+    "gulp-notify": "^3.2.0",
+    "gulp-rename": "^1.2.2",
+    "gulp-uglify": "^3.0.0",
+    "tiny-lr": "^1.1.1"
+  }
+}
