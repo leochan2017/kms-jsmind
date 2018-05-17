@@ -92,7 +92,7 @@ $('#saveBtn').click(function() {
 
 ---
 
-### kmsjsmap.screenshot(Function)
+### kmsjsmap.screenshot()
 对当前视图进行截图
 
 ### 返回参数
@@ -103,7 +103,7 @@ File | PNG | 当前title.png
 #### 调用示例
 ```
 // html:
-<a id="screenShot" href="javascript: void(0);" >截图</a>
+<a id="screenShot" href="javascript: void(0);">截图</a>
 
 // js:
 $('#screenShot').click(function() {
