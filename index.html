@@ -16,6 +16,7 @@
 </head>
 
 <body>
+  <a id="saveBtn" href="javascript: void(0);" class="sui-btn btn-xlarge btn-primary">保存</a>
   <div id="jsmind_container"></div>
   <script src="./lib/jquery.min.js"></script>
   <!-- <script src="./dist/kmsjsmap.min.js" type="text/javascript"></script> -->
@@ -43,14 +44,17 @@
       { "id": "sub33", "parentid": "sub3", "topic": "于禁", "badge": 3 },
       { "id": "sub34", "parentid": "sub3", "topic": "许褚", "badge": 4 }
     ],
-    onSave: function(res) {
-      console.log(res)
-    },
     editable: true,
     onRelation: function(item) {
       console.log('当前选择中的是', item)
     }
   });
+
+  $('#saveBtn').click(function() {
+    kmsjsmap.save(function(data) {
+      console.log('啦啦啦啦', data)
+    })
+  })
   </script>
 </body>
 

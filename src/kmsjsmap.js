@@ -10686,8 +10686,9 @@ $(function() {
   // 创建功能按钮
   kmsjsmap._init_button = function() {
     $(function() {
-      var html = '<a href="javascript: kmsjsmap.onSave()" class="sui-btn btn-xlarge btn-primary">保存思维导图</a>';
-      $('#' + kmsjsmap.options.container).prepend(html);
+      // 0517去掉 - 内置保存按钮
+      // var html = '<a href="javascript: kmsjsmap.onSave()" class="sui-btn btn-xlarge btn-primary">保存思维导图</a>';
+      // $('#' + kmsjsmap.options.container).prepend(html);
       // 给每个节点加上右键菜单事件
       $('jmnode').on('contextmenu', kmsjsmap._conTextMenuEvenHandle);
     })
@@ -10715,19 +10716,12 @@ $(function() {
     }
   }
 
-  // 秒开编辑节点，然后关闭
-  // kmsjsmap._editNode = function(fn) {
-  // _jm.enable_edit()
-  // fn && fn()
-  // _jm.disable_edit()
-  // }
-
 
   // 思维导图库JS 保存回调
-  kmsjsmap.onSave = function() {
+  kmsjsmap.save = function(cb) {
     var data = _jm.get_data('node_array').data;
     // console.log(data)
-    var cb = this.options.onSave;
+    // var cb = this.options.onSave;
     cb && cb(data);
   }
 
