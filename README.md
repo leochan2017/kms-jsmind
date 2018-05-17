@@ -2,12 +2,13 @@
 思维导图JS库，对hizzgdev大神的库进行二次封装，扩展右键菜单，包含拖拽节点等功能。
 
 
-## 1.引入样式
+## 如何使用
+- 引入样式
 ```
 <link rel="stylesheet" type="text/css" href="./dist/kmsjsmap.min.css">
 ```
 
-## 2.引入JS库
+- 引入JS库
 ```
 <script type="text/javascript" src="./dist/kmsjsmap.min.js"></script>
 ```
@@ -85,5 +86,27 @@ $('#saveBtn').click(function() {
     kmsjsmap.save(function(data) {
       console.log('啦啦啦啦', data)
     })
+})
+```
+
+
+---
+
+### kmsjsmap.screenshot(Function)
+对当前视图进行截图
+
+### 返回参数
+参数 | 类型  | 说明
+-----| ----  | -----
+File | PNG | 当前title.png
+
+#### 调用示例
+```
+// html:
+<a id="screenShot" href="javascript: void(0);" >截图</a>
+
+// js:
+$('#screenShot').click(function() {
+    kmsjsmap.screenshot()
 })
 ```
