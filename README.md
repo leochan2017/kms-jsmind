@@ -1,20 +1,41 @@
-# kmsjsmap
+## kmsjsmap
+思维导图JS库，对hizzgdev大神的库进行二次封装，扩展右键菜单，包含拖拽节点等功能。
 
-> KMS用知识地图 思维导图 JS库
 
-
-# 1.引入样式
+## 如何使用
+- 引入样式
 ```
 <link rel="stylesheet" type="text/css" href="./dist/kmsjsmap.min.css">
 ```
 
-# 2.引入JS库
+- 引入JS库
 ```
 <script type="text/javascript" src="./dist/kmsjsmap.min.js"></script>
 ```
 
+## API 说明
 
-# 调用示例
+### kmsjsmap.init(Object)
+地图初始化函数
+
+参数   | 类型 | 是否必填 | 说明
+-----  | ---- | -------- | -----
+container | String | 是  | 容器元素ID
+data | Array(Object) | 否  | 初始数据
+editable | Boolean | 否 | 是否允许编辑
+onRelation | Function | 否 | 点击右键菜单"关联"时的回调，返回当前操作节点的信息
+
+#### data 说明
+参数 | 类型 | 是否必填 | 说明
+-----| ---- | -------- | -----
+id | String | 是  | 当前节点的ID
+parentid | String | 是 | 父节点的ID
+topic | String | 是 | 当前节点的内容文字
+direction | Boolean | 否 | 当前节点的方向，此数据仅在第一层节点上有效，目前仅支持 left 和 right[默认] 两种
+badge | Number | 否 | 当前节点的右上角小图标，如不传或传入0则不显示
+expanded | Boolean | 否 | 是否默认展开该节点
+
+#### 调用示例
 ```
 kmsjsmap.init({
     container: "jsmind_container",
@@ -38,9 +59,6 @@ kmsjsmap.init({
       { "id": "sub33", "parentid": "sub3", "topic": "于禁", "badge": 3 },
       { "id": "sub34", "parentid": "sub3", "topic": "许褚", "badge": 4 }
     ],
-    onSave: function(res) {
-      console.log(res)
-    },
     editable: true,
     onRelation(item) {
       console.log('当前选择中的是', item)
@@ -48,22 +66,47 @@ kmsjsmap.init({
   });
 ```
 
-# API 说明
+---
 
-参数 | 类型 | 是否必填 | 说明
------  | ---- | -------- | -----
-container | String | 是  | 容器元素ID
-data | Array(Object) | 否  | 初始数据
-onSave | Function | 否 | 用户点击"保存思维导图"按钮的回调函数，返回当前的数据结构
-editable | Boolean | 否 | 是否允许编辑
-onRelation | Function | 否 | 点击右键菜单"关联"时的回调，返回当前操作节点的信息
+### kmsjsmap.save(Function)
+获取当前视图数据
 
-# API - data 说明
-参数 | 类型 | 是否必填 | 说明
------  | ---- | -------- | -----
-id | String | 是  | 当前节点的ID
-parentid | String | 是 | 父节点的ID
-topic | String | 是 | 当前节点的内容文字
-direction | Boolean | 否 | 当前节点的方向，此数据仅在第一层节点上有效，目前仅支持 left 和 right[默认] 两种
-badge | Number | 否 | 当前节点的右上角小图标，如不传或传入0则不显示
-expanded | Boolean | 否 | 是否默认展开该节点
+### 返回参数
+参数 | 类型  | 说明
+-----| ----  | -----
+data | Array(Object) | 当前视图数据
+
+#### 调用示例
+```
+// html:
+<a id="saveBtn" href="javascript: void(0);">保存</a>
+
+// js:
+$('#saveBtn').click(function() {
+    kmsjsmap.save(function(data) {
+      console.log('啦啦啦啦', data)
+    })
+})
+```
+
+
+---
+
+### kmsjsmap.screenshot()
+对当前视图进行截图
+
+### 返回参数
+参数 | 类型  | 说明
+-----| ----  | -----
+File | PNG | 当前title.png
+
+#### 调用示例
+```
+// html:
+<a id="screenShot" href="javascript: void(0);">截图</a>
+
+// js:
+$('#screenShot').click(function() {
+    kmsjsmap.screenshot()
+})
+```

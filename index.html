@@ -4,8 +4,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=8">
-  <link rel="stylesheet" type="text/css" href="./dist/kmsjsmap.min.css">
-  <!-- <link rel="stylesheet" type="text/css" href="./src/kmsjsmap.css"> -->
+  <!-- <link rel="stylesheet" type="text/css" href="./dist/kmsjsmap.min.css"> -->
+  <link rel="stylesheet" type="text/css" href="./src/kmsjsmap.css">
   <title>华北大魏有限公司组织架构 - 思维导图</title>
   <style>
   #jsmind_container {
@@ -16,10 +16,12 @@
 </head>
 
 <body>
+  <a id="saveBtn" href="javascript: void(0);" class="sui-btn btn-xlarge btn-primary">保存</a>
+  <a id="screenShot" href="javascript: void(0);" class="sui-btn btn-xlarge btn-primary">截图</a>
   <div id="jsmind_container"></div>
   <script src="./lib/jquery.min.js"></script>
-  <script src="./dist/kmsjsmap.min.js" type="text/javascript"></script>
-  <!-- <script src="./src/kmsjsmap.js" type="text/javascript"></script> -->
+  <!-- <script src="./dist/kmsjsmap.min.js" type="text/javascript"></script> -->
+  <script src="./src/kmsjsmap.js" type="text/javascript"></script>
   <script type="text/javascript">
   kmsjsmap.init({
     container: "jsmind_container",
@@ -43,14 +45,21 @@
       { "id": "sub33", "parentid": "sub3", "topic": "于禁", "badge": 3 },
       { "id": "sub34", "parentid": "sub3", "topic": "许褚", "badge": 4 }
     ],
-    onSave: function(res) {
-      console.log(res)
-    },
     editable: true,
-    onRelation(item) {
+    onRelation: function(item) {
       console.log('当前选择中的是', item)
     }
   });
+
+  $('#saveBtn').click(function() {
+    kmsjsmap.save(function(data) {
+      console.log('啦啦啦啦', data)
+    })
+  })
+
+  $('#screenShot').click(function() {
+    kmsjsmap.screenshot()
+  })
   </script>
 </body>
 
