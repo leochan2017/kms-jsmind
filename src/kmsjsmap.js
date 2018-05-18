@@ -1222,14 +1222,27 @@ $(function() {
       if (!this.options.default_event_handle['enable_click_handle']) {
         return;
       }
+
       var element = e.target || event.srcElement;
       var isexpander = this.view.is_expander(element);
       if (isexpander) {
         var nodeid = this.view.get_binded_nodeid(element);
         if (!!nodeid) {
           this.toggle_node(nodeid);
+          return;
         }
       }
+      // 不可编辑下单机触发关联事件
+      if(!this.get_editable()){
+          var onRelation = this.options.onRelation;
+          if(!onRelation)
+            return;
+          var nodeid = this.view.get_binded_nodeid(element);
+          if (!!nodeid) {
+              onRelation(this.mind.selected);
+          }
+      }
+
     },
 
     dblclick_handle: function(e) {
@@ -3017,14 +3030,7 @@ $(function() {
     return _jm;
   };
 
-  // export jsmind
-  if (typeof module !== 'undefined' && typeof exports === 'object') {
-    module.exports = jm;
-  } else if (typeof define === 'function' && (define.amd || define.cmd)) {
-    define(function() { return jm; });
-  } else {
-    $w[__name__] = jm;
-  }
+  $w[__name__] = jm;
 })(window);
 
 
@@ -11033,7 +11039,8 @@ $(function() {
       mode: 'full',
       shortcut: {
         enable: false // 是否启用快捷键
-      }
+      },
+      onRelation: this.onRelation
     }
     var mind = {
       'meta': {
