@@ -58,7 +58,7 @@ $(function() {
 /*
  * Released under BSD License
  * Copyright (c) 2014-2015 hizzgdev@163.com
- * 
+ *
  * Project Home:
  *   https://github.com/hizzgdev/jsmind/
  */
@@ -2089,6 +2089,9 @@ $(function() {
       var pout = null;
       for (var nodeid in nodes) {
         node = nodes[nodeid];
+        if(node.parent && !node.parent.expanded){
+            continue;
+        }
         pout = this.get_node_point_out(node);
         //logger.debug(pout.x);
         if (pout.x > this.bounds.e) { this.bounds.e = pout.x; }
@@ -3041,7 +3044,7 @@ $(function() {
 /*
  * Released under BSD License
  * Copyright (c) 2014-2015 hizzgdev@163.com
- * 
+ *
  * Project Home:
  *   https://github.com/hizzgdev/jsmind/
  */
@@ -3407,7 +3410,7 @@ $(function() {
 /*
  * Released under BSD License
  * Copyright (c) 2014-2015 hizzgdev@163.com
- * 
+ *
  * Project Home:
  *   https://github.com/hizzgdev/jsmind/
  */
@@ -11148,11 +11151,5 @@ $(function() {
     _jm.screenshot.shootDownload();
   }
 
-  if (typeof module !== 'undefined' && typeof exports === 'object') {
-    module.exports = kmsjsmap
-  } else if (typeof define === 'function' && (define.amd || define.cmd)) {
-    define(function() { return kmsjsmap })
-  } else {
-    $w[__NAME__] = kmsjsmap
-  }
+  $w[__NAME__] = kmsjsmap
 })(window);
