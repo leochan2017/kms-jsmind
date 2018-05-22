@@ -69,8 +69,6 @@ $(function() {
   var __name__ = 'jsMind';
   // library version
   var __version__ = '0.4.6';
-  // author
-  var __author__ = 'leochan2017@gmail.com';
 
   var logger = (typeof console === 'undefined') ? {
     log: _noop,
@@ -525,7 +523,6 @@ $(function() {
       example: {
         "meta": {
           "name": __name__,
-          "author": __author__,
           "version": __version__
         },
         "format": "node_tree",
@@ -624,7 +621,6 @@ $(function() {
       example: {
         "meta": {
           "name": __name__,
-          "author": __author__,
           "version": __version__
         },
         "format": "node_array",
@@ -765,7 +761,6 @@ $(function() {
       example: {
         "meta": {
           "name": __name__,
-          "author": __author__,
           "version": __version__
         },
         "format": "freemind",
