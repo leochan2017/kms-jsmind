@@ -58,7 +58,7 @@ $(function() {
 /*
  * Released under BSD License
  * Copyright (c) 2014-2015 hizzgdev@163.com
- * 
+ *
  * Project Home:
  *   https://github.com/hizzgdev/jsmind/
  */
@@ -276,12 +276,12 @@ $(function() {
       var node = null;
       if (parent_node.isroot) {
         var d = jm.direction.right;
-        if (isNaN(direction)) {
+        if (!direction || isNaN(direction)) {
           var children = parent_node.children;
           var children_len = children.length;
           var r = 0;
           for (var i = 0; i < children_len; i++) { if (children[i].direction === jm.direction.left) { r--; } else { r++; } }
-          d = (children_len > 1 && r > 0) ? jm.direction.left : jm.direction.right
+          d = (children_len > 1 && r > 0) ? jm.direction.left : jm.direction.right;
         } else {
           d = (direction != jm.direction.left) ? jm.direction.right : jm.direction.left;
         }
@@ -2084,6 +2084,9 @@ $(function() {
       var pout = null;
       for (var nodeid in nodes) {
         node = nodes[nodeid];
+        if(node.parent && !node.parent.expanded){
+            continue;
+        }
         pout = this.get_node_point_out(node);
         //logger.debug(pout.x);
         if (pout.x > this.bounds.e) { this.bounds.e = pout.x; }
@@ -2125,11 +2128,14 @@ $(function() {
     toggleBadge: function(nodes, isShow) {
       // console.log(isShow === true ? '显示' : '隐藏', nodes)
       var that = this;
+
       nodes.forEach(function(e) {
         // var visible = e._data.layout.visible
         var visible = that.jm.is_node_visible(e);
         // console.log('visible', visible)
         if (visible === true) return true;
+        // 多层级显示隐藏
+        that.toggleBadge(e.children,isShow);
         var $ele = $('div.leo-badge[nodeid$="' + e.id + '"]');
         if (isShow === true) {
           $ele.show();
@@ -3033,7 +3039,7 @@ $(function() {
 /*
  * Released under BSD License
  * Copyright (c) 2014-2015 hizzgdev@163.com
- * 
+ *
  * Project Home:
  *   https://github.com/hizzgdev/jsmind/
  */
@@ -3399,7 +3405,7 @@ $(function() {
 /*
  * Released under BSD License
  * Copyright (c) 2014-2015 hizzgdev@163.com
- * 
+ *
  * Project Home:
  *   https://github.com/hizzgdev/jsmind/
  */
@@ -11140,11 +11146,5 @@ $(function() {
     _jm.screenshot.shootDownload();
   }
 
-  if (typeof module !== 'undefined' && typeof exports === 'object') {
-    module.exports = kmsjsmap
-  } else if (typeof define === 'function' && (define.amd || define.cmd)) {
-    define(function() { return kmsjsmap })
-  } else {
-    $w[__NAME__] = kmsjsmap
-  }
+  $w[__NAME__] = kmsjsmap
 })(window);
