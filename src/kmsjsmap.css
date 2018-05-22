@@ -203,3 +203,25 @@ jmnode{transition:top .2s;-moz-transition:top .2s;-webkit-transition:top .2s;-o-
   overflow: hidden;
   z-index: 9;
 }
+.lui-jsmind-innerToolBar {
+    position: absolute;
+    bottom: 50%;
+    right: 3px;
+    width: 25px;
+    z-index: 10;
+    transform: none;
+}
+.lui-jsmind-innerToolBar ul {
+    border-width: 1px 1px 1px;
+    border-style: solid none solid solid;
+    border-color: #d9d9d9 #d9d9d9 #d9d9d9;
+    border-right: none;
+}
+.lui-jsmind-innerToolBar li {
+    cursor: pointer;
+    padding: 5px;
+    border-bottom: 1px solid #d9d9d9;
+}
+.lui-jsmind-innerToolBar li:LAST-CHILD {
+    border-bottom:none;
+}
