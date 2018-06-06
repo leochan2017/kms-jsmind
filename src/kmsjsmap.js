@@ -11058,10 +11058,10 @@ $(function() {
     var innerToolBar = document.createElement("div");
     innerToolBar.className = "lui-jsmind-innerToolBar";
 
-    innerToolBar.innerHTML = "<ul><li class='lui_icon_s lui_icon_s_icon_repeat' title='还原' data-zoom='zoomReset' ></li>" +
-        " <li class='lui_icon_s lui_icon_s_icon_zoom_in' title='放大' data-zoom='zoomIn'></li> " +
-        " <li class='lui_icon_s lui_icon_s_icon_zoom_out' title='缩小' data-zoom='zoomOut'></li>" +
-        " </ul>"
+    innerToolBar.innerHTML = "<ul><li class='lui_icon_s lui_icon_s_icon_repeat mui mui-history_handler_back' title='还原' data-opt='zoomReset' ></li>" +
+        " <li class='lui_icon_s lui_icon_s_icon_zoom_in mui mui-addition' title='放大' data-opt='zoomIn'></li> " +
+        " <li class='lui_icon_s lui_icon_s_icon_zoom_out mui mui-delete' title='缩小' data-opt='zoomOut'></li>" +
+        " </ul>";
 
     _jm.view.container.prepend(innerToolBar);
     $(_jm.view.container).css("position" , "relative");
