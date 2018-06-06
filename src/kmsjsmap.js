@@ -11054,6 +11054,28 @@ $(function() {
     }
     _jm = new jsMind(options);
     _jm.show(mind);
+
+    var innerToolBar = document.createElement("div");
+    innerToolBar.className = "lui-jsmind-innerToolBar";
+
+    innerToolBar.innerHTML = "<ul><li class='lui_icon_s lui_icon_s_icon_repeat' title='还原' data-zoom='zoomReset' ></li>" +
+        " <li class='lui_icon_s lui_icon_s_icon_zoom_in' title='放大' data-zoom='zoomIn'></li> " +
+        " <li class='lui_icon_s lui_icon_s_icon_zoom_out' title='缩小' data-zoom='zoomOut'></li>" +
+        " </ul>"
+
+    _jm.view.container.prepend(innerToolBar);
+    $(_jm.view.container).css("position" , "relative");
+
+    var self = this;
+
+    $(innerToolBar).on("click" , function(e) {
+      var $t = $(e.target), type = $t.attr("data-zoom");
+      if(type) {
+        if(self[type]) {
+          self[type]();
+        }
+      }
+    });
   }
 
   // 创建功能按钮
@@ -11146,5 +11168,22 @@ $(function() {
     _jm.screenshot.shootDownload();
   }
 
+
+  kmsjsmap.shootAsDataURL = function(callback){
+    _jm.screenshot.shootAsDataURL(callback);
+  }
+
+  kmsjsmap.zoomIn = function() {
+    _jm.view.zoomIn();
+  }
+
+
+  kmsjsmap.zoomOut = function() {
+    _jm.view.zoomOut();
+  }
+
+  kmsjsmap.zoomReset = function() {
+    _jm.view.setZoom(1);
+  }
   $w[__NAME__] = kmsjsmap
 })(window);
