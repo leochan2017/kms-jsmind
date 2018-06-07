@@ -8,17 +8,17 @@ if (!Object.keys) {
   Object.keys = (function() {
     'use strict';
     var hasOwnProperty = Object.prototype.hasOwnProperty,
-      hasDontEnumBug = !({ toString: null }).propertyIsEnumerable('toString'),
-      dontEnums = [
-        'toString',
-        'toLocaleString',
-        'valueOf',
-        'hasOwnProperty',
-        'isPrototypeOf',
-        'propertyIsEnumerable',
-        'constructor'
-      ],
-      dontEnumsLength = dontEnums.length;
+        hasDontEnumBug = !({ toString: null }).propertyIsEnumerable('toString'),
+        dontEnums = [
+          'toString',
+          'toLocaleString',
+          'valueOf',
+          'hasOwnProperty',
+          'isPrototypeOf',
+          'propertyIsEnumerable',
+          'constructor'
+        ],
+        dontEnumsLength = dontEnums.length;
 
     return function(obj) {
       if (typeof obj !== 'object' && (typeof obj !== 'function' || obj === null)) {
@@ -26,7 +26,7 @@ if (!Object.keys) {
       }
 
       var result = [],
-        prop, i;
+          prop, i;
 
       for (prop in obj) {
         if (hasOwnProperty.call(obj, prop)) {
@@ -1097,8 +1097,8 @@ $(function() {
         for (var o in a) {
           if (o in b) {
             if (typeof b[o] === 'object' &&
-              Object.prototype.toString.call(b[o]).toLowerCase() == '[object object]' &&
-              !b[o].length) {
+                Object.prototype.toString.call(b[o]).toLowerCase() == '[object object]' &&
+                !b[o].length) {
               jm.util.json.merge(b[o], a[o]);
             } else {
               b[o] = a[o];
@@ -1229,13 +1229,13 @@ $(function() {
       }
       // 不可编辑下单机触发关联事件
       if(!this.get_editable()){
-          var onRelation = this.options.onRelation;
-          if(!onRelation)
-            return;
-          var nodeid = this.view.get_binded_nodeid(element);
-          if (!!nodeid) {
-              onRelation(this.mind.selected);
-          }
+        var onRelation = this.options.onRelation;
+        if(!onRelation)
+          return;
+        var nodeid = this.view.get_binded_nodeid(element);
+        if (!!nodeid) {
+          onRelation(this.mind.selected);
+        }
       }
 
     },
@@ -1852,15 +1852,15 @@ $(function() {
           }
         }
         /*
-        var boundary = Math.ceil(children_count/2);
-        var i = children_count;
-        while(i--){
-            if(i>=boundary){
-                this._layout_direction_side(children[i],jm.direction.left, children_count-i-1);
-            }else{
-                this._layout_direction_side(children[i],jm.direction.right, i);
-            }
-        }*/
+         var boundary = Math.ceil(children_count/2);
+         var i = children_count;
+         while(i--){
+         if(i>=boundary){
+         this._layout_direction_side(children[i],jm.direction.left, children_count-i-1);
+         }else{
+         this._layout_direction_side(children[i],jm.direction.right, i);
+         }
+         }*/
 
       }
     },
@@ -2085,7 +2085,7 @@ $(function() {
       for (var nodeid in nodes) {
         node = nodes[nodeid];
         if(node.parent && !node.parent.expanded){
-            continue;
+          continue;
         }
         pout = this.get_node_point_out(node);
         //logger.debug(pout.x);
@@ -2498,7 +2498,7 @@ $(function() {
     select_node: function(node) {
       if (!!this.selected_node) {
         this.selected_node._data.view.element.className =
-          this.selected_node._data.view.element.className.replace(/\s*selected\b/i, '');
+            this.selected_node._data.view.element.className.replace(/\s*selected\b/i, '');
         this.reset_node_custom_style(this.selected_node);
       }
       if (!!node) {
@@ -2816,11 +2816,11 @@ $(function() {
       ctx.lineCap = 'round';
 
       jm.util.canvas.bezierto(
-        ctx,
-        pin.x + offset.x,
-        pin.y + offset.y,
-        pout.x + offset.x,
-        pout.y + offset.y);
+          ctx,
+          pin.x + offset.x,
+          pin.y + offset.y,
+          pout.x + offset.x,
+          pout.y + offset.y);
     },
   };
 
@@ -3152,10 +3152,10 @@ $(function() {
         this.canvas_ctx.lineCap = 'round';
         this.clear_lines();
         jcanvas.lineto(this.canvas_ctx,
-          node.sp.x,
-          node.sp.y,
-          node.np.x,
-          node.np.y);
+            node.sp.x,
+            node.sp.y,
+            node.np.x,
+            node.np.y);
       }
     },
 
@@ -3173,7 +3173,7 @@ $(function() {
       var ns, nl;
 
       var direct = (sx + sw / 2) >= root_x ?
-        jsMind.direction.right : jsMind.direction.left;
+          jsMind.direction.right : jsMind.direction.left;
       var nodes = this.jm.mind.nodes;
       var node = null;
       var min_distance = Number.MAX_VALUE;
@@ -3629,10 +3629,10 @@ $(function() {
       var padding_bottom = parseInt(css(ncs, 'padding-bottom'));
       var text_overflow = css(ncs, 'text-overflow');
       var font = css(ncs, 'font-style') + ' ' +
-        css(ncs, 'font-variant') + ' ' +
-        css(ncs, 'font-weight') + ' ' +
-        css(ncs, 'font-size') + '/' + css(ncs, 'line-height') + ' ' +
-        css(ncs, 'font-family');
+          css(ncs, 'font-variant') + ' ' +
+          css(ncs, 'font-weight') + ' ' +
+          css(ncs, 'font-size') + '/' + css(ncs, 'line-height') + ' ' +
+          css(ncs, 'font-family');
 
       var rb = {
         x: view_data.abs_x,
@@ -3663,9 +3663,9 @@ $(function() {
           rotation = node.data['background-rotation'];
         }
         jcanvas.image(ctx, backgroundUrl, rb.x, rb.y, rb.w, rb.h, round_radius, rotation,
-          function() {
-            node.ready = true;
-          });
+            function() {
+              node.ready = true;
+            });
       }
       if (!!node.topic) {
         if (text_overflow === 'ellipsis') {
@@ -3799,18 +3799,18 @@ $(function() {
   $.fn.contextMenu = function(id, options) {
     if (!menu) { // Create singleton menu
       menu = $('<div id="jqContextMenu"></div>')
-        .hide()
-        .css({ position: 'absolute', zIndex: '500' })
-        .appendTo('body')
-        .bind('click', function(e) {
-          e.stopPropagation();
-        });
+          .hide()
+          .css({ position: 'absolute', zIndex: '500' })
+          .appendTo('body')
+          .bind('click', function(e) {
+            e.stopPropagation();
+          });
     }
     if (!shadow) {
       shadow = $('<div></div>')
-        .css({ backgroundColor: '#000', position: 'absolute', opacity: 0.2, zIndex: 499 })
-        .appendTo('body')
-        .hide();
+          .css({ backgroundColor: '#000', position: 'absolute', opacity: 0.2, zIndex: 499 })
+          .appendTo('body')
+          .hide();
     }
     hash = hash || [];
     hash.push({
@@ -3840,12 +3840,12 @@ $(function() {
     var cur = hash[index];
     content = $('#' + cur.id).find('ul:first').clone(true);
     content.css(cur.menuStyle).find('li').css(cur.itemStyle).hover(
-      function() {
-        $(this).css(cur.itemHoverStyle);
-      },
-      function() {
-        $(this).css(cur.itemStyle);
-      }
+        function() {
+          $(this).css(cur.itemHoverStyle);
+        },
+        function() {
+          $(this).css(cur.itemStyle);
+        }
     ).find('img').css({ verticalAlign: 'middle', paddingRight: '2px' });
 
     // Send the content to the menu
@@ -3928,30 +3928,30 @@ $(function() {
     ! function($) {
       'use strict';
       var
-        utils = (function() {
-          return {
-            escapeRegExChars: function(value) {
-              return value.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&");
-            },
-            createNode: function(containerClass) {
-              var ul = document.createElement('ul');
-              ul.className = containerClass;
-              ul.style.position = 'absolute';
-              ul.style.display = 'none';
-              return ul;
-            }
-          };
-        }()),
+          utils = (function() {
+            return {
+              escapeRegExChars: function(value) {
+                return value.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&");
+              },
+              createNode: function(containerClass) {
+                var ul = document.createElement('ul');
+                ul.className = containerClass;
+                ul.style.position = 'absolute';
+                ul.style.display = 'none';
+                return ul;
+              }
+            };
+          }()),
 
-        keys = {
-          ESC: 27,
-          TAB: 9,
-          RETURN: 13,
-          LEFT: 37,
-          UP: 38,
-          RIGHT: 39,
-          DOWN: 40
-        };
+          keys = {
+            ESC: 27,
+            TAB: 9,
+            RETURN: 13,
+            LEFT: 37,
+            UP: 38,
+            RIGHT: 39,
+            DOWN: 40
+          };
 
       function Autocomplete(el, options) {
         var that = this;
@@ -3999,10 +3999,10 @@ $(function() {
 
         initialize: function() {
           var that = this,
-            suggestionSelector = '.' + that.classes.suggestion,
-            selected = that.classes.selected,
-            options = that.options,
-            container;
+              suggestionSelector = '.' + that.classes.suggestion,
+              selected = that.classes.selected,
+              options = that.options,
+              container;
 
           // Remove autocomplete attribute to prevent native suggestions:
           that.element.setAttribute('autocomplete', 'off');
@@ -4072,7 +4072,7 @@ $(function() {
 
         setOptions: function(suppliedOptions) {
           var that = this,
-            options = that.options;
+              options = that.options;
 
           $.extend(options, suppliedOptions);
 
@@ -4115,8 +4115,8 @@ $(function() {
 
         fixPosition: function() {
           var that = this,
-            offset,
-            styles;
+              offset,
+              styles;
 
           // Don't adjsut position if custom container has been specified:
           if (that.options.appendTo !== 'body') {
@@ -4162,9 +4162,9 @@ $(function() {
 
         isCursorAtEnd: function() {
           var that = this,
-            valLength = that.el.val().length,
-            selectionStart = that.element.selectionStart,
-            range;
+              valLength = that.el.val().length,
+              selectionStart = that.element.selectionStart,
+              range;
 
           if (typeof selectionStart === 'number') {
             return selectionStart === valLength;
@@ -4263,10 +4263,10 @@ $(function() {
 
         onValueChange: function() {
           var that = this,
-            options = that.options,
-            value = that.el.val(),
-            query = that.getQuery(value),
-            index;
+              options = that.options,
+              value = that.el.val(),
+              query = that.getQuery(value),
+              index;
 
           if (that.selection) {
             that.selection = null;
@@ -4295,8 +4295,8 @@ $(function() {
 
         findSuggestionIndex: function(query) {
           var that = this,
-            index = -1,
-            queryLowerCase = query.toLowerCase();
+              index = -1,
+              queryLowerCase = query.toLowerCase();
 
           $.each(that.suggestions, function(i, suggestion) {
             if (suggestion.value.toLowerCase() === queryLowerCase) {
@@ -4310,7 +4310,7 @@ $(function() {
 
         getQuery: function(value) {
           var delimiter = this.options.delimiter,
-            parts;
+              parts;
 
           if (!delimiter) {
             return value;
@@ -4321,11 +4321,11 @@ $(function() {
 
         getSuggestionsLocal: function(query) {
           var that = this,
-            options = that.options,
-            queryLowerCase = query.toLowerCase(),
-            filter = options.lookupFilter,
-            limit = parseInt(options.lookupLimit, 10),
-            data;
+              options = that.options,
+              queryLowerCase = query.toLowerCase(),
+              filter = options.lookupFilter,
+              limit = parseInt(options.lookupLimit, 10),
+              data;
 
           data = {
             suggestions: $.grep(options.lookup, function(suggestion) {
@@ -4342,11 +4342,11 @@ $(function() {
 
         getSuggestions: function(q) {
           var response,
-            that = this,
-            options = that.options,
-            serviceUrl = options.serviceUrl,
-            params,
-            cacheKey;
+              that = this,
+              options = that.options,
+              serviceUrl = options.serviceUrl,
+              params,
+              cacheKey;
 
           options.params[options.paramName] = q;
           params = options.ignoreParams ? null : options.params;
@@ -4394,7 +4394,7 @@ $(function() {
           }
 
           var badQueries = this.badQueries,
-            i = badQueries.length;
+              i = badQueries.length;
 
           while (i--) {
             if (q.indexOf(badQueries[i]) === 0) {
@@ -4420,16 +4420,16 @@ $(function() {
           }
 
           var that = this,
-            options = that.options,
-            formatResult = options.formatResult,
-            value = that.getQuery(that.currentValue),
-            className = that.classes.suggestion,
-            classSelected = that.classes.selected,
-            container = $(that.suggestionsContainer),
-            beforeRender = options.beforeRender,
-            html = '',
-            index,
-            width;
+              options = that.options,
+              formatResult = options.formatResult,
+              value = that.getQuery(that.currentValue),
+              className = that.classes.suggestion,
+              classSelected = that.classes.selected,
+              container = $(that.suggestionsContainer),
+              beforeRender = options.beforeRender,
+              html = '',
+              index,
+              width;
 
           if (options.triggerSelectOnValidInput) {
             index = that.findSuggestionIndex(value);
@@ -4473,8 +4473,8 @@ $(function() {
 
         findBestHint: function() {
           var that = this,
-            value = that.el.val().toLowerCase(),
-            bestMatch = null;
+              value = that.el.val().toLowerCase(),
+              bestMatch = null;
 
           if (!value) {
             return;
@@ -4493,7 +4493,7 @@ $(function() {
 
         signalHint: function(suggestion) {
           var hintValue = '',
-            that = this;
+              that = this;
           if (suggestion) {
             hintValue = that.currentValue + suggestion.value.substr(that.currentValue.length);
           }
@@ -4517,7 +4517,7 @@ $(function() {
 
         processResponse: function(result, originalQuery, cacheKey) {
           var that = this,
-            options = that.options;
+              options = that.options;
 
           result.suggestions = that.verifySuggestionsFormat(result.suggestions);
 
@@ -4540,10 +4540,10 @@ $(function() {
 
         activate: function(index) {
           var that = this,
-            activeItem,
-            selected = that.classes.selected,
-            container = $(that.suggestionsContainer),
-            children = container.children();
+              activeItem,
+              selected = that.classes.selected,
+              container = $(that.suggestionsContainer),
+              children = container.children();
 
           container.children('.' + selected).removeClass(selected);
 
@@ -4560,7 +4560,7 @@ $(function() {
 
         selectHint: function() {
           var that = this,
-            i = $.inArray(that.hint, that.suggestions);
+              i = $.inArray(that.hint, that.suggestions);
 
           that.select(i);
         },
@@ -4601,11 +4601,11 @@ $(function() {
 
         adjustScroll: function(index) {
           var that = this,
-            activeItem = that.activate(index),
-            offsetTop,
-            upperBound,
-            lowerBound,
-            heightDelta = 25;
+              activeItem = that.activate(index),
+              offsetTop,
+              upperBound,
+              lowerBound,
+              heightDelta = 25;
 
           if (!activeItem) {
             return;
@@ -4627,8 +4627,8 @@ $(function() {
 
         onSelect: function(index) {
           var that = this,
-            onSelectCallback = that.options.onSelect,
-            suggestion = that.suggestions[index];
+              onSelectCallback = that.options.onSelect,
+              suggestion = that.suggestions[index];
 
           that.currentValue = that.getValue(suggestion.value);
 
@@ -4647,9 +4647,9 @@ $(function() {
 
         getValue: function(value) {
           var that = this,
-            delimiter = that.options.delimiter,
-            currentValue,
-            parts;
+              delimiter = that.options.delimiter,
+              currentValue,
+              parts;
 
           if (!delimiter) {
             return value;
@@ -4684,8 +4684,8 @@ $(function() {
         var dataKey = 'autocomplete';
         return this.each(function() {
           var $this = $(this),
-            data = $this.data(dataKey),
-            options = typeof option == 'object' && option
+              data = $this.data(dataKey),
+              options = typeof option == 'object' && option
           if (!data) $this.data(dataKey, (data = new Autocomplete(this, options)))
           if (typeof option == 'string') data[option]()
         });
@@ -4767,9 +4767,9 @@ $(function() {
 
       Button.prototype.setState = function(state) {
         var d = 'disabled',
-          $el = this.$element,
-          data = $el.data(),
-          val = $el.is('input') ? 'val' : 'html'
+            $el = this.$element,
+            data = $el.data(),
+            val = $el.is('input') ? 'val' : 'html'
 
         state = state + 'Text'
         data.resetText || $el.data('resetText', $el[val]())
@@ -4779,8 +4779,8 @@ $(function() {
         // push to event loop to allow forms to submit
         setTimeout(function() {
           state == 'loadingText' ?
-            $el.addClass(d).attr(d, d) :
-            $el.removeClass(d).removeAttr(d)
+              $el.addClass(d).attr(d, d) :
+              $el.removeClass(d).removeAttr(d)
         }, 0)
       }
 
@@ -4788,8 +4788,8 @@ $(function() {
         var $parent = this.$element.closest('[data-toggle="buttons-radio"]')
 
         $parent && $parent
-          .find('.active')
-          .removeClass('active')
+            .find('.active')
+            .removeClass('active')
 
         this.$element.toggleClass('active')
       }
@@ -4803,8 +4803,8 @@ $(function() {
       $.fn.button = function(option) {
         return this.each(function() {
           var $this = $(this),
-            data = $this.data('button'),
-            options = typeof option == 'object' && option
+              data = $this.data('button'),
+              options = typeof option == 'object' && option
           if (!data) $this.data('button', (data = new Button(this, options)))
           if (option == 'toggle') data.toggle()
           else if (option) data.setState(option)
@@ -4873,81 +4873,81 @@ $(function() {
         this.$indicators = this.$element.find('.carousel-indicators')
         this.options = options
         this.options.pause == 'hover' && this.$element
-          .on('mouseenter', $.proxy(this.pause, this))
-          .on('mouseleave', $.proxy(this.cycle, this))
+            .on('mouseenter', $.proxy(this.pause, this))
+            .on('mouseleave', $.proxy(this.cycle, this))
       }
 
       Carousel.prototype = {
 
         cycle: function(e) {
-            if (!e) this.paused = false
-            if (this.interval) clearInterval(this.interval);
-            this.options.interval &&
-              !this.paused &&
-              (this.interval = setInterval($.proxy(this.next, this), this.options.interval))
-            return this
-          }
+          if (!e) this.paused = false
+          if (this.interval) clearInterval(this.interval);
+          this.options.interval &&
+          !this.paused &&
+          (this.interval = setInterval($.proxy(this.next, this), this.options.interval))
+          return this
+        }
 
-          ,
+        ,
         getActiveIndex: function() {
-            this.$active = this.$element.find('.item.active')
-            this.$items = this.$active.parent().children()
-            return this.$items.index(this.$active)
-          }
+          this.$active = this.$element.find('.item.active')
+          this.$items = this.$active.parent().children()
+          return this.$items.index(this.$active)
+        }
 
-          ,
+        ,
         to: function(pos) {
-            var activeIndex = this.getActiveIndex(),
+          var activeIndex = this.getActiveIndex(),
               that = this
 
-            if (pos > (this.$items.length - 1) || pos < 0) return
+          if (pos > (this.$items.length - 1) || pos < 0) return
 
-            if (this.sliding) {
-              return this.$element.one('slid', function() {
-                that.to(pos)
-              })
-            }
-
-            if (activeIndex == pos) {
-              return this.pause().cycle()
-            }
-
-            return this.slide(pos > activeIndex ? 'next' : 'prev', $(this.$items[pos]))
+          if (this.sliding) {
+            return this.$element.one('slid', function() {
+              that.to(pos)
+            })
           }
 
-          ,
+          if (activeIndex == pos) {
+            return this.pause().cycle()
+          }
+
+          return this.slide(pos > activeIndex ? 'next' : 'prev', $(this.$items[pos]))
+        }
+
+        ,
         pause: function(e) {
-            if (!e) this.paused = true
-            if (this.$element.find('.next, .prev').length && $.support.transition.end) {
-              this.$element.trigger($.support.transition.end)
-              this.cycle(true)
-            }
-            clearInterval(this.interval)
-            this.interval = null
-            return this
+          if (!e) this.paused = true
+          if (this.$element.find('.next, .prev').length && $.support.transition.end) {
+            this.$element.trigger($.support.transition.end)
+            this.cycle(true)
           }
+          clearInterval(this.interval)
+          this.interval = null
+          return this
+        }
 
-          ,
+        ,
         next: function() {
-            if (this.sliding) return
-            return this.slide('next')
-          }
+          if (this.sliding) return
+          return this.slide('next')
+        }
 
-          ,
+        ,
         prev: function() {
-            if (this.sliding) return
-            return this.slide('prev')
-          }
+          if (this.sliding) return
+          return this.slide('prev')
+        }
 
-          ,
+        ,
         slide: function(type, next) {
           var $active = this.$element.find('.item.active'),
-            $next = next || $active[type](),
-            isCycling = this.interval,
-            direction = type == 'next' ? 'left' : 'right',
-            fallback = type == 'next' ? 'first' : 'last',
-            that = this,
-            e
+              $next = next || $active[type](),
+              isCycling = this.interval,
+              direction = type == 'next' ? 'left' : 'right',
+              fallback = type == 'next' ? 'first' : 'last',
+              that = this,
+              e
 
           this.sliding = true
 
@@ -5008,9 +5008,9 @@ $(function() {
       $.fn.carousel = function(option) {
         return this.each(function() {
           var $this = $(this),
-            data = $this.data('carousel'),
-            options = $.extend({}, $.fn.carousel.defaults, $this.data(), typeof option == 'object' && option),
-            action = typeof option == 'string' ? option : options.slide
+              data = $this.data('carousel'),
+              options = $.extend({}, $.fn.carousel.defaults, $this.data(), typeof option == 'object' && option),
+              action = typeof option == 'string' ? option : options.slide
           if (!data) $this.data('carousel', (data = new Carousel(this, options)))
           if (typeof option == 'number') data.to(option)
           else if (action) data[action]()
@@ -5040,10 +5040,10 @@ $(function() {
 
       $(document).on('click.sui-carousel.data-api', '[data-slide], [data-slide-to]', function(e) {
         var $this = $(this),
-          href, $target = $($this.attr('data-target') || (href = $this.attr('href')) && href.replace(/.*(?=#[^\s]+$)/, '')) //strip for ie7
-          ,
-          options = $.extend({}, $target.data(), $this.data()),
-          slideIndex
+            href, $target = $($this.attr('data-target') || (href = $this.attr('href')) && href.replace(/.*(?=#[^\s]+$)/, '')) //strip for ie7
+            ,
+            options = $.extend({}, $target.data(), $this.data()),
+            slideIndex
 
         $target.carousel(options)
 
@@ -5081,8 +5081,8 @@ $(function() {
       $.fn.checkbox = function(option) {
         return this.each(function() {
           var $this = $(this),
-            data = $this.data('checkbox'),
-            options = typeof option == 'object' && option
+              data = $this.data('checkbox'),
+              options = typeof option == 'object' && option
           if (!data) $this.data('checkbox', (data = new Checkbox(this, options)))
           else if (option) data[option]()
         })
@@ -5279,9 +5279,9 @@ $(function() {
 
         if (this.o.calendarWeeks)
           this.picker.find('tfoot th.today')
-          .attr('colspan', function(i, val) {
-            return parseInt(val) + 1;
-          });
+              .attr('colspan', function(i, val) {
+                return parseInt(val) + 1;
+              });
 
         this._allow_update = false;
 
@@ -5392,7 +5392,7 @@ $(function() {
           });
 
           var plc = String(o.orientation).toLowerCase().split(/\s+/g),
-            _plc = o.orientation.toLowerCase();
+              _plc = o.orientation.toLowerCase();
           plc = $.grep(plc, function(word) {
             return (/^auto|left|right|top|bottom$/).test(word);
           });
@@ -5401,7 +5401,7 @@ $(function() {
             y: 'auto'
           };
           if (!_plc || _plc === 'auto')
-          ; // no action
+            ; // no action
           else if (plc.length === 1) {
             switch (plc[0]) {
               case 'top':
@@ -5492,25 +5492,25 @@ $(function() {
           //timepicker change
           if (this.o.timepicker) {
             this._events.push(
-              [this.timepickerContainer, {
-                'time:change': $.proxy(this.timeChange, this)
-              }]
+                [this.timepickerContainer, {
+                  'time:change': $.proxy(this.timeChange, this)
+                }]
             )
           }
 
           this._events.push(
-            // Component: listen for blur on element descendants
-            [this.element, '*', {
-              blur: $.proxy(function(e) {
-                this._focused_from = e.target;
-              }, this)
-            }],
-            // Input: listen for blur on element
-            [this.element, {
-              blur: $.proxy(function(e) {
-                this._focused_from = e.target;
-              }, this)
-            }]
+              // Component: listen for blur on element descendants
+              [this.element, '*', {
+                blur: $.proxy(function(e) {
+                  this._focused_from = e.target;
+                }, this)
+              }],
+              // Input: listen for blur on element
+              [this.element, {
+                blur: $.proxy(function(e) {
+                  this._focused_from = e.target;
+                }, this)
+              }]
           );
 
           this._secondaryEvents = [
@@ -5524,11 +5524,11 @@ $(function() {
               'mousedown touchstart': $.proxy(function(e) {
                 // Clicked outside the datepicker, hide it
                 if (!(
-                    this.element.is(e.target) ||
-                    this.element.find(e.target).length ||
-                    this.picker.is(e.target) ||
-                    this.picker.find(e.target).length
-                  )) {
+                        this.element.is(e.target) ||
+                        this.element.find(e.target).length ||
+                        this.picker.is(e.target) ||
+                        this.picker.find(e.target).length
+                    )) {
                   this.hide();
                 }
               }, this)
@@ -5557,7 +5557,7 @@ $(function() {
         },
         _trigger: function(event, altdate) {
           var date = altdate || this.dates.get(-1),
-            local_date = this._utc_to_local(date);
+              local_date = this._utc_to_local(date);
 
           this.element.trigger({
             type: event,
@@ -5605,11 +5605,11 @@ $(function() {
           this.showMode();
 
           if (
-            this.o.forceParse &&
-            (
-              this.isInput && this.element.val() ||
-              this.hasInput && this.element.find('input').val()
-            )
+              this.o.forceParse &&
+              (
+                  this.isInput && this.element.val() ||
+                  this.hasInput && this.element.find('input').val()
+              )
           )
             this.setValue();
           if (this.o.timepicker) {
@@ -5771,24 +5771,24 @@ $(function() {
           if (this.isInline)
             return;
           var calendarWidth = this.picker.outerWidth(),
-            calendarHeight = this.picker.outerHeight(),
-            visualPadding = 10,
-            windowWidth = $window.width(),
-            windowHeight = $window.height(),
-            scrollTop = $window.scrollTop();
+              calendarHeight = this.picker.outerHeight(),
+              visualPadding = 10,
+              windowWidth = $window.width(),
+              windowHeight = $window.height(),
+              scrollTop = $window.scrollTop();
 
           var zIndex = parseInt(this.element.parents().filter(function() {
-            return $(this).css('z-index') !== 'auto';
-          }).first().css('z-index')) + 10;
+                return $(this).css('z-index') !== 'auto';
+              }).first().css('z-index')) + 10;
           var offset = this.component ? this.component.parent().offset() : this.element.offset();
           var height = this.component ? this.component.outerHeight(true) : this.element.outerHeight(false);
           var width = this.component ? this.component.outerWidth(true) : this.element.outerWidth(false);
           var left = offset.left,
-            top = offset.top;
+              top = offset.top;
 
           this.picker.removeClass(
-            'datepicker-orient-top datepicker-orient-bottom ' +
-            'datepicker-orient-right datepicker-orient-left'
+              'datepicker-orient-top datepicker-orient-bottom ' +
+              'datepicker-orient-right datepicker-orient-left'
           );
 
           if (this.o.orientation.x !== 'auto') {
@@ -5810,7 +5810,7 @@ $(function() {
           // auto y orientation is best-situation: top or bottom, no fudging,
           // decision based on which shows more of the calendar
           var yorient = this.o.orientation.y,
-            top_overflow, bottom_overflow;
+              top_overflow, bottom_overflow;
           if (yorient === 'auto') {
             top_overflow = -scrollTop + offset.top - calendarHeight;
             bottom_overflow = scrollTop + windowHeight - (offset.top + height + calendarHeight);
@@ -5850,8 +5850,8 @@ $(function() {
             return;
 
           var oldDates = this.dates.copy(),
-            dates = [],
-            fromArgs = false;
+              dates = [],
+              fromArgs = false;
           if (arguments.length) {
             $.each(arguments, $.proxy(function(i, date) {
               //鑾峰彇绗竴涓殑鏃堕棿,鐢ㄦ潵update 鏃堕棿
@@ -5892,9 +5892,9 @@ $(function() {
           }, this));
           dates = $.grep(dates, $.proxy(function(date) {
             return (
-              date < this.o.startDate ||
-              date > this.o.endDate ||
-              !date
+                date < this.o.startDate ||
+                date > this.o.endDate ||
+                !date
             );
           }, this), true);
           this.dates.replace(dates);
@@ -5922,7 +5922,7 @@ $(function() {
 
         fillDow: function() {
           var dowCnt = this.o.weekStart,
-            html = '<tr class="week-content">';
+              html = '<tr class="week-content">';
           if (this.o.calendarWeeks) {
             var cell = '<th class="cw">&nbsp;</th>';
             html += cell;
@@ -5937,7 +5937,7 @@ $(function() {
 
         fillMonths: function() {
           var html = '',
-            i = 0;
+              i = 0;
           while (i < 12) {
             html += '<span class="month">' + dates[this.o.language].monthsShort[i++] + '</span>';
           }
@@ -5956,9 +5956,9 @@ $(function() {
 
         getClassNames: function(date) {
           var cls = [],
-            year = this.viewDate.getUTCFullYear(),
-            month = this.viewDate.getUTCMonth(),
-            today = new Date();
+              year = this.viewDate.getUTCFullYear(),
+              month = this.viewDate.getUTCMonth(),
+              today = new Date();
           if (date.getUTCFullYear() < year || (date.getUTCFullYear() === year && date.getUTCMonth() < month)) {
             cls.push('old');
           } else if (date.getUTCFullYear() > year || (date.getUTCFullYear() === year && date.getUTCMonth() > month)) {
@@ -5968,15 +5968,15 @@ $(function() {
             cls.push('focused');
           // Compare internal UTC date with local today, not UTC today
           if (this.o.todayHighlight &&
-            date.getUTCFullYear() === today.getFullYear() &&
-            date.getUTCMonth() === today.getMonth() &&
-            date.getUTCDate() === today.getDate()) {
+              date.getUTCFullYear() === today.getFullYear() &&
+              date.getUTCMonth() === today.getMonth() &&
+              date.getUTCDate() === today.getDate()) {
             cls.push('today');
           }
           if (this.dates.contains(date) !== -1)
             cls.push('active');
           if (date.valueOf() < this.o.startDate || date.valueOf() > this.o.endDate ||
-            $.inArray(date.getUTCDay(), this.o.daysOfWeekDisabled) !== -1) {
+              $.inArray(date.getUTCDay(), this.o.daysOfWeekDisabled) !== -1) {
             cls.push('disabled');
           }
           if (this.range) {
@@ -5992,27 +5992,27 @@ $(function() {
 
         fill: function() {
           var d = new Date(this.viewDate),
-            year = d.getUTCFullYear(),
-            month = d.getUTCMonth(),
-            startYear = this.o.startDate !== -Infinity ? this.o.startDate.getUTCFullYear() : -Infinity,
-            startMonth = this.o.startDate !== -Infinity ? this.o.startDate.getUTCMonth() : -Infinity,
-            endYear = this.o.endDate !== Infinity ? this.o.endDate.getUTCFullYear() : Infinity,
-            endMonth = this.o.endDate !== Infinity ? this.o.endDate.getUTCMonth() : Infinity,
-            todaytxt = dates[this.o.language].today || dates['en'].today || '',
-            cleartxt = dates[this.o.language].clear || dates['en'].clear || '',
-            tooltip;
+              year = d.getUTCFullYear(),
+              month = d.getUTCMonth(),
+              startYear = this.o.startDate !== -Infinity ? this.o.startDate.getUTCFullYear() : -Infinity,
+              startMonth = this.o.startDate !== -Infinity ? this.o.startDate.getUTCMonth() : -Infinity,
+              endYear = this.o.endDate !== Infinity ? this.o.endDate.getUTCFullYear() : Infinity,
+              endMonth = this.o.endDate !== Infinity ? this.o.endDate.getUTCMonth() : Infinity,
+              todaytxt = dates[this.o.language].today || dates['en'].today || '',
+              cleartxt = dates[this.o.language].clear || dates['en'].clear || '',
+              tooltip;
           this.picker.find('.datepicker-days thead th.datepicker-switch')
-            .text(year + '骞� ' + dates[this.o.language].months[month]);
+              .text(year + '骞� ' + dates[this.o.language].months[month]);
           this.picker.find('tfoot th.today')
-            .text(todaytxt)
-            .toggle(this.o.todayBtn !== false);
+              .text(todaytxt)
+              .toggle(this.o.todayBtn !== false);
           this.picker.find('tfoot th.clear')
-            .text(cleartxt)
-            .toggle(this.o.clearBtn !== false);
+              .text(cleartxt)
+              .toggle(this.o.clearBtn !== false);
           this.updateNavArrows();
           this.fillMonths();
           var prevMonth = UTCDate(year, month - 1, 28),
-            day = DPGlobal.getDaysInMonth(prevMonth.getUTCFullYear(), prevMonth.getUTCMonth());
+              day = DPGlobal.getDaysInMonth(prevMonth.getUTCFullYear(), prevMonth.getUTCMonth());
           prevMonth.setUTCDate(day);
           prevMonth.setUTCDate(day - (prevMonth.getUTCDay() - this.o.weekStart + 7) % 7);
           var nextMonth = new Date(prevMonth);
@@ -6027,14 +6027,14 @@ $(function() {
                 // ISO 8601: First week contains first thursday.
                 // ISO also states week starts on Monday, but we can be more abstract here.
                 var
-                  // Start of current week: based on weekstart/current date
-                  ws = new Date(+prevMonth + (this.o.weekStart - prevMonth.getUTCDay() - 7) % 7 * 864e5),
-                  // Thursday of this week
-                  th = new Date(Number(ws) + (7 + 4 - ws.getUTCDay()) % 7 * 864e5),
-                  // First Thursday of year, year from thursday
-                  yth = new Date(Number(yth = UTCDate(th.getUTCFullYear(), 0, 1)) + (7 + 4 - yth.getUTCDay()) % 7 * 864e5),
-                  // Calendar week: ms between thursdays, div ms per day, div 7 days
-                  calWeek = (th - yth) / 864e5 / 7 + 1;
+                // Start of current week: based on weekstart/current date
+                    ws = new Date(+prevMonth + (this.o.weekStart - prevMonth.getUTCDay() - 7) % 7 * 864e5),
+                // Thursday of this week
+                    th = new Date(Number(ws) + (7 + 4 - ws.getUTCDay()) % 7 * 864e5),
+                // First Thursday of year, year from thursday
+                    yth = new Date(Number(yth = UTCDate(th.getUTCFullYear(), 0, 1)) + (7 + 4 - yth.getUTCDay()) % 7 * 864e5),
+                // Calendar week: ms between thursdays, div ms per day, div 7 days
+                    calWeek = (th - yth) / 864e5 / 7 + 1;
                 html.push('<td class="cw">' + calWeek + '</td>');
 
               }
@@ -6066,9 +6066,9 @@ $(function() {
             var currentDate;
             var today = new Date();
             if (this.o.todayHighlight &&
-              prevMonth.getUTCFullYear() === today.getFullYear() &&
-              prevMonth.getUTCMonth() === today.getMonth() &&
-              prevMonth.getUTCDate() === today.getDate()) {
+                prevMonth.getUTCFullYear() === today.getFullYear() &&
+                prevMonth.getUTCMonth() === today.getMonth() &&
+                prevMonth.getUTCDate() === today.getDate()) {
               currentDate = '浠婃棩';
             } else {
               currentDate = prevMonth.getUTCDate();
@@ -6082,10 +6082,10 @@ $(function() {
           this.picker.find('.datepicker-days tbody').empty().append(html.join(''));
 
           var months = this.picker.find('.datepicker-months')
-            .find('th:eq(1)')
-            .text(year)
-            .end()
-            .find('span').removeClass('active');
+              .find('th:eq(1)')
+              .text(year)
+              .end()
+              .find('span').removeClass('active');
 
           $.each(this.dates, function(i, d) {
             if (d.getUTCFullYear() === year)
@@ -6105,15 +6105,15 @@ $(function() {
           html = '';
           year = parseInt(year / 10, 10) * 10;
           var yearCont = this.picker.find('.datepicker-years')
-            .find('th:eq(1)')
-            .text(year + '-' + (year + 9))
-            .end()
-            .find('td');
+              .find('th:eq(1)')
+              .text(year + '-' + (year + 9))
+              .end()
+              .find('td');
           year -= 1;
           var years = $.map(this.dates, function(d) {
-              return d.getUTCFullYear();
-            }),
-            classes;
+                return d.getUTCFullYear();
+              }),
+              classes;
           for (var i = -1; i < 11; i++) {
             classes = ['year'];
             if (i === -1)
@@ -6135,8 +6135,8 @@ $(function() {
             return;
 
           var d = new Date(this.viewDate),
-            year = d.getUTCFullYear(),
-            month = d.getUTCMonth();
+              year = d.getUTCFullYear(),
+              month = d.getUTCMonth();
           switch (this.viewMode) {
             case 0:
               if (this.o.startDate !== -Infinity && year <= this.o.startDate.getUTCFullYear() && month <= this.o.startDate.getUTCMonth()) {
@@ -6188,7 +6188,7 @@ $(function() {
             return;
           }
           var target = $(e.target).closest('span, td, th'),
-            year, month, day;
+              year, month, day;
           if (target.length === 1) {
             switch (target[0].nodeName.toLowerCase()) {
               case 'th':
@@ -6337,25 +6337,25 @@ $(function() {
           if (!dir)
             return date;
           var new_date = new Date(date.valueOf()),
-            day = new_date.getUTCDate(),
-            month = new_date.getUTCMonth(),
-            mag = Math.abs(dir),
-            new_month, test;
+              day = new_date.getUTCDate(),
+              month = new_date.getUTCMonth(),
+              mag = Math.abs(dir),
+              new_month, test;
           dir = dir > 0 ? 1 : -1;
           if (mag === 1) {
             test = dir === -1
-              // If going back one month, make sure month is not current month
-              // (eg, Mar 31 -> Feb 31 == Feb 28, not Mar 02)
-              ?
-              function() {
-                return new_date.getUTCMonth() === month;
-              }
-              // If going forward one month, make sure month is as expected
-              // (eg, Jan 31 -> Feb 31 == Feb 28, not Mar 02)
-              :
-              function() {
-                return new_date.getUTCMonth() !== new_month;
-              };
+                // If going back one month, make sure month is not current month
+                // (eg, Mar 31 -> Feb 31 == Feb 28, not Mar 02)
+                ?
+                function() {
+                  return new_date.getUTCMonth() === month;
+                }
+                // If going forward one month, make sure month is as expected
+                // (eg, Jan 31 -> Feb 31 == Feb 28, not Mar 02)
+                :
+                function() {
+                  return new_date.getUTCMonth() !== new_month;
+                };
             new_month = month + dir;
             new_date.setUTCMonth(new_month);
             // Dec -> Jan (12) or Jan -> Dec (-1) -- limit expected date to 0-11
@@ -6364,7 +6364,7 @@ $(function() {
           } else {
             // For magnitudes >1, move one month at a time...
             for (var i = 0; i < mag; i++)
-              // ...which might decrease the day (eg, Jan 31 to Feb 28, etc)...
+                // ...which might decrease the day (eg, Jan 31 to Feb 28, etc)...
               new_date = this.moveMonth(new_date, dir);
             // ...then reset the day, keeping it in the new month
             new_month = new_date.getUTCMonth();
@@ -6397,8 +6397,8 @@ $(function() {
             return;
           }
           var dateChanged = false,
-            dir, newDate, newViewDate,
-            focusDate = this.focusDate || this.viewDate;
+              dir, newDate, newViewDate,
+              focusDate = this.focusDate || this.viewDate;
           switch (e.keyCode) {
             case 27: // escape
               if (this.focusDate) {
@@ -6508,10 +6508,10 @@ $(function() {
             this.viewMode = Math.max(this.o.minViewMode, Math.min(2, this.viewMode + dir));
           }
           this.picker
-            .find('>div')
-            .hide()
-            .filter('.datepicker-' + DPGlobal.modes[this.viewMode].clsName)
-            .css('display', 'block');
+              .find('>div')
+              .hide()
+              .filter('.datepicker-' + DPGlobal.modes[this.viewMode].clsName)
+              .css('display', 'block');
           this.updateNavArrows();
         }
       };
@@ -6524,8 +6524,8 @@ $(function() {
         delete options.inputs;
 
         $(this.inputs)
-          .datepicker(options)
-          .bind('changeDate', $.proxy(this.dateUpdated, this));
+            .datepicker(options)
+            .bind('changeDate', $.proxy(this.dateUpdated, this));
 
         this.pickers = $.map(this.inputs, function(i) {
           return $(i).data('datepicker');
@@ -6556,9 +6556,9 @@ $(function() {
           this.updating = true;
 
           var dp = $(e.target).data('datepicker'),
-            new_date = dp.getUTCDate(),
-            i = $.inArray(e.target, this.inputs),
-            l = this.inputs.length;
+              new_date = dp.getUTCDate(),
+              i = $.inArray(e.target, this.inputs),
+              l = this.inputs.length;
           if (i === -1)
             return;
 
@@ -6603,9 +6603,9 @@ $(function() {
       function opts_from_el(el, prefix) {
         // Derive options from element data-attrs
         var data = $(el).data(),
-          out = {},
-          inkey,
-          replace = new RegExp('^' + prefix.toLowerCase() + '([A-Z])');
+            out = {},
+            inkey,
+            replace = new RegExp('^' + prefix.toLowerCase() + '([A-Z])');
         prefix = new RegExp('^' + prefix.toLowerCase());
 
         function re_lower(_, a) {
@@ -6644,15 +6644,15 @@ $(function() {
         var internal_return;
         this.each(function() {
           var $this = $(this),
-            data = $this.data('datepicker'),
-            options = typeof option === 'object' && option;
+              data = $this.data('datepicker'),
+              options = typeof option === 'object' && option;
           if (!data) {
             var elopts = opts_from_el(this, 'date'),
-              // Preliminary otions
-              xopts = $.extend({}, defaults, elopts, options),
-              locopts = opts_from_locale(xopts.language),
-              // Options priority: js args, data-attrs, locales, defaults
-              opts = $.extend({}, defaults, locopts, elopts, options);
+            // Preliminary otions
+                xopts = $.extend({}, defaults, elopts, options),
+                locopts = opts_from_locale(xopts.language),
+            // Options priority: js args, data-attrs, locales, defaults
+                opts = $.extend({}, defaults, locopts, elopts, options);
             if ($this.is('.input-daterange') || opts.inputs) {
               var ropts = {
                 inputs: opts.inputs || $this.find('input').toArray()
@@ -6751,7 +6751,7 @@ $(function() {
           // IE treats \0 as a string end in inputs (truncating the value),
           // so it's a bad format delimiter, anyway
           var separators = format.replace(this.validParts, '\0').split('\0'),
-            parts = format.match(this.validParts);
+              parts = format.match(this.validParts);
           if (!separators || !separators.length || !parts || parts.length === 0) {
             throw new Error("Invalid date format.");
           }
@@ -6768,8 +6768,8 @@ $(function() {
           if (typeof format === 'string')
             format = DPGlobal.parseFormat(format);
           var part_re = /([\-+]\d+)([dmwy])/,
-            parts = date.match(/([\-+]\d+)([dmwy])/g),
-            part, dir, i;
+              parts = date.match(/([\-+]\d+)([dmwy])/g),
+              part, dir, i;
           if (/^[\-+]\d+[dmwy]([\s,]+[\-+]\d+[dmwy])*$/.test(date)) {
             date = new Date();
             for (i = 0; i < parts.length; i++) {
@@ -6795,30 +6795,30 @@ $(function() {
           parts = date && date.match(this.nonpunctuation) || [];
           date = new Date();
           var parsed = {},
-            setters_order = ['yyyy', 'yy', 'M', 'MM', 'm', 'mm', 'd', 'dd'],
-            setters_map = {
-              yyyy: function(d, v) {
-                return d.setUTCFullYear(v);
-              },
-              yy: function(d, v) {
-                return d.setUTCFullYear(2000 + v);
-              },
-              m: function(d, v) {
-                if (isNaN(d))
+              setters_order = ['yyyy', 'yy', 'M', 'MM', 'm', 'mm', 'd', 'dd'],
+              setters_map = {
+                yyyy: function(d, v) {
+                  return d.setUTCFullYear(v);
+                },
+                yy: function(d, v) {
+                  return d.setUTCFullYear(2000 + v);
+                },
+                m: function(d, v) {
+                  if (isNaN(d))
+                    return d;
+                  v -= 1;
+                  while (v < 0) v += 12;
+                  v %= 12;
+                  d.setUTCMonth(v);
+                  while (d.getUTCMonth() !== v)
+                    d.setUTCDate(d.getUTCDate() - 1);
                   return d;
-                v -= 1;
-                while (v < 0) v += 12;
-                v %= 12;
-                d.setUTCMonth(v);
-                while (d.getUTCMonth() !== v)
-                  d.setUTCDate(d.getUTCDate() - 1);
-                return d;
+                },
+                d: function(d, v) {
+                  return d.setUTCDate(v);
+                }
               },
-              d: function(d, v) {
-                return d.setUTCDate(v);
-              }
-            },
-            val, filtered;
+              val, filtered;
           setters_map['M'] = setters_map['MM'] = setters_map['mm'] = setters_map['m'];
           setters_map['dd'] = setters_map['d'];
           date = UTCDate(date.getFullYear(), date.getMonth(), date.getDate(), 0, 0, 0);
@@ -6832,7 +6832,7 @@ $(function() {
           // Process remainder
           function match_part() {
             var m = this.slice(0, parts[i].length),
-              p = parts[i].slice(0, m.length);
+                p = parts[i].slice(0, m.length);
             return m === p;
           }
           if (parts.length === fparts.length) {
@@ -6894,47 +6894,47 @@ $(function() {
           return date.join('');
         },
         headTemplate: '<thead>' +
-          '<tr class="date-header">' +
-          '<th class="prev"><b></b></th>' +
-          '<th colspan="5" class="datepicker-switch"></th>' +
-          '<th class="next"><b></b></th>' +
-          '</tr>' +
-          '</thead>',
+        '<tr class="date-header">' +
+        '<th class="prev"><b></b></th>' +
+        '<th colspan="5" class="datepicker-switch"></th>' +
+        '<th class="next"><b></b></th>' +
+        '</tr>' +
+        '</thead>',
         contTemplate: '<tbody><tr><td colspan="7"></td></tr></tbody>',
         footTemplate: '<tfoot>' +
-          '<tr>' +
-          '<th colspan="7" class="today"></th>' +
-          '</tr>' +
-          '<tr>' +
-          '<th colspan="7" class="clear"></th>' +
-          '</tr>' +
-          '</tfoot>',
+        '<tr>' +
+        '<th colspan="7" class="today"></th>' +
+        '</tr>' +
+        '<tr>' +
+        '<th colspan="7" class="clear"></th>' +
+        '</tr>' +
+        '</tfoot>',
         timepicerTemplate: '<div class="timepicker-container"></div>'
       };
       DPGlobal.template = '<div class="datepicker">' +
-        '<div class="datepicker-days clearfix">' +
-        '<table class=" table-condensed">' +
-        DPGlobal.headTemplate +
-        '<tbody></tbody>' +
-        DPGlobal.footTemplate +
-        '</table>' +
-        DPGlobal.timepicerTemplate +
-        '</div>' +
-        '<div class="datepicker-months">' +
-        '<table class="table-condensed">' +
-        DPGlobal.headTemplate +
-        DPGlobal.contTemplate +
-        DPGlobal.footTemplate +
-        '</table>' +
-        '</div>' +
-        '<div class="datepicker-years">' +
-        '<table class="table-condensed">' +
-        DPGlobal.headTemplate +
-        DPGlobal.contTemplate +
-        DPGlobal.footTemplate +
-        '</table>' +
-        '</div>' +
-        '</div>';
+          '<div class="datepicker-days clearfix">' +
+          '<table class=" table-condensed">' +
+          DPGlobal.headTemplate +
+          '<tbody></tbody>' +
+          DPGlobal.footTemplate +
+          '</table>' +
+          DPGlobal.timepicerTemplate +
+          '</div>' +
+          '<div class="datepicker-months">' +
+          '<table class="table-condensed">' +
+          DPGlobal.headTemplate +
+          DPGlobal.contTemplate +
+          DPGlobal.footTemplate +
+          '</table>' +
+          '</div>' +
+          '<div class="datepicker-years">' +
+          '<table class="table-condensed">' +
+          DPGlobal.headTemplate +
+          DPGlobal.contTemplate +
+          DPGlobal.footTemplate +
+          '</table>' +
+          '</div>' +
+          '</div>';
 
       $.fn.datepicker.DPGlobal = DPGlobal;
 
@@ -6952,16 +6952,16 @@ $(function() {
        * ================== */
 
       $(document).on(
-        'focus.datepicker.data-api click.datepicker.data-api',
-        '[data-toggle="datepicker"]',
-        function(e) {
-          var $this = $(this);
-          if ($this.data('datepicker'))
-            return;
-          e.preventDefault();
-          // component click requires us to explicitly show it
-          $this.datepicker('show');
-        }
+          'focus.datepicker.data-api click.datepicker.data-api',
+          '[data-toggle="datepicker"]',
+          function(e) {
+            var $this = $(this);
+            if ($this.data('datepicker'))
+              return;
+            e.preventDefault();
+            // component click requires us to explicitly show it
+            $this.datepicker('show');
+          }
       );
       $(function() {
         $('[data-toggle="datepicker-inline"]').datepicker();
@@ -6976,7 +6976,7 @@ $(function() {
 
       "use strict";
       var toggleSelector = '[data-toggle=dropdown]',
-        containerClass = ".sui-dropdown, .sui-dropup";
+          containerClass = ".sui-dropdown, .sui-dropup";
       var clearMenus = function() {
         $('.sui-dropdown.open, .sui-dropup.open, .sui-btn-group.open').each(function() {
           $(this).removeClass('open')
@@ -6990,7 +6990,7 @@ $(function() {
       var show = function() {
         clearMenus()
         var $el = $(this),
-          $container = getContainer($el);
+            $container = getContainer($el);
         if ($container.is('.disabled, :disabled')) return
         $container.addClass("open")
         $el.focus()
@@ -6998,7 +6998,7 @@ $(function() {
       }
       var hide = function() {
         var $el = $(this),
-          $container = getContainer($el);
+            $container = getContainer($el);
         if ($container.is('.disabled, :disabled')) return
         $container.removeClass("open")
         $el.focus()
@@ -7007,8 +7007,8 @@ $(function() {
 
       var toggle = function() {
         var $el = $(this),
-          $container = getContainer($el),
-          active = $container.hasClass("open");
+            $container = getContainer($el),
+            active = $container.hasClass("open");
         clearMenus()
         if ($container.is('.disabled, :disabled')) return
         if (active) $container.removeClass("open")
@@ -7019,9 +7019,9 @@ $(function() {
 
       var setValue = function() {
         var $target = $(this),
-          $li = $target.parent(),
-          $container = $target.parents(".sui-dropdown, .sui-dropup"),
-          $menu = $container.find("[role='menu']");
+            $li = $target.parent(),
+            $container = $target.parents(".sui-dropdown, .sui-dropup"),
+            $menu = $container.find("[role='menu']");
         if ($li.is(".disabled, :disabled")) return;
         if ($container.is('.disabled, :disabled')) return;
         $container.find("input").val($target.attr("value") || "").trigger("change")
@@ -7033,12 +7033,12 @@ $(function() {
 
       $(document).on("mouseover", containerClass, function() {
         var $container = $(this),
-          el;
+            el;
         if (el = $container.find('[data-trigger="hover"]')[0]) show.call(el);
       })
       $(document).on("mouseleave", containerClass, function() {
         var $container = $(this),
-          el;
+            el;
         if (el = $container.find('[data-trigger="hover"]')[0]) hide.call(el);
       })
       $(document).on("click", "[data-toggle='dropdown']", toggle)
@@ -7084,11 +7084,11 @@ $(function() {
       $.extend({
         filesize: function(arg, options) {
           var result = "",
-            opt = options || {},
-            num = Number(arg),
-            bytes = ["B", "kB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"],
-            round = opt.round !== undefined ? opt.round : 2,
-            e;
+              opt = options || {},
+              num = Number(arg),
+              bytes = ["B", "kB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"],
+              round = opt.round !== undefined ? opt.round : 2,
+              e;
 
           if (isNaN(arg) || num < 0) {
             throw new Error("鏃犳晥鐨剆ize鍙傛暟");
@@ -7157,7 +7157,7 @@ $(function() {
        */
       function _introForElement(targetElm) {
         var introItems = [],
-          self = this;
+            self = this;
         var allIntroSteps = [];
         if (this._options.steps) {
           //use steps passed programmatically
@@ -7266,7 +7266,7 @@ $(function() {
           _nextStep.call(self);
 
           var skipButton = targetElm.querySelector('.introjs-skipbutton'),
-            nextStepButton = targetElm.querySelector('.introjs-nextbutton');
+              nextStepButton = targetElm.querySelector('.introjs-nextbutton');
 
           self._onKeyDown = function(e) {
             if (e.keyCode === 27 && self._options.exitOnEsc === true) {
@@ -7467,9 +7467,9 @@ $(function() {
        */
       function _placeTooltip(targetElement, tooltipLayer, arrowLayer, helperNumberLayer) {
         var tooltipCssClass = '',
-          currentStepObj,
-          tooltipOffset,
-          targetElementOffset;
+            currentStepObj,
+            tooltipOffset,
+            targetElementOffset;
 
         //reset the old style
         tooltipLayer.style.top = null;
@@ -7570,8 +7570,8 @@ $(function() {
           if (!this._introItems[this._currentStep]) return;
 
           var currentElement = this._introItems[this._currentStep],
-            elementPosition = _getOffset(currentElement.element),
-            widthHeightPadding = 10;
+              elementPosition = _getOffset(currentElement.element),
+              widthHeightPadding = 10;
 
           if (currentElement.position === 'floating') {
             widthHeightPadding = 0;
@@ -7579,9 +7579,9 @@ $(function() {
 
           //set new position to helper layer
           helperLayer.setAttribute('style', 'width: ' + (elementPosition.width + widthHeightPadding) + 'px; ' +
-            'height:' + (elementPosition.height + widthHeightPadding) + 'px; ' +
-            'top:' + (elementPosition.top - 5) + 'px;' +
-            'left: ' + (elementPosition.left - 5) + 'px;');
+              'height:' + (elementPosition.height + widthHeightPadding) + 'px; ' +
+              'top:' + (elementPosition.top - 5) + 'px;' +
+              'left: ' + (elementPosition.left - 5) + 'px;');
         }
       }
 
@@ -7599,17 +7599,17 @@ $(function() {
         }
 
         var self = this,
-          oldHelperLayer = document.querySelector('.sui-introjs-helperLayer'),
-          elementPosition = _getOffset(targetElement.element);
+            oldHelperLayer = document.querySelector('.sui-introjs-helperLayer'),
+            elementPosition = _getOffset(targetElement.element);
 
         if (oldHelperLayer !== null) {
           var oldHelperNumberLayer = oldHelperLayer.querySelector('.introjs-helperNumberLayer'),
-            oldtooltipLayer = oldHelperLayer.querySelector('.introjs-tooltiptext'),
-            oldArrowLayer = oldHelperLayer.querySelector('.introjs-arrow'),
-            oldtooltipContainer = oldHelperLayer.querySelector('.introjs-tooltip'),
-            skipTooltipButton = oldHelperLayer.querySelector('.introjs-skipbutton'),
-            prevTooltipButton = oldHelperLayer.querySelector('.introjs-prevbutton'),
-            nextTooltipButton = oldHelperLayer.querySelector('.introjs-nextbutton');
+              oldtooltipLayer = oldHelperLayer.querySelector('.introjs-tooltiptext'),
+              oldArrowLayer = oldHelperLayer.querySelector('.introjs-arrow'),
+              oldtooltipContainer = oldHelperLayer.querySelector('.introjs-tooltip'),
+              skipTooltipButton = oldHelperLayer.querySelector('.introjs-skipbutton'),
+              prevTooltipButton = oldHelperLayer.querySelector('.introjs-prevbutton'),
+              nextTooltipButton = oldHelperLayer.querySelector('.introjs-nextbutton');
 
           //hide the tooltip
           oldtooltipContainer.style.opacity = 0;
@@ -7661,11 +7661,11 @@ $(function() {
 
         } else {
           var helperLayer = document.createElement('div'),
-            arrowLayer = document.createElement('div'),
-            tooltipLayer = document.createElement('div'),
-            tooltipTextLayer = document.createElement('div'),
-            bulletsLayer = document.createElement('div'),
-            buttonsLayer = document.createElement('div');
+              arrowLayer = document.createElement('div'),
+              tooltipLayer = document.createElement('div'),
+              tooltipTextLayer = document.createElement('div'),
+              bulletsLayer = document.createElement('div'),
+              buttonsLayer = document.createElement('div');
 
           helperLayer.className = 'sui-introjs-helperLayer';
 
@@ -7806,7 +7806,7 @@ $(function() {
 
         var currentElementPosition = _getPropValue(targetElement.element, 'position');
         if (currentElementPosition !== 'absolute' &&
-          currentElementPosition !== 'relative') {
+            currentElementPosition !== 'relative') {
           //change to new intro item
           targetElement.element.className += ' introjs-relativePosition';
         }
@@ -7828,9 +7828,9 @@ $(function() {
 
         if (!_elementInViewport(targetElement.element) && this._options.scrollToElement === true) {
           var rect = targetElement.element.getBoundingClientRect(),
-            winHeight = _getWinSize().height,
-            top = rect.bottom - (rect.bottom - rect.top),
-            bottom = rect.bottom - winHeight;
+              winHeight = _getWinSize().height,
+              top = rect.bottom - (rect.bottom - rect.top),
+              bottom = rect.bottom - winHeight;
 
           //Scroll up
           if (top < 0 || targetElement.element.clientHeight > winHeight) {
@@ -7902,10 +7902,10 @@ $(function() {
         var rect = el.getBoundingClientRect();
 
         return (
-          rect.top >= 0 &&
-          rect.left >= 0 &&
-          (rect.bottom + 80) <= window.innerHeight && // add 80 to get the text right
-          rect.right <= window.innerWidth
+            rect.top >= 0 &&
+            rect.left >= 0 &&
+            (rect.bottom + 80) <= window.innerHeight && // add 80 to get the text right
+            rect.right <= window.innerWidth
         );
       }
 
@@ -7918,8 +7918,8 @@ $(function() {
        */
       function _addOverlayLayer(targetElm) {
         var overlayLayer = document.createElement('div'),
-          styleText = '',
-          self = this;
+            styleText = '',
+            self = this;
 
         //set css class name
         overlayLayer.className = 'sui-introjs-overlay';
@@ -8168,30 +8168,30 @@ $(function() {
         //鑻lement涓簄ull锛屽垯琛ㄧず涓簀s瑙﹀彂鐨刟lert銆乧onfirm寮瑰眰
         if (element === null) {
           var TPL = ''
-            //data-hidetype琛ㄦ槑杩欑被绠€鍗昫ialog璋冪敤hide鏂规硶鏃朵細浠庢枃妗ｆ爲閲屽垹闄よ妭鐐�
-            +
-            '<div class="sui-modal hide fade" tabindex="-1" role="dialog" id={%id%} data-hidetype="remove">' +
-            '<div class="modal-dialog">' +
-            '<div class="modal-content">' +
-            '<div class="modal-header">' +
-            (options.closeBtn ? '<button type="button" class="sui-close" data-dismiss="modal" aria-hidden="true">&times;</button>' : '') +
-            '<h4 class="modal-title">{%title%}</h4>' +
-            '</div>' +
-            '<div class="modal-body ' + (options.hasfoot ? '' : 'no-foot') + '">{%body%}</div>' +
-            (options.hasfoot ? '<div class="modal-footer">'
+              //data-hidetype琛ㄦ槑杩欑被绠€鍗昫ialog璋冪敤hide鏂规硶鏃朵細浠庢枃妗ｆ爲閲屽垹闄よ妭鐐�
+              +
+              '<div class="sui-modal hide fade" tabindex="-1" role="dialog" id={%id%} data-hidetype="remove">' +
+              '<div class="modal-dialog">' +
+              '<div class="modal-content">' +
+              '<div class="modal-header">' +
+              (options.closeBtn ? '<button type="button" class="sui-close" data-dismiss="modal" aria-hidden="true">&times;</button>' : '') +
+              '<h4 class="modal-title">{%title%}</h4>' +
+              '</div>' +
+              '<div class="modal-body ' + (options.hasfoot ? '' : 'no-foot') + '">{%body%}</div>' +
+              (options.hasfoot ? '<div class="modal-footer">'
               //澧炲姞data-ok="modal"鍙傛暟
               +
               '<button type="button" class="sui-btn btn-primary btn-large" data-ok="modal">{%ok_btn%}</button>' +
               (options.cancelBtn ? '<button type="button" class="sui-btn btn-default btn-large" data-dismiss="modal">{%cancel_btn%}</button>' : '') +
               '</div>' : '') +
-            '</div>' +
-            '</div>' +
-            '</div>';
+              '</div>' +
+              '</div>' +
+              '</div>';
           element = $(TPL.replace('{%title%}', options.title)
-            .replace('{%body%}', options.body)
-            .replace('{%id%}', options.id)
-            .replace('{%ok_btn%}', options.okBtn)
-            .replace('{%cancel_btn%}', options.cancelBtn))
+              .replace('{%body%}', options.body)
+              .replace('{%id%}', options.id)
+              .replace('{%ok_btn%}', options.okBtn)
+              .replace('{%cancel_btn%}', options.cancelBtn))
           //濡傛灉涓嶆敮鎸佸姩鐢绘樉绀猴紙榛樿鏀寔锛�
           $('body').append(element)
         }
@@ -8204,78 +8204,78 @@ $(function() {
       Modal.prototype = {
         constructor: Modal,
         init: function() {
-            var ele = this.$element,
+          var ele = this.$element,
               opt = this.options,
               w = opt.width,
               h = opt.height,
               self = this,
               standardW = {
                 small: 440 //榛樿瀹藉害
-                  ,
+                ,
                 normal: 590,
                 large: 780
               }
-            ele.delegate('[data-dismiss="modal"]', 'click.dismiss.modal', $.proxy(this.hide, this))
+          ele.delegate('[data-dismiss="modal"]', 'click.dismiss.modal', $.proxy(this.hide, this))
               .delegate(':not(.disabled)[data-ok="modal"]', 'click.ok.modal', $.proxy(this.okHide, this))
-            if (w) {
-              standardW[w] && (w = standardW[w])
-              ele.width(w).css('margin-left', -parseInt(w) / 2)
-            }
-            h && ele.find('.modal-body').height(h);
-            if (typeof this.options.remote == 'string') {
-              this.$element.find('.modal-body').load(this.options.remote)
-            }
+          if (w) {
+            standardW[w] && (w = standardW[w])
+            ele.width(w).css('margin-left', -parseInt(w) / 2)
           }
+          h && ele.find('.modal-body').height(h);
+          if (typeof this.options.remote == 'string') {
+            this.$element.find('.modal-body').load(this.options.remote)
+          }
+        }
 
-          ,
+        ,
         toggle: function() {
-            return this[!this.isShown ? 'show' : 'hide']()
-          }
+          return this[!this.isShown ? 'show' : 'hide']()
+        }
 
-          ,
+        ,
         show: function() {
-            var self = this,
+          var self = this,
               e = $.Event('show'),
               ele = this.$element
-            ele.trigger(e)
-            if (this.isShown || e.isDefaultPrevented()) return
-            this.isShown = true
-            this.escape()
-            this.backdrop(function() {
-              var transition = $.support.transition && ele.hasClass('fade')
-              if (!ele.parent().length) {
-                ele.appendTo(document.body) //don't move modals dom position
-              }
-              //澶勭悊dialog鍦ㄩ〉闈腑鐨勫畾浣�
-              self.resize()
+          ele.trigger(e)
+          if (this.isShown || e.isDefaultPrevented()) return
+          this.isShown = true
+          this.escape()
+          this.backdrop(function() {
+            var transition = $.support.transition && ele.hasClass('fade')
+            if (!ele.parent().length) {
+              ele.appendTo(document.body) //don't move modals dom position
+            }
+            //澶勭悊dialog鍦ㄩ〉闈腑鐨勫畾浣�
+            self.resize()
 
-              ele.show()
-              if (transition) {
-                ele[0].offsetWidth // force reflow
-              }
-              ele
+            ele.show()
+            if (transition) {
+              ele[0].offsetWidth // force reflow
+            }
+            ele
                 .addClass('in')
                 .attr('aria-hidden', false)
-              self.enforceFocus()
-              transition ?
+            self.enforceFocus()
+            transition ?
                 ele.one($.support.transition.end, function() {
                   callbackAfterTransition(self)
                 }) :
                 callbackAfterTransition(self)
 
-              function callbackAfterTransition(self) {
-                self.$element.focus().trigger('shown')
-                if (self.options.timeout > 0) {
-                  self.timeid = setTimeout(function() {
-                    self.hide();
-                  }, self.options.timeout)
-                }
+            function callbackAfterTransition(self) {
+              self.$element.focus().trigger('shown')
+              if (self.options.timeout > 0) {
+                self.timeid = setTimeout(function() {
+                  self.hide();
+                }, self.options.timeout)
               }
-            })
-            return ele
-          }
+            }
+          })
+          return ele
+        }
 
-          ,
+        ,
         hide: function(e) {
           e && e.preventDefault()
           var $ele = this.$element
@@ -8288,43 +8288,43 @@ $(function() {
           $(document).off('focusin.modal')
           this.timeid && clearTimeout(this.timeid)
           $ele
-            .removeClass('in')
-            .attr('aria-hidden', true)
+              .removeClass('in')
+              .attr('aria-hidden', true)
           $.support.transition && $ele.hasClass('fade') ?
-            this.hideWithTransition() :
-            this.hideModal()
+              this.hideWithTransition() :
+              this.hideModal()
           return $ele
         },
         okHide: function(e) {
-            var self = this
-            // 濡傛灉e涓簎ndefined鑰屼笉鏄簨浠跺璞★紝鍒欒鏄庝笉鏄偣鍑荤‘瀹氭寜閽Е鍙戠殑鎵ц锛岃€屾槸鎵嬪伐璋冪敤锛�
-            // 閭ｄ箞鐩存帴鎵цhideWithOk
-            if (!e) {
-              hideWithOk()
-              return
-            }
-            var fn = this.options.okHide,
-              ifNeedHide = true
-            if (!fn) {
-              var eventArr = $._data(this.$element[0], 'events').okHide
-              if (eventArr && eventArr.length) {
-                fn = eventArr[eventArr.length - 1].handler;
-              }
-            }
-            typeof fn == 'function' && (ifNeedHide = fn.call(this))
-            //鏄惧紡杩斿洖false锛屽垯涓嶅叧闂璇濇
-            if (ifNeedHide !== false) {
-              hideWithOk()
-            }
-
-            function hideWithOk() {
-              self.hideReason = 'ok'
-              self.hide(e)
-            }
-            return self.$element
+          var self = this
+          // 濡傛灉e涓簎ndefined鑰屼笉鏄簨浠跺璞★紝鍒欒鏄庝笉鏄偣鍑荤‘瀹氭寜閽Е鍙戠殑鎵ц锛岃€屾槸鎵嬪伐璋冪敤锛�
+          // 閭ｄ箞鐩存帴鎵цhideWithOk
+          if (!e) {
+            hideWithOk()
+            return
           }
-          //瀵硅瘽妗嗗唴閮ㄩ伄缃╁眰
-          ,
+          var fn = this.options.okHide,
+              ifNeedHide = true
+          if (!fn) {
+            var eventArr = $._data(this.$element[0], 'events').okHide
+            if (eventArr && eventArr.length) {
+              fn = eventArr[eventArr.length - 1].handler;
+            }
+          }
+          typeof fn == 'function' && (ifNeedHide = fn.call(this))
+          //鏄惧紡杩斿洖false锛屽垯涓嶅叧闂璇濇
+          if (ifNeedHide !== false) {
+            hideWithOk()
+          }
+
+          function hideWithOk() {
+            self.hideReason = 'ok'
+            self.hide(e)
+          }
+          return self.$element
+        }
+        //瀵硅瘽妗嗗唴閮ㄩ伄缃╁眰
+        ,
         shadeIn: function() {
           var $ele = this.$element
           if ($ele.find('.shade').length) return
@@ -8339,15 +8339,15 @@ $(function() {
           return this.$element
         },
         shadeToggle: function() {
-            return this[!this.hasShaded ? 'shadeIn' : 'shadeOut']()
-          }
-          // dialog灞曠ず鍚庯紝濡傛灉楂樺害鍔ㄦ€佸彂鐢熷彉鍖栵紝姣斿濉炲叆寮傛鏁版嵁鍚庢拺楂樺鍣紝鍒欒皟鐢�$dialog.modal('resize'),浣縟ialog閲嶆柊瀹氫綅灞呬腑
-          ,
+          return this[!this.hasShaded ? 'shadeIn' : 'shadeOut']()
+        }
+        // dialog灞曠ず鍚庯紝濡傛灉楂樺害鍔ㄦ€佸彂鐢熷彉鍖栵紝姣斿濉炲叆寮傛鏁版嵁鍚庢拺楂樺鍣紝鍒欒皟鐢�$dialog.modal('resize'),浣縟ialog閲嶆柊瀹氫綅灞呬腑
+        ,
         resize: function() {
           var ele = this.$element,
-            eleH = ele.height(),
-            winH = $(window).height(),
-            mt = 0
+              eleH = ele.height(),
+              winH = $(window).height(),
+              mt = 0
           if (eleH >= winH)
             mt = -winH / 2
           else
@@ -8356,84 +8356,84 @@ $(function() {
           return ele
         },
         enforceFocus: function() {
-            var self = this
-            //闃叉澶氬疄渚嬫椂寰幆瑙﹀彂
-            $(document).off('focusin.modal').on('focusin.modal', function(e) {
-              if (self.$element[0] !== e.target && !self.$element.has(e.target).length) {
-                self.$element.focus()
-              }
-            })
-          }
-
-          ,
-        escape: function() {
-            var self = this
-            if (this.isShown && this.options.keyboard) {
-              this.$element.on('keyup.dismiss.modal', function(e) {
-                e.which == 27 && self.hide()
-              })
-            } else if (!this.isShown) {
-              this.$element.off('keyup.dismiss.modal')
+          var self = this
+          //闃叉澶氬疄渚嬫椂寰幆瑙﹀彂
+          $(document).off('focusin.modal').on('focusin.modal', function(e) {
+            if (self.$element[0] !== e.target && !self.$element.has(e.target).length) {
+              self.$element.focus()
             }
-          }
+          })
+        }
 
-          ,
+        ,
+        escape: function() {
+          var self = this
+          if (this.isShown && this.options.keyboard) {
+            this.$element.on('keyup.dismiss.modal', function(e) {
+              e.which == 27 && self.hide()
+            })
+          } else if (!this.isShown) {
+            this.$element.off('keyup.dismiss.modal')
+          }
+        }
+
+        ,
         hideWithTransition: function() {
-            var self = this,
+          var self = this,
               timeout = setTimeout(function() {
                 self.$element.off($.support.transition.end)
                 self.hideModal()
               }, 300)
-            this.$element.one($.support.transition.end, function() {
-              clearTimeout(timeout)
-              self.hideModal()
-            })
-          }
+          this.$element.one($.support.transition.end, function() {
+            clearTimeout(timeout)
+            self.hideModal()
+          })
+        }
 
-          ,
+        ,
         hideModal: function() {
-            var self = this,
+          var self = this,
               ele = this.$element
-            ele.hide()
-            this.backdrop(function() {
-              self.removeBackdrop()
-              ele.trigger(self.hideReason == 'ok' ? 'okHidden' : 'cancelHidden')
-              self.hideReason = null
-              ele.trigger('hidden')
-              //閿€姣侀潤鎬佹柟娉曠敓鎴愮殑dialog鍏冪礌 , 榛樿鍙湁闈欐€佹柟娉曟槸remove绫诲瀷
-              ele.data('hidetype') == 'remove' && ele.remove()
-            })
-          }
+          ele.hide()
+          this.backdrop(function() {
+            self.removeBackdrop()
+            ele.trigger(self.hideReason == 'ok' ? 'okHidden' : 'cancelHidden')
+            self.hideReason = null
+            ele.trigger('hidden')
+            //閿€姣侀潤鎬佹柟娉曠敓鎴愮殑dialog鍏冪礌 , 榛樿鍙湁闈欐€佹柟娉曟槸remove绫诲瀷
+            ele.data('hidetype') == 'remove' && ele.remove()
+          })
+        }
 
-          ,
+        ,
         removeBackdrop: function() {
-            this.$backdrop && this.$backdrop.remove()
-            this.$backdrop = null
-          }
+          this.$backdrop && this.$backdrop.remove()
+          this.$backdrop = null
+        }
 
-          ,
+        ,
         backdrop: function(callback) {
           var self = this,
-            animate = this.$element.hasClass('fade') ? 'fade' : '',
-            opt = this.options
+              animate = this.$element.hasClass('fade') ? 'fade' : '',
+              opt = this.options
           if (this.isShown) {
             var doAnimate = $.support.transition && animate
             //濡傛灉鏄剧ず鑳屾櫙閬僵灞�
             if (opt.backdrop !== false) {
               this.$backdrop = $('<div class="sui-modal-backdrop ' + animate + '" style="background:' + opt.bgcolor + '"/>')
-                .appendTo(document.body)
+                  .appendTo(document.body)
               //閬僵灞傝儗鏅粦鑹插崐閫忔槑
               this.$backdrop.click(
-                opt.backdrop == 'static' ?
-                $.proxy(this.$element[0].focus, this.$element[0]) :
-                $.proxy(this.hide, this)
+                  opt.backdrop == 'static' ?
+                      $.proxy(this.$element[0].focus, this.$element[0]) :
+                      $.proxy(this.hide, this)
               )
               if (doAnimate) this.$backdrop[0].offsetWidth // force reflow
               this.$backdrop.addClass('in ')
               if (!callback) return
               doAnimate ?
-                this.$backdrop.one($.support.transition.end, callback) :
-                callback()
+                  this.$backdrop.one($.support.transition.end, callback) :
+                  callback()
             } else {
               callback && callback()
             }
@@ -8441,8 +8441,8 @@ $(function() {
             if (this.$backdrop) {
               this.$backdrop.removeClass('in')
               $.support.transition && this.$element.hasClass('fade') ?
-                this.$backdrop.one($.support.transition.end, callback) :
-                callback()
+                  this.$backdrop.one($.support.transition.end, callback) :
+                  callback()
             } else {
               callback && callback();
             }
@@ -8461,8 +8461,8 @@ $(function() {
         //each璁╄濡� $('#qqq, #eee').modal(options) 鐨勭敤娉曞彲琛屻€�
         return this.each(function() {
           var $this = $(this),
-            data = $this.data('modal'),
-            options = $.extend({}, $.fn.modal.defaults, $this.data(), typeof option == 'object' && option)
+              data = $this.data('modal'),
+              options = $.extend({}, $.fn.modal.defaults, $this.data(), typeof option == 'object' && option)
           //杩欓噷鍒ゆ柇鐨勭洰鐨勬槸锛氱涓€娆how鏃跺疄渚嬪寲dialog锛屼箣鍚庣殑show鍒欑敤缂撳瓨鍦╠ata-modal閲岀殑瀵硅薄銆�
           if (!data) $this.data('modal', (data = new Modal(this, options)))
 
@@ -8495,20 +8495,20 @@ $(function() {
 
       $(document).on('click.modal.data-api', '[data-toggle="modal"]', function(e) {
         var $this = $(this),
-          href = $this.attr('href')
-          //$target杩欓噷鎸嘾ialog鏈綋Dom(鑻ュ瓨鍦�)
-          //閫氳繃data-target="#foo"鎴杊ref="#foo"鎸囧悜
-          ,
-          $target = $($this.attr('data-target') || (href && href.replace(/.*(?=#[^\s]+$)/, ''))) //strip for ie7
-          //remote,href灞炴€у鏋滀互#寮€澶达紝琛ㄧず绛夊悓浜巇ata-target灞炴€�
-          ,
-          option = $target.data('modal') ? 'toggle' : $this.data()
+            href = $this.attr('href')
+        //$target杩欓噷鎸嘾ialog鏈綋Dom(鑻ュ瓨鍦�)
+        //閫氳繃data-target="#foo"鎴杊ref="#foo"鎸囧悜
+            ,
+            $target = $($this.attr('data-target') || (href && href.replace(/.*(?=#[^\s]+$)/, ''))) //strip for ie7
+        //remote,href灞炴€у鏋滀互#寮€澶达紝琛ㄧず绛夊悓浜巇ata-target灞炴€�
+            ,
+            option = $target.data('modal') ? 'toggle' : $this.data()
         e.preventDefault()
         $target
-          .modal(option)
-          .one('hide', function() {
-            $this.focus()
-          })
+            .modal(option)
+            .one('hide', function() {
+              $this.focus()
+            })
       })
 
       /* jquery寮瑰眰闈欐€佹柟娉曪紝鐢ㄤ簬寰堝皯閲嶅锛屼笉闇€璁颁綇鐘舵€佺殑寮瑰眰锛屽彲鏂逛究鐨勭洿鎺ヨ皟鐢紝鏈€绠€鍗曞舰寮忓氨鏄�$.alert('鎴戞槸alert')
@@ -8546,28 +8546,28 @@ $(function() {
        */
       $.extend({
         _modal: function(dialogCfg, customCfg) {
-            var modalId = +new Date()
+          var modalId = +new Date()
 
               ,
               finalCfg = $.extend({}, $.fn.modal.defaults, dialogCfg, { id: modalId, okBtn: '纭畾' }, (typeof customCfg == 'string' ? { body: customCfg } : customCfg))
-            var dialog = new Modal(null, finalCfg),
+          var dialog = new Modal(null, finalCfg),
               $ele = dialog.$element
-            _bind(modalId, finalCfg)
-            $ele.data('modal', dialog).modal('show')
+          _bind(modalId, finalCfg)
+          $ele.data('modal', dialog).modal('show')
 
-            function _bind(id, eList) {
-              var eType = ['show', 'shown', 'hide', 'hidden', 'okHidden', 'cancelHide', 'cancelHidden']
-              $.each(eType, function(k, v) {
-                if (typeof eList[v] == 'function') {
-                  $(document).on(v, '#' + id, $.proxy(eList[v], $('#' + id)[0]))
-                }
-              })
-            }
-            //闈欐€佹柟娉曞璇濇杩斿洖瀵硅瘽妗嗗厓绱犵殑jQuery瀵硅薄
-            return $ele
+          function _bind(id, eList) {
+            var eType = ['show', 'shown', 'hide', 'hidden', 'okHidden', 'cancelHide', 'cancelHidden']
+            $.each(eType, function(k, v) {
+              if (typeof eList[v] == 'function') {
+                $(document).on(v, '#' + id, $.proxy(eList[v], $('#' + id)[0]))
+              }
+            })
           }
-          //涓烘渶甯歌鐨刟lert锛宑onfirm寤虹珛$.modal鐨勫揩鎹锋柟寮忥紝
-          ,
+          //闈欐€佹柟娉曞璇濇杩斿洖瀵硅瘽妗嗗厓绱犵殑jQuery瀵硅薄
+          return $ele
+        }
+        //涓烘渶甯歌鐨刟lert锛宑onfirm寤虹珛$.modal鐨勫揩鎹锋柟寮忥紝
+        ,
         alert: function(customCfg) {
           var dialogCfg = {
             type: 'alert',
@@ -8594,7 +8594,7 @@ $(function() {
       $(document).on('click.msgs', '[data-dismiss="msgs"]', function(e) {
         e.preventDefault();
         var $this = $(this),
-          $msg = $this.parents('.sui-msg').remove();
+            $msg = $this.parents('.sui-msg').remove();
 
         var id = $msg.attr("id");
         if (id && $msg.hasClass("remember")) {
@@ -8668,8 +8668,8 @@ $(function() {
               tpl += '<li><a href="#" data="1">1</a></li>';
               tpl += '<li class="dotted"><span>...</span></li>';
               var frontPage,
-                backPage,
-                middle = (this.displayPage - 3) / 2;
+                  backPage,
+                  middle = (this.displayPage - 3) / 2;
               if ((this.displayPage - 3) % 2 == 0) {
                 frontPage = backPage = middle;
               } else {
@@ -8690,13 +8690,13 @@ $(function() {
         //鍊间紶閫�
         _drawCtrl: function() {
           var tpl = '<div>&nbsp;' + (this.displayInfoType == 'itemsCount' ? '<span>鍏�' + this.itemsCount + '鏉�</span>&nbsp;' : '<span>鍏�' + this.pages + '椤�</span>&nbsp;') +
-            '<span>' + '&nbsp;鍒�&nbsp;' + '<input type="text" class="page-num"/><button class="page-confirm">纭畾</button>' + '&nbsp;椤�' + '</span>' + '</div>';
+              '<span>' + '&nbsp;鍒�&nbsp;' + '<input type="text" class="page-num"/><button class="page-confirm">纭畾</button>' + '&nbsp;椤�' + '</span>' + '</div>';
           return tpl;
         },
 
         _ctrl: function() {
           var self = this,
-            pag = self.hookNode.children('.sui-pagination');
+              pag = self.hookNode.children('.sui-pagination');
 
           function doPagination() {
             var tmpNum = parseInt(pag.find('.page-num').val());
@@ -8776,7 +8776,7 @@ $(function() {
           args.shift();
         }
         var $this = $(this),
-          pag = $this.data('sui-pagination');
+            pag = $this.data('sui-pagination');
         if (!pag) $this.data('sui-pagination', (pag = new Pagination(opts).init(opts, $(this))))
         else if (typeof options == 'string') {
           pag[options].apply(pag, args)
@@ -8866,53 +8866,53 @@ $(function() {
 
         constructor: Tab
 
-          ,
+        ,
         show: function() {
-            var $this = this.element,
+          var $this = this.element,
               $ul = $this.closest('ul:not(.dropdown-menu)'),
               selector = $this.attr('data-target'),
               previous, $target, e
 
-            if (!selector) {
-              selector = $this.attr('href')
-              selector = selector && selector.replace(/.*(?=#[^\s]*$)/, '') //strip for ie7
-            }
-
-            if ($this.parent('li').hasClass('active')) return
-
-            previous = $ul.find('.active:last a')[0]
-
-            e = $.Event('show', {
-              relatedTarget: previous
-            })
-
-            $this.trigger(e)
-
-            if (e.isDefaultPrevented()) return
-
-            $target = $(selector)
-
-            this.activate($this.parent('li'), $ul)
-            this.activate($target, $target.parent(), function() {
-              $this.trigger({
-                type: 'shown',
-                relatedTarget: previous
-              })
-            })
+          if (!selector) {
+            selector = $this.attr('href')
+            selector = selector && selector.replace(/.*(?=#[^\s]*$)/, '') //strip for ie7
           }
 
-          ,
+          if ($this.parent('li').hasClass('active')) return
+
+          previous = $ul.find('.active:last a')[0]
+
+          e = $.Event('show', {
+            relatedTarget: previous
+          })
+
+          $this.trigger(e)
+
+          if (e.isDefaultPrevented()) return
+
+          $target = $(selector)
+
+          this.activate($this.parent('li'), $ul)
+          this.activate($target, $target.parent(), function() {
+            $this.trigger({
+              type: 'shown',
+              relatedTarget: previous
+            })
+          })
+        }
+
+        ,
         activate: function(element, container, callback) {
           var $active = container.find('> .active'),
-            transition = callback &&
-            $.support.transition &&
-            $active.hasClass('fade')
+              transition = callback &&
+                  $.support.transition &&
+                  $active.hasClass('fade')
 
           function next() {
             $active
-              .removeClass('active')
-              .find('> .dropdown-menu > .active')
-              .removeClass('active')
+                .removeClass('active')
+                .find('> .dropdown-menu > .active')
+                .removeClass('active')
 
             element.addClass('active')
 
@@ -8931,8 +8931,8 @@ $(function() {
           }
 
           transition ?
-            $active.one($.support.transition.end, next) :
-            next()
+              $active.one($.support.transition.end, next) :
+              next()
 
           $active.removeClass('in')
         }
@@ -8947,7 +8947,7 @@ $(function() {
       $.fn.tab = function(option) {
         return this.each(function() {
           var $this = $(this),
-            data = $this.data('tab')
+              data = $this.data('tab')
           if (!data) $this.data('tab', (data = new Tab(this)))
           if (typeof option == 'string') data[option]()
         })
@@ -9047,10 +9047,10 @@ $(function() {
 
         // Combine delimiters into one regular expression via alternation.
         var matcher = RegExp([
-          (settings.escape || noMatch).source,
-          (settings.interpolate || noMatch).source,
-          (settings.evaluate || noMatch).source
-        ].join('|') + '|$', 'g');
+              (settings.escape || noMatch).source,
+              (settings.interpolate || noMatch).source,
+              (settings.evaluate || noMatch).source
+            ].join('|') + '|$', 'g');
 
         // Compile the template source, escaping string literals appropriately.
         var index = 0;
@@ -9076,8 +9076,8 @@ $(function() {
         if (!settings.variable) source = 'with(obj||{}){\n' + source + '}\n';
 
         source = "var __t,__p='',__j=Array.prototype.join," +
-          "print=function(){__p+=__j.call(arguments,'');};\n" +
-          source + 'return __p;\n';
+            "print=function(){__p+=__j.call(arguments,'');};\n" +
+            source + 'return __p;\n';
 
         try {
           var render = new Function(settings.variable || 'obj', '_', source);
@@ -9221,25 +9221,25 @@ $(function() {
           if (this.isInline || this.isInDatepicker)
             return;
           var calendarWidth = this.picker.outerWidth(),
-            calendarHeight = this.picker.outerHeight(),
-            visualPadding = 10,
-            $window = $(window),
-            windowWidth = $window.width(),
-            windowHeight = $window.height(),
-            scrollTop = $window.scrollTop();
+              calendarHeight = this.picker.outerHeight(),
+              visualPadding = 10,
+              $window = $(window),
+              windowWidth = $window.width(),
+              windowHeight = $window.height(),
+              scrollTop = $window.scrollTop();
 
           var zIndex = parseInt(this.element.parents().filter(function() {
-            return $(this).css('z-index') !== 'auto';
-          }).first().css('z-index')) + 10;
+                return $(this).css('z-index') !== 'auto';
+              }).first().css('z-index')) + 10;
           var offset = this.component ? this.component.parent().offset() : this.element.offset();
           var height = this.component ? this.component.outerHeight(true) : this.element.outerHeight(false);
           var width = this.component ? this.component.outerWidth(true) : this.element.outerWidth(false);
           var left = offset.left,
-            top = offset.top;
+              top = offset.top;
 
           this.picker.removeClass(
-            'datepicker-orient-top datepicker-orient-bottom ' +
-            'datepicker-orient-right datepicker-orient-left'
+              'datepicker-orient-top datepicker-orient-bottom ' +
+              'datepicker-orient-right datepicker-orient-left'
           );
 
           if (this.o.orientation.x !== 'auto') {
@@ -9261,7 +9261,7 @@ $(function() {
           // auto y orientation is best-situation: top or bottom, no fudging,
           // decision based on which shows more of the calendar
           var yorient = this.o.orientation.y,
-            top_overflow, bottom_overflow;
+              top_overflow, bottom_overflow;
           if (yorient === 'auto') {
             top_overflow = -scrollTop + offset.top - calendarHeight;
             bottom_overflow = scrollTop + windowHeight - (offset.top + height + calendarHeight);
@@ -9371,18 +9371,18 @@ $(function() {
             ];
           }
           this._events.push(
-            // Component: listen for blur on element descendants
-            [this.element, '*', {
-              blur: $.proxy(function(e) {
-                this._focused_from = e.target;
-              }, this)
-            }],
-            // Input: listen for blur on element
-            [this.element, {
-              blur: $.proxy(function(e) {
-                this._focused_from = e.target;
-              }, this)
-            }]
+              // Component: listen for blur on element descendants
+              [this.element, '*', {
+                blur: $.proxy(function(e) {
+                  this._focused_from = e.target;
+                }, this)
+              }],
+              // Input: listen for blur on element
+              [this.element, {
+                blur: $.proxy(function(e) {
+                  this._focused_from = e.target;
+                }, this)
+              }]
           );
 
           this._secondaryEvents = [
@@ -9393,11 +9393,11 @@ $(function() {
               'mousedown touchstart': $.proxy(function(e) {
                 // Clicked outside the datepicker, hide it
                 if (!(
-                    this.element.is(e.target) ||
-                    this.element.find(e.target).length ||
-                    this.picker.is(e.target) ||
-                    this.picker.find(e.target).length
-                  )) {
+                        this.element.is(e.target) ||
+                        this.element.find(e.target).length ||
+                        this.picker.is(e.target) ||
+                        this.picker.find(e.target).length
+                    )) {
                   this._hide();
                 }
               }, this)
@@ -9412,27 +9412,27 @@ $(function() {
           this.picker.on('click', '.J_up', function(ev) {
 
             var target = ev.currentTarget,
-              parentNode = $(target).parent(),
-              role = parentNode.attr('data-role');
+                parentNode = $(target).parent(),
+                role = parentNode.attr('data-role');
 
             self._slide(role, 'up');
 
           }).on('click', '.J_down', function(ev) {
             var target = ev.currentTarget,
-              parentNode = $(target).parent(),
-              role = parentNode.attr('data-role');
+                parentNode = $(target).parent(),
+                role = parentNode.attr('data-role');
 
             self._slide(role, 'down');
 
           }).on('click', 'span', function(ev) {
 
             var target = ev.currentTarget,
-              parentNode = $(target).parent().parent().parent(),
-              role = parentNode.attr('data-role'),
-              targetNum = target.innerHTML,
-              attrs = self[role + 'Attr'],
-              step = parseInt(targetNum - attrs.current, 10),
-              dur;
+                parentNode = $(target).parent().parent().parent(),
+                role = parentNode.attr('data-role'),
+                targetNum = target.innerHTML,
+                attrs = self[role + 'Attr'],
+                step = parseInt(targetNum - attrs.current, 10),
+                dur;
             if (step > 0) {
               self._slideDonw(attrs, step);
             } else {
@@ -9457,7 +9457,7 @@ $(function() {
 
           step = step || 1;
           var cp = attrs.cp,
-            dur = attrs.ih * step;
+              dur = attrs.ih * step;
 
           attrs.current += step;
 
@@ -9481,7 +9481,7 @@ $(function() {
           step = step || 1;
 
           var cp = attrs.cp,
-            dur = attrs.ih * step;
+              dur = attrs.ih * step;
 
           attrs.current -= step;
 
@@ -9508,8 +9508,8 @@ $(function() {
         },
         _updateUI: function() {
           var oldMimute = this.o.minute,
-            oldHour = this.o.hour,
-            attrs, role, step;
+              oldHour = this.o.hour,
+              attrs, role, step;
 
           this._getInputTime();
 
@@ -9555,10 +9555,10 @@ $(function() {
         },
         _foramtTimeString: function(val) {
           var time = {
-              minute: 0,
-              hour: 0
-            },
-            minute, hour;
+                minute: 0,
+                hour: 0
+              },
+              minute, hour;
           val = val.split(':');
           for (var i = val.length - 1; i >= 0; i--) {
             val[i] = $.trim(val[i]);
@@ -9597,7 +9597,7 @@ $(function() {
 
         _juicer: function(current, list) {
           var items = '',
-            item;
+              item;
           for (var i = list.length - 1; i >= 0; i--) {
             if (list[i] == current) {
               item = '<span ' + 'class="current" data-num="' + i + '">' + list[i] + '</span>';
@@ -9607,26 +9607,26 @@ $(function() {
             items = item + items;
           }
           return '<div class="picker-wrap">' +
-            '<a href="javascript:;" class="picker-btn up J_up"><b class="arrow"></b><b class="arrow-bg"></b></a>' +
-            '<div class="picker-con">' +
-            '<div class="picker-innercon">' +
-            items +
-            '</div>' +
-            '</div>' +
-            '<a href="javascript:;" class="picker-btn down J_down"><b class="arrow"></b><b class="arrow-bg"></b></a>' +
-            '</div>';
+              '<a href="javascript:;" class="picker-btn up J_up"><b class="arrow"></b><b class="arrow-bg"></b></a>' +
+              '<div class="picker-con">' +
+              '<div class="picker-innercon">' +
+              items +
+              '</div>' +
+              '</div>' +
+              '<a href="javascript:;" class="picker-btn down J_down"><b class="arrow"></b><b class="arrow-bg"></b></a>' +
+              '</div>';
         },
 
         _renderHour: function() {
           var self = this,
-            hourRet = [];
+              hourRet = [];
 
           for (var i = 0; i < 24; i++) {
             hourRet.push(self._beautifyNum(i));
           }
 
           var tpl = this._juicer(self.o.hour, hourRet),
-            $tpl = $(tpl);
+              $tpl = $(tpl);
 
           $tpl.attr('data-role', 'hour');
 
@@ -9639,13 +9639,13 @@ $(function() {
 
         _renderMinutes: function() {
           var self = this,
-            minuteRet = [];
+              minuteRet = [];
           for (var i = 0; i < 60; i++) {
             minuteRet.push(self._beautifyNum(i));
           }
 
           var tpl = this._juicer(self.o.minute, minuteRet),
-            $tpl = $(tpl);
+              $tpl = $(tpl);
 
           $tpl.attr('data-role', 'minute');
 
@@ -9659,15 +9659,15 @@ $(function() {
         _addPrefixAndSuffix: function(parentNode, maxSize) {
 
           var self = this,
-            pickerCon = $('.picker-con', parentNode),
-            innerPickerCon = $('.picker-innercon', parentNode),
-            currentNode = $('.current', parentNode),
-            itemH = currentNode.outerHeight(),
-            parentH = pickerCon.outerHeight(),
-            fixNum = Math.floor(parentH / itemH) + 1,
-            currentNodeOffsetTop,
-            currentPosition,
-            tpl = '';
+              pickerCon = $('.picker-con', parentNode),
+              innerPickerCon = $('.picker-innercon', parentNode),
+              currentNode = $('.current', parentNode),
+              itemH = currentNode.outerHeight(),
+              parentH = pickerCon.outerHeight(),
+              fixNum = Math.floor(parentH / itemH) + 1,
+              currentNodeOffsetTop,
+              currentPosition,
+              tpl = '';
 
           for (var j = maxSize - fixNum; j <= maxSize; j++) {
             tpl += '<span>' + self._beautifyNum(j) + '</span>';
@@ -9698,10 +9698,10 @@ $(function() {
 
         _renderSplit: function() {
           var tpl = '<div class="timePicker-split">' +
-            '<div class="hour-input"></div>' +
-            '<div class="split-icon">:</div>' +
-            '<div class="minute-input"></div>' +
-            '</div>';
+              '<div class="hour-input"></div>' +
+              '<div class="split-icon">:</div>' +
+              '<div class="minute-input"></div>' +
+              '</div>';
 
           this.picker.append($(tpl));
         },
@@ -9762,7 +9762,7 @@ $(function() {
         var internal_return;
         this.each(function() {
           var $this = $(this),
-            data = $this.data('timepicker')
+              data = $this.data('timepicker')
           if (!data) $this.data('timepicker', (data = new TimePicker(this, option)))
           if (typeof option === 'string' && typeof data[option] === 'function') {
             internal_return = data[option].apply(data, args);
@@ -9788,16 +9788,16 @@ $(function() {
        * ================== */
 
       $(document).on(
-        'focus.timepicker.data-api click.timepicker.data-api',
-        '[data-toggle="timepicker"]',
-        function(e) {
-          var $this = $(this);
-          if ($this.data('timepicker'))
-            return;
-          e.preventDefault();
-          // component click requires us to explicitly show it
-          $this.timepicker('_show');
-        }
+          'focus.timepicker.data-api click.timepicker.data-api',
+          '[data-toggle="timepicker"]',
+          function(e) {
+            var $this = $(this);
+            if ($this.data('timepicker'))
+              return;
+            e.preventDefault();
+            // component click requires us to explicitly show it
+            $this.timepicker('_show');
+          }
       );
       $(function() {
         $('[data-toggle="timepicker-inline"]').timepicker();
@@ -9844,189 +9844,189 @@ $(function() {
 
         constructor: Tooltip
 
-          ,
+        ,
         init: function(type, element, options) {
-            var eventIn, eventOut, triggers, trigger, i
+          var eventIn, eventOut, triggers, trigger, i
 
-            this.type = type
-            this.$element = $(element)
-            this.options = this.getOptions(options)
-            this.enabled = true
-            this.hoverState = 'out'
+          this.type = type
+          this.$element = $(element)
+          this.options = this.getOptions(options)
+          this.enabled = true
+          this.hoverState = 'out'
 
-            triggers = this.options.trigger.split(' ')
+          triggers = this.options.trigger.split(' ')
 
-            for (i = triggers.length; i--;) {
-              trigger = triggers[i]
-              if (trigger == 'click') {
-                this.$element.on('click.' + this.type, this.options.selector, $.proxy(this.toggle, this))
+          for (i = triggers.length; i--;) {
+            trigger = triggers[i]
+            if (trigger == 'click') {
+              this.$element.on('click.' + this.type, this.options.selector, $.proxy(this.toggle, this))
 
-              } else if (trigger != 'manual') {
-                eventIn = trigger == 'hover' ? 'mouseenter' : 'focus'
-                eventOut = trigger == 'hover' ? 'mouseleave' : 'blur'
-                this.$element.on(eventIn + '.' + this.type, this.options.selector, $.proxy(this.enter, this))
-                this.$element.on(eventOut + '.' + this.type, this.options.selector, $.proxy(this.leave, this))
-              }
+            } else if (trigger != 'manual') {
+              eventIn = trigger == 'hover' ? 'mouseenter' : 'focus'
+              eventOut = trigger == 'hover' ? 'mouseleave' : 'blur'
+              this.$element.on(eventIn + '.' + this.type, this.options.selector, $.proxy(this.enter, this))
+              this.$element.on(eventOut + '.' + this.type, this.options.selector, $.proxy(this.leave, this))
             }
+          }
 
-            this.options.selector ?
+          this.options.selector ?
               (this._options = $.extend({}, this.options, { trigger: 'manual', selector: '' })) :
               this.fixTitle()
-          }
+        }
 
-          ,
+        ,
         getOptions: function(options) {
-            options = $.extend({}, $.fn[this.type].defaults, this.$element.data(), options)
+          options = $.extend({}, $.fn[this.type].defaults, this.$element.data(), options)
 
-            var foot = options.type == 'confirm' ? '<div class="tooltip-footer"><button class="sui-btn btn-primary" data-ok="tooltip">纭畾</button><button class="sui-btn btn-default" data-dismiss="tooltip">鍙栨秷</button></div>' : ''
-            //鏍规嵁tooltip鐨則ype绫诲瀷鏋勯€爐ip妯＄増
-            options.template = '<div class="sui-tooltip ' + options.type + '" style="overflow:visible"><div class="tooltip-arrow"><div class="tooltip-arrow cover"></div></div><div class="tooltip-inner"></div>' + foot + '</div>'
-            options.type == 'confirm' && (options.html = true)
+          var foot = options.type == 'confirm' ? '<div class="tooltip-footer"><button class="sui-btn btn-primary" data-ok="tooltip">纭畾</button><button class="sui-btn btn-default" data-dismiss="tooltip">鍙栨秷</button></div>' : ''
+          //鏍规嵁tooltip鐨則ype绫诲瀷鏋勯€爐ip妯＄増
+          options.template = '<div class="sui-tooltip ' + options.type + '" style="overflow:visible"><div class="tooltip-arrow"><div class="tooltip-arrow cover"></div></div><div class="tooltip-inner"></div>' + foot + '</div>'
+          options.type == 'confirm' && (options.html = true)
 
-            if (options.delay && typeof options.delay == 'number') {
-              options.delay = {
-                show: options.delay,
-                hide: options.delay
-              }
+          if (options.delay && typeof options.delay == 'number') {
+            options.delay = {
+              show: options.delay,
+              hide: options.delay
             }
-
-            return options
           }
 
-          ,
+          return options
+        }
+
+        ,
         enter: function(e) {
-            var defaults = $.fn[this.type].defaults,
+          var defaults = $.fn[this.type].defaults,
               options = {},
               self
 
-            this._options && $.each(this._options, function(key, value) {
-              if (defaults[key] != value) options[key] = value
-            }, this)
+          this._options && $.each(this._options, function(key, value) {
+            if (defaults[key] != value) options[key] = value
+          }, this)
 
-            self = $(e.currentTarget)[this.type](options).data(this.type)
+          self = $(e.currentTarget)[this.type](options).data(this.type)
 
-            clearTimeout(self.timeout)
-            if (this.hoverState == 'out') {
-              this.hoverState = 'in'
-              this.tip().off($.support.transition && $.support.transition.end)
-              if (!this.options.delay || !this.options.delay.show) return this.show()
-              this.timeout = setTimeout(function() {
-                if (self.hoverState == 'in') self.show()
-              }, self.options.delay.show)
-            }
-          }
-
-          ,
-        leave: function(e) {
-            var self = $(e.currentTarget)[this.type](this._options).data(this.type)
-            if (this.timeout) clearTimeout(this.timeout)
-            if (!self.options.delay || !self.options.delay.hide) return self.hide()
-
+          clearTimeout(self.timeout)
+          if (this.hoverState == 'out') {
+            this.hoverState = 'in'
+            this.tip().off($.support.transition && $.support.transition.end)
+            if (!this.options.delay || !this.options.delay.show) return this.show()
             this.timeout = setTimeout(function() {
-              //isHover 涓�0鎴杣ndefined锛寀ndefined:娌℃湁绉诲埌tip涓婅繃
-              if (!self.isTipHover) {
-                self.hoverState = 'out'
-              }
-              if (self.hoverState == 'out') self.hide()
-            }, self.options.delay.hide)
+              if (self.hoverState == 'in') self.show()
+            }, self.options.delay.show)
           }
+        }
 
-          ,
+        ,
+        leave: function(e) {
+          var self = $(e.currentTarget)[this.type](this._options).data(this.type)
+          if (this.timeout) clearTimeout(this.timeout)
+          if (!self.options.delay || !self.options.delay.hide) return self.hide()
+
+          this.timeout = setTimeout(function() {
+            //isHover 涓�0鎴杣ndefined锛寀ndefined:娌℃湁绉诲埌tip涓婅繃
+            if (!self.isTipHover) {
+              self.hoverState = 'out'
+            }
+            if (self.hoverState == 'out') self.hide()
+          }, self.options.delay.hide)
+        }
+
+        ,
         show: function() {
-            var $tip, pos, actualWidth, actualHeight, placement, tp, e = $.Event('show'),
+          var $tip, pos, actualWidth, actualHeight, placement, tp, e = $.Event('show'),
               opt = this.options,
               align = opt.align,
               self = this
 
-            if (this.hasContent() && this.enabled) {
-              this.$element.trigger(e)
-              if (e.isDefaultPrevented()) return
-              $tip = this.tip()
-              this.setContent()
+          if (this.hasContent() && this.enabled) {
+            this.$element.trigger(e)
+            if (e.isDefaultPrevented()) return
+            $tip = this.tip()
+            this.setContent()
 
-              if (opt.animation) {
-                $tip.addClass('fade')
-              }
+            if (opt.animation) {
+              $tip.addClass('fade')
+            }
 
-              placement = typeof opt.placement == 'function' ?
+            placement = typeof opt.placement == 'function' ?
                 opt.placement.call(this, $tip[0], this.$element[0]) :
                 opt.placement
 
-              $tip
+            $tip
                 .detach()
                 .css({ top: 0, left: 0, display: 'block' })
 
-              opt.container ? $tip.appendTo(opt.container) : $tip.insertAfter(this.$element)
-              if (/\bhover\b/.test(opt.trigger)) {
-                $tip.hover(function() {
-                  self.isTipHover = 1
-                }, function() {
-                  self.isTipHover = 0
-                  self.hoverState = 'out'
-                  $tip.detach()
-                })
-              }
-              this.setWidth()
-              pos = this.getPosition()
-
-              actualWidth = $tip[0].offsetWidth
-              actualHeight = $tip[0].offsetHeight
-
-              //+ - 7淇锛屽拰css瀵瑰簲锛屽嬁鍗曠嫭淇敼
-              var d = opt.type == 'attention' ? 5 : 7
-              tp = positioning();
-              this.applyPlacement(tp, placement)
-              this.applyAlign(align, pos)
-              this.$element.trigger('shown')
+            opt.container ? $tip.appendTo(opt.container) : $tip.insertAfter(this.$element)
+            if (/\bhover\b/.test(opt.trigger)) {
+              $tip.hover(function() {
+                self.isTipHover = 1
+              }, function() {
+                self.isTipHover = 0
+                self.hoverState = 'out'
+                $tip.detach()
+              })
             }
-            //纭畾tooltip甯冨眬瀵归綈鏂瑰紡
-            function positioning() {
-              var _left = pos.left + pos.width / 2 - actualWidth / 2,
+            this.setWidth()
+            pos = this.getPosition()
+
+            actualWidth = $tip[0].offsetWidth
+            actualHeight = $tip[0].offsetHeight
+
+            //+ - 7淇锛屽拰css瀵瑰簲锛屽嬁鍗曠嫭淇敼
+            var d = opt.type == 'attention' ? 5 : 7
+            tp = positioning();
+            this.applyPlacement(tp, placement)
+            this.applyAlign(align, pos)
+            this.$element.trigger('shown')
+          }
+          //纭畾tooltip甯冨眬瀵归綈鏂瑰紡
+          function positioning() {
+            var _left = pos.left + pos.width / 2 - actualWidth / 2,
                 _top = pos.top + pos.height / 2 - actualHeight / 2
-              switch (align) {
-                case 'left':
-                  _left = pos.left
-                  break
-                case 'right':
-                  _left = pos.left - actualWidth + pos.width
-                  break
-                case 'top':
-                  _top = pos.top
-                  break
-                case 'bottom':
-                  _top = pos.top - actualHeight + pos.height
-                  break
-              }
-              switch (placement) {
-                case 'bottom':
-                  tp = { top: pos.top + pos.height + d, left: _left }
-                  break
-                case 'top':
-                  tp = { top: pos.top - actualHeight - d, left: _left }
-                  break
-                case 'left':
-                  tp = { top: _top, left: pos.left - actualWidth - d }
-                  break
-                case 'right':
-                  tp = { top: _top, left: pos.left + pos.width + d }
-                  break
-              }
-              return tp
+            switch (align) {
+              case 'left':
+                _left = pos.left
+                break
+              case 'right':
+                _left = pos.left - actualWidth + pos.width
+                break
+              case 'top':
+                _top = pos.top
+                break
+              case 'bottom':
+                _top = pos.top - actualHeight + pos.height
+                break
             }
-
+            switch (placement) {
+              case 'bottom':
+                tp = { top: pos.top + pos.height + d, left: _left }
+                break
+              case 'top':
+                tp = { top: pos.top - actualHeight - d, left: _left }
+                break
+              case 'left':
+                tp = { top: _top, left: pos.left - actualWidth - d }
+                break
+              case 'right':
+                tp = { top: _top, left: pos.left + pos.width + d }
+                break
+            }
+            return tp
           }
 
-          ,
+        }
+
+        ,
         applyPlacement: function(offset, placement) {
           var $tip = this.tip(),
-            width = $tip[0].offsetWidth,
-            height = $tip[0].offsetHeight,
-            actualWidth, actualHeight, delta, replace
+              width = $tip[0].offsetWidth,
+              height = $tip[0].offsetHeight,
+              actualWidth, actualHeight, delta, replace
 
           $tip
-            .offset(offset)
-            .addClass(placement)
-            .addClass('in')
+              .offset(offset)
+              .addClass(placement)
+              .addClass('in')
 
           actualWidth = $tip[0].offsetWidth
           actualHeight = $tip[0].offsetHeight
@@ -10055,182 +10055,182 @@ $(function() {
           if (replace) $tip.offset(offset)
         },
         applyAlign: function(align, tipPos) {
-            var $tip = this.tip(),
+          var $tip = this.tip(),
               actualWidth = $tip[0].offsetWidth,
               actualHeight = $tip[0].offsetHeight,
               css = {}
-            switch (align) {
-              case 'left':
-                if (tipPos.width < actualWidth)
-                  css = { left: tipPos.width / 2 }
-                break
-              case 'right':
-                if (tipPos.width < actualWidth)
-                  css = { left: actualWidth - tipPos.width / 2 }
-                break
-              case 'top':
-                if (tipPos.height < actualHeight)
-                  css = { top: tipPos.height / 2 }
-                break
-              case 'bottom':
-                if (tipPos.height < actualHeight)
-                  css = { top: actualHeight - tipPos.height / 2 }
-                break
-            }
-            align != 'center' && $tip.find('.tooltip-arrow').first().css(css)
-
+          switch (align) {
+            case 'left':
+              if (tipPos.width < actualWidth)
+                css = { left: tipPos.width / 2 }
+              break
+            case 'right':
+              if (tipPos.width < actualWidth)
+                css = { left: actualWidth - tipPos.width / 2 }
+              break
+            case 'top':
+              if (tipPos.height < actualHeight)
+                css = { top: tipPos.height / 2 }
+              break
+            case 'bottom':
+              if (tipPos.height < actualHeight)
+                css = { top: actualHeight - tipPos.height / 2 }
+              break
           }
+          align != 'center' && $tip.find('.tooltip-arrow').first().css(css)
 
-          ,
+        }
+
+        ,
         replaceArrow: function(delta, dimension, position) {
-            this
+          this
               .arrow()
               .css(position, delta ? (50 * (1 - delta / dimension) + "%") : '')
-          }
+        }
 
-          ,
+        ,
         setWidth: function() {
-            var opt = this.options,
+          var opt = this.options,
               width = opt.width,
               widthLimit = opt.widthlimit,
               $tip = this.tip()
-            //浜哄伐璁剧疆瀹藉害锛屽垯蹇界暐鏈€澶у搴﹂檺鍒�
-            if (width) {
-              $tip.width(width)
+          //浜哄伐璁剧疆瀹藉害锛屽垯蹇界暐鏈€澶у搴﹂檺鍒�
+          if (width) {
+            $tip.width(width)
+          } else {
+            //瀹藉害闄愬埗閫昏緫
+            if (widthLimit === true) {
+              $tip.css('max-width', '400px')
             } else {
-              //瀹藉害闄愬埗閫昏緫
-              if (widthLimit === true) {
-                $tip.css('max-width', '400px')
-              } else {
-                var val
-                widthLimit === false && (val = 'none')
-                typeof opt.widthlimit == 'string' && (val = widthLimit)
-                $tip.css('max-width', val)
-              }
+              var val
+              widthLimit === false && (val = 'none')
+              typeof opt.widthlimit == 'string' && (val = widthLimit)
+              $tip.css('max-width', val)
             }
           }
+        }
 
-          ,
+        ,
         setContent: function() {
-            var $tip = this.tip(),
+          var $tip = this.tip(),
               title = this.getTitle()
 
-            $tip.find('.tooltip-inner')[this.options.html ? 'html' : 'text'](title)
-            $tip.removeClass('fade in top bottom left right')
-          }
+          $tip.find('.tooltip-inner')[this.options.html ? 'html' : 'text'](title)
+          $tip.removeClass('fade in top bottom left right')
+        }
 
-          ,
+        ,
         hide: function() {
-            var $tip = this.tip(),
+          var $tip = this.tip(),
               e = $.Event('hide'),
               self = this,
               opt = this.options
 
-            this.$element.trigger(e)
-            if (e.isDefaultPrevented()) return
+          this.$element.trigger(e)
+          if (e.isDefaultPrevented()) return
 
-            $tip.removeClass('in')
-            if (typeof opt.hide == 'function') {
-              opt.hide.call(self.$element)
-            }
+          $tip.removeClass('in')
+          if (typeof opt.hide == 'function') {
+            opt.hide.call(self.$element)
+          }
 
-            function removeWithAnimation() {
-              self.timeout = setTimeout(function() {
-                $tip.off($.support.transition.end).detach()
-              }, 500)
+          function removeWithAnimation() {
+            self.timeout = setTimeout(function() {
+              $tip.off($.support.transition.end).detach()
+            }, 500)
 
-              $tip.one($.support.transition.end, function() {
-                clearTimeout(self.timeout)
-                $tip.detach()
-              })
-            }
+            $tip.one($.support.transition.end, function() {
+              clearTimeout(self.timeout)
+              $tip.detach()
+            })
+          }
 
-            $.support.transition && this.$tip.hasClass('fade') ?
+          $.support.transition && this.$tip.hasClass('fade') ?
               removeWithAnimation() :
               ($tip.detach())
-            this.$element.trigger('hidden')
+          this.$element.trigger('hidden')
 
-            return this
-          }
+          return this
+        }
 
-          ,
+        ,
         fixTitle: function() {
-            var $e = this.$element
-            //鍙湁鏃爅s婵€娲绘柟寮忔墠澶勭悊title灞炴€с€傚悓鏃秇tml灞炴€ata-original-title蹇呴』闄勫姞鍒拌Е鍙戝厓绱�,鍗充娇鏄痡s璋冪敤鐢熸垚鐨則ooltip銆�
-            if ($e.attr('title') || typeof($e.attr('data-original-title')) != 'string') {
-              if ($e.data('toggle') == 'tooltip') {
-                $e.attr('data-original-title', $e.attr('title') || '').attr('title', '')
-              } else {
-                $e.attr('data-original-title', '')
-              }
+          var $e = this.$element
+          //鍙湁鏃爅s婵€娲绘柟寮忔墠澶勭悊title灞炴€с€傚悓鏃秇tml灞炴€ata-original-title蹇呴』闄勫姞鍒拌Е鍙戝厓绱�,鍗充娇鏄痡s璋冪敤鐢熸垚鐨則ooltip銆�
+          if ($e.attr('title') || typeof($e.attr('data-original-title')) != 'string') {
+            if ($e.data('toggle') == 'tooltip') {
+              $e.attr('data-original-title', $e.attr('title') || '').attr('title', '')
+            } else {
+              $e.attr('data-original-title', '')
             }
           }
+        }
 
-          ,
+        ,
         hasContent: function() {
-            return this.getTitle()
-          }
+          return this.getTitle()
+        }
 
-          ,
+        ,
         getPosition: function() {
-            var el = this.$element[0]
-            return $.extend({}, (typeof el.getBoundingClientRect == 'function') ? el.getBoundingClientRect() : {
-              width: el.offsetWidth,
-              height: el.offsetHeight
-            }, this.$element.offset())
-          }
+          var el = this.$element[0]
+          return $.extend({}, (typeof el.getBoundingClientRect == 'function') ? el.getBoundingClientRect() : {
+            width: el.offsetWidth,
+            height: el.offsetHeight
+          }, this.$element.offset())
+        }
 
-          ,
+        ,
         getTitle: function() {
-            var title, $e = this.$element,
+          var title, $e = this.$element,
               o = this.options
 
-            title = $e.attr('data-original-title') ||
+          title = $e.attr('data-original-title') ||
               (typeof o.title == 'function' ? o.title.call($e[0]) : o.title)
-            return title
-          }
+          return title
+        }
 
-          ,
+        ,
         tip: function() {
-            return this.$tip = this.$tip || $(this.options.template)
-          }
+          return this.$tip = this.$tip || $(this.options.template)
+        }
 
-          ,
+        ,
         arrow: function() {
-            return this.$arrow = this.$arrow || this.tip().find(".tooltip-arrow")
-          }
+          return this.$arrow = this.$arrow || this.tip().find(".tooltip-arrow")
+        }
 
-          ,
+        ,
         validate: function() {
-            if (!this.$element[0].parentNode) {
-              this.hide()
-              this.$element = null
-              this.options = null
-            }
+          if (!this.$element[0].parentNode) {
+            this.hide()
+            this.$element = null
+            this.options = null
           }
+        }
 
-          ,
+        ,
         enable: function() {
-            this.enabled = true
-          }
+          this.enabled = true
+        }
 
-          ,
+        ,
         disable: function() {
-            this.enabled = false
-          }
+          this.enabled = false
+        }
 
-          ,
+        ,
         toggleEnabled: function() {
-            this.enabled = !this.enabled
-          }
+          this.enabled = !this.enabled
+        }
 
-          ,
+        ,
         toggle: function(e) {
-            var self = e ? $(e.currentTarget)[this.type](this._options).data(this.type) : this
-            self.tip().hasClass('in') ? self.hide() : self.show()
-          }
+          var self = e ? $(e.currentTarget)[this.type](this._options).data(this.type) : this
+          self.tip().hasClass('in') ? self.hide() : self.show()
+        }
 
-          ,
+        ,
         destroy: function() {
           this.hide().$element.off('.' + this.type).removeData(this.type)
         }
@@ -10247,8 +10247,8 @@ $(function() {
 
         return this.each(function() {
           var $this = $(this),
-            data = $this.data('tooltip'),
-            options = typeof option == 'object' && option
+              data = $this.data('tooltip'),
+              options = typeof option == 'object' && option
           if (!data) $this.data('tooltip', (data = new Tooltip(this, options)))
           if (typeof option == 'string') data[option]()
         })
@@ -10259,22 +10259,22 @@ $(function() {
       $.fn.tooltip.defaults = {
         animation: true,
         type: 'default' //tip 绫诲瀷 {string} 'default'|'primary'|'attention'|'info'|'confirm' ,鍖哄埆瑙乨emo
-          ,
+        ,
         placement: 'top',
         selector: false //閫氬父瑕侀厤鍚堣皟鐢ㄦ柟娉曚娇鐢紝濡傛灉tooltip鍏冪礌寰堝锛岀敤姝ら€斿緞杩涜浜嬩欢濮旀墭鍑忓皯浜嬩欢鐩戝惉鏁伴噺: $('body').tooltip({selector: '.tips'})
-          ,
+        ,
         trigger: 'hover focus' //瑙﹀彂鏂瑰紡锛屽閫夛細click hover focus锛屽鏋滃笇鏈涙墜鍔ㄨЕ鍙戯紝鍒欎紶鍏�'manual'
-          ,
+        ,
         title: 'it is default title' //榛樿tooltip鐨勫唴瀹癸紝濡傛灉缁檋tml鍏冪礌娣诲姞浜唗itle灞炴€у垯浣跨敤璇tml灞炴€ф浛浠ｆ灞炴€�
-          ,
+        ,
         delay: { show: 0, hide: 200 } //濡傛灉鍙紶number锛屽垯show銆乭ide鏃堕兘浼氫娇鐢ㄨ繖涓欢鏃讹紝鑻ユ兂宸紓鍖栧垯浼犲叆褰㈠{show:400, hide: 600} 鐨勫璞�   娉細delay鍙傛暟瀵筸anual瑙﹀彂鏂瑰紡鐨則ooltip鏃犳晥
         ,
         html: true //鍐冲畾鏄痟tml()杩樻槸text()
-          ,
+        ,
         container: false //灏唗ooltip涓庤緭鍏ユ缁勪竴鍚屼娇鐢ㄦ椂锛屼负浜嗛伩鍏嶄笉蹇呰鐨勫奖鍝嶏紝闇€瑕佽缃甤ontainer.浠栫敤鏉ュ皢tooltip鐨刣om鑺傜偣鎻掑叆鍒癱ontainer鎸囧畾鐨勫厓绱犲唴鐨勬渶鍚庯紝鍙悊瑙ｄ负 container.append(tooltipDom)銆�
-          ,
+        ,
         widthlimit: true // {Boolean|string} tooltip鍏冪礌鏈€澶у搴﹂檺鍒讹紝false涓嶉檺瀹斤紝true闄愬300px锛屼篃鍙紶鍏�"500px",浜哄伐闄愬埗瀹藉害
-          ,
+        ,
         align: 'center' // {string} tip鍏冪礌鐨勫竷灞€鏂瑰紡锛岄粯璁ゅ眳涓細'center' ,'left','right','top','bottom'
       }
 
@@ -10294,9 +10294,9 @@ $(function() {
         //mousedown澶栭儴鍙秷澶眛ooltip(涓轰簡鍦╟lick鍥炶皟鎵ц鍓嶅鐞嗗ソdom鐘舵€�)
         $(document).on('mousedown', function(e) {
           var tgt = $(e.target),
-            tip = $('.sui-tooltip'),
-            switchTgt = tip.prev(),
-            tipContainer = tgt.parents('.sui-tooltip')
+              tip = $('.sui-tooltip'),
+              switchTgt = tip.prev(),
+              tipContainer = tgt.parents('.sui-tooltip')
           /* 閫昏緫鎵ц鏉′欢涓€娆℃敞閲婏細
            * 1銆佸瓨鍦╰ip
            * 2銆佺偣鍑荤殑涓嶆槸tip鍐呯殑鏌愬尯鍩�
@@ -10317,8 +10317,8 @@ $(function() {
         $(document).on('click', '[data-ok=tooltip]', function(e) {
           e.preventDefault()
           var triggerEle = $(e.target).parents('.sui-tooltip').prev(),
-            instance = triggerEle.data('tooltip'),
-            okHideCallback = instance.options.okHide
+              instance = triggerEle.data('tooltip'),
+              okHideCallback = instance.options.okHide
           if (typeof okHideCallback == 'function') {
             okHideCallback.call(triggerEle)
           }
@@ -10365,13 +10365,13 @@ $(function() {
           var transitionEnd = (function() {
 
             var el = document.createElement('bootstrap'),
-              transEndEventNames = {
-                'WebkitTransition': 'webkitTransitionEnd',
-                'MozTransition': 'transitionend',
-                'OTransition': 'oTransitionEnd otransitionend',
-                'transition': 'transitionend'
-              },
-              name
+                transEndEventNames = {
+                  'WebkitTransition': 'webkitTransitionEnd',
+                  'MozTransition': 'transitionend',
+                  'OTransition': 'oTransitionEnd otransitionend',
+                  'transition': 'transitionend'
+                },
+                name
 
             for (name in transEndEventNames) {
               if (el.style[name] !== undefined) {
@@ -10382,8 +10382,8 @@ $(function() {
           }())
 
           return transitionEnd && {
-            end: transitionEnd
-          }
+                end: transitionEnd
+              }
 
         })()
 
@@ -10440,7 +10440,7 @@ $(function() {
 
         getData: function(id, index) {
           var that = this,
-            data = that.redis.query(id); // 鍏堣幏鍙栫紦瀛樻暟鎹�
+              data = that.redis.query(id); // 鍏堣幏鍙栫紦瀛樻暟鎹�
           if (!that.options.src) return;
           // 鍏堝彇缂撳瓨鏁版嵁
           if (data) {
@@ -10462,8 +10462,8 @@ $(function() {
 
         createDom: function(list, index) {
           var dom = ['<select>'],
-            placeholder = this.options.placeholder,
-            val = this.options.val[index];
+              placeholder = this.options.placeholder,
+              val = this.options.val[index];
           placeholder && dom.push('<option value="">' + placeholder + '</option>');
           $.each(list, function(i, n) {
             dom.push('<option data-isleaf="' + n.isleaf + '" value="' + n.id + '" ' + (n.id == val ? 'selected' : '') + '>' + n.value + '</option>')
@@ -10477,7 +10477,7 @@ $(function() {
           var that = this;
           this.$element.on('change.sui.tree', 'select', function(e) {
             var $this = $(this),
-              v = $this.val();
+                v = $this.val();
             $this.nextAll().remove();
             methods.saveValue.call(that);
             if (!v) return; // 閫夋嫨浜唒laceholder
@@ -10497,7 +10497,7 @@ $(function() {
 
         saveValue: function() {
           var _val = [],
-            _opt = [];
+              _opt = [];
           this.$element.find('select').each(function() {
             _val.push(this.value);
             _opt.push($(this).find('option:selected').text());
@@ -10526,12 +10526,12 @@ $(function() {
       $.fn.extend({
         tree: function() {
           var args = Array.prototype.slice.call(arguments),
-            arg0 = args.shift();
+              arg0 = args.shift();
 
           return this.each(function() {
             var $this = $(this),
-              data = $this.data('tree'),
-              options = $.extend({}, $.fn.tree.defaults, $this.data(), typeof arg0 === 'object' && arg0);
+                data = $this.data('tree'),
+                options = $.extend({}, $.fn.tree.defaults, $this.data(), typeof arg0 === 'object' && arg0);
             if (!data) $this.data('tree', (data = new Tree(this, options))); // 鍦ㄦ瘡涓厓绱犱笂鍙繚瀛樹竴涓疄渚�
             if (typeof arg0 === 'string' && typeof data[arg0] === 'function') data[arg0].apply(data, args);
             else methods.init.call(data);
@@ -10927,7 +10927,7 @@ $(function() {
           var args = arguments;
           return this.each(function() {
             var $this = $(this),
-              data = $this.data("validate")
+                data = $this.data("validate")
             if (!data) $this.data('validate', (data = new Validate(this, options)))
             if (typeof options == 'string') data[options].apply(data, Array.prototype.slice.call(args, 1));
           })
@@ -11058,10 +11058,10 @@ $(function() {
     var innerToolBar = document.createElement("div");
     innerToolBar.className = "lui-jsmind-innerToolBar";
 
-    innerToolBar.innerHTML = "<ul><li class='lui_icon_s lui_icon_s_icon_repeat' title='还原' data-zoom='zoomReset' ></li>" +
-        " <li class='lui_icon_s lui_icon_s_icon_zoom_in' title='放大' data-zoom='zoomIn'></li> " +
-        " <li class='lui_icon_s lui_icon_s_icon_zoom_out' title='缩小' data-zoom='zoomOut'></li>" +
-        " </ul>"
+    innerToolBar.innerHTML = "<ul><li class='lui_icon_s lui_icon_s_icon_repeat mui mui-history_handler_back' title='还原' data-opt='zoomReset' ></li>" +
+        " <li class='lui_icon_s lui_icon_s_icon_zoom_in mui mui-addition' title='放大' data-opt='zoomIn'></li> " +
+        " <li class='lui_icon_s lui_icon_s_icon_zoom_out mui mui-delete' title='缩小' data-opt='zoomOut'></li>" +
+        " </ul>";
 
     _jm.view.container.prepend(innerToolBar);
     $(_jm.view.container).css("position" , "relative");
@@ -11069,7 +11069,7 @@ $(function() {
     var self = this;
 
     $(innerToolBar).on("click" , function(e) {
-      var $t = $(e.target), type = $t.attr("data-zoom");
+      var $t = $(e.target), type = $t.attr("data-opt");
       if(type) {
         if(self[type]) {
           self[type]();
@@ -11185,5 +11185,31 @@ $(function() {
   kmsjsmap.zoomReset = function() {
     _jm.view.setZoom(1);
   }
+
+
+  kmsjsmap.fullScreen = function(element) {
+    if(!element) {
+      element = _jm.view.container;
+    }
+    var requestMethod = element.requestFullScreen || element.webkitRequestFullScreen || element.mozRequestFullScreen || element.msRequestFullScreen;
+    if(requestMethod)
+      requestMethod.call(element);
+  }
+
+  kmsjsmap.exitFullscreen = function(element) {
+    var elem = document;
+    if (elem.webkitCancelFullScreen) {
+      elem.webkitCancelFullScreen();
+    } else if (elem.mozCancelFullScreen) {
+      element.mozCancelFullScreen();
+    } else if (elem.cancelFullScreen) {
+      elem.cancelFullScreen();
+    } else if (elem.exitFullscreen) {
+      elem.exitFullscreen();
+    } else {
+      //浏览器不支持全屏API或已被禁用
+    };
+  }
+
   $w[__NAME__] = kmsjsmap
 })(window);

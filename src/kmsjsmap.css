@@ -205,10 +205,10 @@ jmnode{transition:top .2s;-moz-transition:top .2s;-webkit-transition:top .2s;-o-
 }
 .lui-jsmind-innerToolBar {
     position: absolute;
-    bottom: 50%;
+    bottom: 10%;
     right: 3px;
     width: 25px;
-    z-index: 10;
+    z-index: 5;
     transform: none;
 }
 .lui-jsmind-innerToolBar ul {
@@ -216,6 +216,8 @@ jmnode{transition:top .2s;-moz-transition:top .2s;-webkit-transition:top .2s;-o-
     border-style: solid none solid solid;
     border-color: #d9d9d9 #d9d9d9 #d9d9d9;
     border-right: none;
+    list-style: none;
+    background-color: #fff;
 }
 .lui-jsmind-innerToolBar li {
     cursor: pointer;
