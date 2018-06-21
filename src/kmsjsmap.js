@@ -4099,12 +4099,11 @@ $(function() {
 
 
   kmsjsmap.fullScreen = function(element) {
-    if (!element) {
-      element = _jm.view.container;
-    }
+    if (!element) element = _jm.view.container;
+    
     var requestMethod = element.requestFullScreen || element.webkitRequestFullScreen || element.mozRequestFullScreen || element.msRequestFullScreen;
-    if (requestMethod)
-      requestMethod.call(element);
+    
+    if (requestMethod) requestMethod.call(element);
   }
 
   kmsjsmap.exitFullscreen = function(element) {
@@ -4121,6 +4120,9 @@ $(function() {
       //浏览器不支持全屏API或已被禁用
     };
   }
+
+
+
 
   $w[__NAME__] = kmsjsmap
 })(window);
