@@ -281,3 +281,12 @@ jmnodes.theme-kms1 jmexpander:hover {
 
 }
 
+/*节点添加链接后的样式*/
+jmnodes jmnode.isLink {
+    padding-right: 18px!important;
+    background-repeat: no-repeat!important;
+    background-position: right center!important;
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAdZJREFUOBGlks8rBGEYx3d2tjalLeKgtHuQFMpZdjerrHYduGxRHMRN7cXRciH2D3BQKMVJrYNywJT2R36l5MTBwYk9ok3K7qzPM81MU1aUp97e5/s83+/zPO8z43L905S/6PuxSqWSrlarnYqi3Lvd7vlsNnsi2l8LBIPBKXhbZqMn7hZTFy0UCprbTNS8EE+S2KTrOyeGoJXuIWKf4GUR/VggFAqNkN+G+IZoMJ/PH4kgl8udEbvG7RJcs0AsFvOR2+C8qKoa4b3nQhajcAu76OY8CK5ZoFQq9UJoplO6XC4PIVoRMrtsIn6M67Oe4JGEZYlEQi0Wiz0WhiyTJLg7wuHwLV8iCe5GvMKTMsKzv4Ip3iU26vF4Ruksfh3vH9d1fQ//Dn+OIgMscwFsmD0BndfpNEb1K959AXEanEHcxv1IvJ1dnKKSY5uxA8aLQpqBdOP1eqOapr2y7QNwJ10vRUzeWJqtNB1rgmHBdE6K2EGqZ5JDSVFoyRG3XWMCqhu7gOy1MpFIpIfxNXADJ8VE+1bOeasCAoGAzjXBCfr9/mdwH8V2wI2Mv8jSlvFrmv0V+G3XYMw6WDriFJ9r1RH75toFJMMy44wdx/1gHxnnH/hNaQa+ALg8wwX3thiSAAAAAElFTkSuQmCC')!important;
+}
+
+

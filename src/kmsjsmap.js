@@ -2452,6 +2452,15 @@ $(function() {
 
       d.setAttribute('nodeid', node.id);
       d.style.visibility = 'hidden';
+
+      // 设置node节点的链接图标
+      if (node.data.isLink === true) {
+        $(d).addClass('isLink')
+      } else {
+        $(d).removeClass('isLink')
+      }
+
+
       this._reset_node_custom_style(d, node.data);
 
       parent_node.appendChild(d);
@@ -4100,7 +4109,7 @@ $(function() {
 
   kmsjsmap.fullScreen = function(element) {
     if (!element) element = _jm.view.container;
-    
+
     var requestMethod = element.requestFullScreen || element.webkitRequestFullScreen || element.mozRequestFullScreen || element.msRequestFullScreen;
     
     if (requestMethod) requestMethod.call(element);
@@ -4122,7 +4131,18 @@ $(function() {
   }
 
 
-
+  kmsjsmap.setLinkStatus = function(options) {
+    var id = options.id;
+    var isLink = options.isLink;
+    if (!id || typeof isLink !== 'boolean') return logger.error('setLinkStatus传入参数有误');
+    var $dom = $('#' + kmsjsmap.options.container).find('jmnode[nodeid="'+ id +'"]');
+    if (!$dom.length === 0) return
+    if (isLink) {
+      $dom.addClass('isLink')
+    } else {
+      $dom.removeClass('isLink')
+    }
+  }
 
   $w[__NAME__] = kmsjsmap
 })(window);

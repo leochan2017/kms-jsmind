@@ -36,7 +36,7 @@
       { "id": "sub2", "parentid": "root", "topic": "军师", "badge": 66, "direction": "right"},
       { "id": "sub21", "parentid": "sub2", "topic": "郭嘉", "badge": 233 },
       { "id": "sub22", "parentid": "sub2", "topic": "荀彧", "badge": 9 },
-      { "id": "sub23", "parentid": "sub2", "topic": "司马懿", "badge": 7 },
+      { "id": "sub23", "parentid": "sub2", "topic": "司马懿", "badge": 7, "isLink": true },
       { "id": "sub24", "parentid": "sub2", "topic": "贾诩", "badge": 77 },
 
       { "id": "sub3", "parentid": "root", "topic": "大将", "badge": 45, "direction": "right", "expanded":false },
@@ -48,6 +48,10 @@
     editable: true,
     onRelation: function(item) {
       console.log('当前选择中的是', item)
+      kmsjsmap.setLinkStatus({
+        id: item.id,
+        isLink: true
+      })
     }
   });
 
