@@ -4111,7 +4111,7 @@ $(function() {
     if (!element) element = _jm.view.container;
 
     var requestMethod = element.requestFullScreen || element.webkitRequestFullScreen || element.mozRequestFullScreen || element.msRequestFullScreen;
-    
+
     if (requestMethod) requestMethod.call(element);
   }
 
@@ -4135,7 +4135,7 @@ $(function() {
     var id = options.id;
     var isLink = options.isLink;
     if (!id || typeof isLink !== 'boolean') return logger.error('setLinkStatus传入参数有误');
-    var $dom = $('#' + kmsjsmap.options.container).find('jmnode[nodeid="'+ id +'"]');
+    var $dom = $('#' + kmsjsmap.options.container).find('jmnode[nodeid="' + id + '"]');
     if (!$dom.length === 0) return
     if (isLink) {
       $dom.addClass('isLink')
