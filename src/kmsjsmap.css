@@ -159,12 +159,45 @@ jmnode{transition:top .2s;-moz-transition:top .2s;-webkit-transition:top .2s;-o-
 
 
 
+/*右键菜单*/
+.kmsjsmap-dropdown-menu {
+    list-style: none;
+    padding: 6px 0;
+    margin: 0;
+    box-sizing: border-box;
+    background-color: #fff;
+    border-radius: 3px;
+}
+
+.kmsjsmap-dropdown-menu li {
+    font-size: 14px;
+    padding: 0 16px;
+    position: relative;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    color: #606266;
+    height: 34px;
+    line-height: 34px;
+    box-sizing: border-box;
+    cursor: pointer;
+}
+
+
+.kmsjsmap-dropdown-menu li:hover {
+    background-color: #f5f7fa;
+}
+
+.kmsjsmap-dropdown-menu li a {
+    color: #606266;
+    text-decoration: none;
+}
 
 
 #kmsjsmap_contextmenu {
-  position: absolute;
-  z-index: 99999;
-  display: none;
+    position: absolute;
+    z-index: 99999;
+    display: none;
 }
 
 

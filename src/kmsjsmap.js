@@ -47,7 +47,7 @@ if (!Object.keys) {
 }
 
 $(function() {
-  var html = '<div id="kmsjsmap_contextmenu"><ul class="sui-dropdown-menu"><li><a href="javascript: kmsjsmap.add_node();">添加节点</a></li><li><a href="javascript: kmsjsmap.modify_node()">编辑节点</a></li><li><a href="javascript: kmsjsmap.del_node()">删除节点</a></li><li><a href="javascript: kmsjsmap.relation_node()">关联节点</a></li></ul></div>';
+  var html = '<div id="kmsjsmap_contextmenu"><ul class="kmsjsmap-dropdown-menu"><li><a href="javascript: kmsjsmap.add_node();">添加节点</a></li><li><a href="javascript: kmsjsmap.modify_node()">编辑节点</a></li><li><a href="javascript: kmsjsmap.del_node()">删除节点</a></li><li><a href="javascript: kmsjsmap.relation_node()">关联节点</a></li></ul></div>';
 
   $('body').append(html);
 
