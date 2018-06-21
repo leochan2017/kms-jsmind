@@ -186,23 +186,7 @@ jmnode{transition:top .2s;-moz-transition:top .2s;-webkit-transition:top .2s;-o-
 }
 
 
-.leo-badge {
-  background-color: #f56c6c;
-  border-radius: 10px;
-  color: #fff;
-  display: inline-block;
-  font-size: 12px;
-  height: 18px;
-  line-height: 18px;
-  padding: 0 6px;
-  text-align: center;
-  white-space: nowrap;
-  border: 1px solid #fff;
-  border-color: #adadad;
-  position: absolute;
-  overflow: hidden;
-  z-index: 9;
-}
+
 .lui-jsmind-innerToolBar {
     position: absolute;
     bottom: 10%;
@@ -227,3 +211,58 @@ jmnode{transition:top .2s;-moz-transition:top .2s;-webkit-transition:top .2s;-o-
 .lui-jsmind-innerToolBar li:LAST-CHILD {
     border-bottom:none;
 }
+
+
+/*思维导图主题*/
+.leo-badge {
+    background-color: #D85646;
+    border-radius: 10px;
+    display: inline-block;
+    font-size: 8px;
+    color: #FFFFFF;
+    height: 18px;
+    line-height: 18px;
+    padding: 0 6px;
+    text-align: center;
+    white-space: nowrap;
+    border: 1px solid #fff;
+    border-color: #adadad;
+    position: absolute;
+    overflow: hidden;
+    z-index: 9;
+}
+
+/* kms1 theme */                                                
+/* 节点样式 */      
+jmnodes.theme-kms1 jmnode {
+    background-color: #EDF2FD;
+    border: 1px solid #4285F4;
+    border-radius: 4px;
+    font-size: 16px;
+    color:#000;
+}
+/* 鼠标悬停的节点样式 */
+jmnodes.theme-kms1 jmnode:hover {
+    /*background-color: #16a085;*/
+}
+/* 选中的节点样式 */
+jmnodes.theme-kms1 jmnode.selected {
+    /*background-color: #11f;*/
+    /*color:#fff;*/
+}
+/* 根节点样式 */
+jmnodes.theme-kms1 jmnode.root {
+    background: #4285F4;
+    border-radius: 6px;
+    font-size: 22px;
+    color: #FFFFFF;
+}
+/* 展开/关闭节点的控制点样式 */
+jmnodes.theme-kms1 jmexpander {
+
+}
+/* 鼠标悬停展开/关闭节点的控制点样式 */
+jmnodes.theme-kms1 jmexpander:hover {
+
+}
+
