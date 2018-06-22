@@ -52,7 +52,7 @@
       console.log('当前选择中的是', item)
       kmsjsmap.setLinkStatus({
         id: item.id,
-        isLink: true
+        isLink: item.data.isLink === true ? false : true
       })
     }
   });

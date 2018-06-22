@@ -4136,11 +4136,14 @@ $(function() {
     var isLink = options.isLink;
     if (!id || typeof isLink !== 'boolean') return logger.error('setLinkStatus传入参数有误');
     var $dom = $('#' + kmsjsmap.options.container).find('jmnode[nodeid="' + id + '"]');
-    if (!$dom.length === 0) return
+    if (!$dom.length === 0) return;
+    var node = _jm.get_selected_node();
     if (isLink) {
-      $dom.addClass('isLink')
+      $dom.addClass('isLink');
+      node.data.isLink = true;
     } else {
-      $dom.removeClass('isLink')
+      $dom.removeClass('isLink');
+      node.data.isLink = false;
     }
   }
 
