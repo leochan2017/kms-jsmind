@@ -127,10 +127,10 @@ $('#screenShot').click(function() {
 对某个节点设置链接状态
 
 ### 参数
-参数   | 类型    | 说明
------- | ------- | -----
-id     | String  | 节点id
-isLink | Boolean | 是否链接状态，默认：FALSE
+参数   | 类型    | 是否必填 | 说明
+------ | ------- | -------- | -----
+id     | String  | 是       | 节点id
+isLink | Boolean | 是       | 是否链接状态，默认：FALSE
 
 #### 调用示例
 ```
