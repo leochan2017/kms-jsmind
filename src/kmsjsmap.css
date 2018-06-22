@@ -283,6 +283,7 @@ jmnodes.theme-kms1 jmexpander:hover {
 
 /*节点添加链接后的样式*/
 jmnodes jmnode.isLink {
+    cursor: pointer!important;
     padding-right: 18px!important;
     background-repeat: no-repeat!important;
     background-position: right center!important;
