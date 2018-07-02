@@ -1,0 +1,22 @@
+language: node_js
+node_js:
+- node
+- 8
+cache:
+  directories:
+  - node_modules
+install:
+- yarn
+script:
+- gulp
+deploy:
+  provider: releases
+  api_key:
+    # check https://docs.travis-ci.com/user/deployment/releases/ for configurations
+    secure: 'xxxx'
+  file: "./ext.zip"
+  branches:
+    only:
+    - master
+  on:
+    tags: true
