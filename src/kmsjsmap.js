@@ -1,5 +1,7 @@
 var $conTextMenu = '';
 
+console.log('leotest')
+
 // an noop function define
 var _noop = function() {};
 
