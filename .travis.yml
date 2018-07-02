@@ -8,6 +8,7 @@ cache:
 install:
 - yarn
 script:
+- gulp clean
 - gulp
 deploy:
   provider: releases
