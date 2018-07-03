@@ -2826,9 +2826,6 @@ $(function() {
       ctx.lineWidth = this.opts.line_width;
       ctx.lineCap = 'round';
 
-      // 线条颜色
-      ctx.strokeStyle = '#5385EE';
-
       jm.util.canvas.bezierto(
         ctx,
         pin.x + offset.x,
@@ -3968,7 +3965,11 @@ $(function() {
       shortcut: {
         enable: false // 是否启用快捷键
       },
-      onRelation: this.onRelation
+      onRelation: this.onRelation,
+      view: {
+        line_width: 2,
+        line_color: '#5385EE'
+      }
     }
     var mind = {
       'meta': {
