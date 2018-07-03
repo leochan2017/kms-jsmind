@@ -21,7 +21,7 @@ jmnode{position:absolute;cursor:default;max-width:400px;white-space:nowrap;overf
 
 /*leo add*/
 /*jsMind在样式中设置到节点的最大宽度，如果越宽，该节点内的文本将会被截断，并在末尾添加“...”，如果希望jsMind不进行此处理，可通过下面修改jsmind的样式表进行处理。*/
-jmnodes{position:absolute;z-index:2;background-color:rgba(0,0,0,0);min-width:420px;}
+jmnodes{position:absolute;z-index:2;background-color:rgba(0,0,0,0);min-width:420px;word-break:break-all;}
 /* 17行 */
 jmnode{position:absolute;cursor:default;max-width:400px;}
 
