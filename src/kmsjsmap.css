@@ -14,8 +14,17 @@
 canvas{position:absolute;z-index:1;}
 
 /* z-index:2 */
-jmnodes{position:absolute;z-index:2;background-color:rgba(0,0,0,0);}/*background color is necessary*/
-jmnode{position:absolute;cursor:default;max-width:400px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+
+/*leo hide*/
+/*jmnodes{position:absolute;z-index:2;background-color:rgba(0,0,0,0);}
+jmnode{position:absolute;cursor:default;max-width:400px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}*/
+
+/*leo add*/
+/*jsMind在样式中设置到节点的最大宽度，如果越宽，该节点内的文本将会被截断，并在末尾添加“...”，如果希望jsMind不进行此处理，可通过下面修改jsmind的样式表进行处理。*/
+jmnodes{position:absolute;z-index:2;background-color:rgba(0,0,0,0);min-width:420px;}
+/* 17行 */
+jmnode{position:absolute;cursor:default;max-width:400px;}
+
 jmexpander{position:absolute;width:11px;height:11px;display:block;overflow:hidden;line-height:12px;font-size:12px;text-align:center;border-radius:6px;border-width:1px;border-style:solid;cursor:pointer;}
 
 /* default theme */
