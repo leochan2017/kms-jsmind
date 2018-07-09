@@ -3525,7 +3525,6 @@ $(function() {
   jsMind.screenshot.prototype = {
     init: function() {
       if (this._inited) { return; }
-      console.log('init');
       var c = $c('canvas');
       var ctx = c.getContext('2d');
 
@@ -3605,7 +3604,6 @@ $(function() {
       }
 
       function check_nodes_ready() {
-        console.log('check_node_ready' + new Date());
         var allOk = true;
         for (var nodeid in nodes) {
           node = nodes[nodeid];
