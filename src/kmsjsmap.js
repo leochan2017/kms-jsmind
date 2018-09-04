@@ -2617,6 +2617,7 @@ $(function() {
       this.actualZoom = zoom;
       for (var i = 0; i < this.e_panel.children.length; i++) {
         this.e_panel.children[i].style.transform = 'scale(' + zoom + ')';
+        this.e_panel.children[i].style["-ms-transform"] = 'scale(' + zoom + ')';
       };
       this.show(true);
       return true;
@@ -3920,7 +3921,9 @@ $(function() {
     warn: _noop,
     info: _noop
   } : console;
-
+  if(!logger.debug) logger.debug = _noop;
+  
+  
   if (typeof module === 'undefined' || !module.exports) {
     if (typeof $w[__NAME__] !== 'undefined') {
       logger.log(__NAME__ + '已经存在啦啦啦啦~');
