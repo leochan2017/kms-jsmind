@@ -1,6 +1,8 @@
 ## kmsjsmap
 思维导图JS库，对hizzgdev大神的库进行二次封装，扩展右键菜单，包含拖拽节点等功能。
 
+## DEMO
+https://leochan2017.github.io/kms-jsmind/
 
 ## 如何使用
 - 引入样式
